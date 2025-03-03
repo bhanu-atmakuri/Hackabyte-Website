@@ -1,70 +1,92 @@
-# Getting Started with Create React App
+# Hackabyte Website
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A modern, responsive website for Hackabyte - a student-led hackathon and coding education organization.
 
-## Available Scripts
+## Project Setup
 
-In the project directory, you can run:
+Follow these steps to set up and run the project:
 
-### `npm start`
+### 1. Clone the repository
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+```bash
+git clone https://github.com/your-username/hackabyte-website.git
+cd hackabyte-website
+```
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### 2. Install dependencies
 
-### `npm test`
+```bash
+npm install
+```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### 3. Create folder structure for images
 
-### `npm run build`
+Create the following folder structure in the `public` directory:
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```
+public/
+└── images/
+    ├── logo.png                  # The Hackabyte logo
+    ├── bg-particles.jpg          # Dark background with particles
+    ├── organizers/               # Board members & volunteers
+    │   ├── bhanu.jpg
+    │   ├── suraj.jpg
+    │   ├── gagan.jpg
+    │   └── ...
+    ├── team-luma/                # LUMA team members
+    │   ├── ekansh.jpg
+    │   ├── jash.jpg
+    │   └── ...
+    ├── sponsors/
+    │   ├── anaghas-math.png
+    │   ├── desmos.png
+    │   └── ...
+    ├── past-events/
+    │   ├── spring-2024.jpg
+    │   ├── winter-2024.jpg
+    │   └── ...
+    ├── event-pictures/
+    │   ├── digipen.jpg
+    │   ├── coding1.jpg
+    │   └── ...
+    └── social/                   # Social media icons
+        ├── instagram.svg
+        ├── discord.svg
+        ├── facebook.svg
+        └── ...
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### 4. Add your images
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Add all your images to the appropriate folders in the public directory. Make sure the image paths in the data files match your actual image paths.
 
-### `npm run eject`
+### 5. Run the development server
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+```bash
+npm start
+```
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+The website should now be running at [http://localhost:3000](http://localhost:3000).
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## Project Structure
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+- `src/components/` - Reusable UI components
+- `src/pages/` - Top-level page components
+- `src/data/` - Data files for the website content
+- `public/images/` - Images used throughout the website
 
-## Learn More
+## Deployment
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+To build the project for production:
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+```bash
+npm run build
+```
 
-### Code Splitting
+This will create a `build` directory with the compiled assets. You can then deploy this to your preferred hosting service.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+## Technologies Used
 
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+- React.js
+- React Router
+- Tailwind CSS

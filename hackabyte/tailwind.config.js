@@ -1,11 +1,20 @@
+/** @type {import('tailwindcss').Config} */
 module.exports = {
-  purge: [],
-  darkMode: false, // or 'media' or 'class'
+  content: [
+    "./src/**/*.{js,jsx,ts,tsx}",
+  ],
   theme: {
-    extend: {},
-  },
-  variants: {
-    extend: {},
+    extend: {
+      colors: {
+        'hackabyte-red': '#ff4d5a',
+        'hackabyte-dark': '#1a1a1a',
+        'hackabyte-gray': '#212121',
+        'hackabyte-light': '#f8f8f8',
+      },
+      fontFamily: {
+        sans: ['Inter', 'sans-serif'],
+      }
+    },
   },
   plugins: [],
 }
