@@ -15,9 +15,6 @@ const HomePage = () => {
       {/* Next Event Countdown */}
       <NextEvent />
       
-      {/* About Section */}
-      <AboutSection />
-      
       {/* Donations Section */}
       <div className="py-16 bg-hackabyte-dark border-t border-gray-800">
         <div className="container mx-auto px-4">
