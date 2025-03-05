@@ -1,41 +1,20 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import Navbar from '@/components/Navbar';
-import Footer from '@/components/Footer';
-import AboutHero from '@/components/AboutHero';
-import Mission from '@/components/Mission';
-import Team from '@/components/Team';
-import Journey from '@/components/Journey';
-import Partners from '@/components/Partners';
-import useNoFlash from '@/hooks/useNoFlash';
+import BasePageLayout from '@/components/shared/BasePageLayout';
+import EventsHero from '@/components/events/EventsHero';
+import FeaturedEvent from '@/components/events/FeaturedEvent';
+import UpcomingEventsList from '@/components/events/UpcomingEventsList';
+import EventsCalendar from '@/components/events/EventsCalendar';
+import EventsRegistration from '@/components/events/EventsRegistration';
 
-export default function About() {
-  const [isMounted, setIsMounted] = useState(false);
-  
-  // Use the no-flash hook
-  useNoFlash();
-  
-  // Only render content after client-side hydration
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
-  
-  if (!isMounted) {
-    return <div className="min-h-screen flex items-center justify-center">
-      <div className="animate-pulse text-gray-400">Loading...</div>
-    </div>;
-  }
-
+export default function Events() {
   return (
-    <main className="min-h-screen">
-      <Navbar />
-      <AboutHero />
-      <Mission />
-      <Journey />
-      <Team />
-      <Partners />
-      <Footer />
-    </main>
+    <BasePageLayout>
+      <EventsHero />
+      <FeaturedEvent />
+      <UpcomingEventsList />
+      <EventsCalendar />
+      <EventsRegistration />
+    </BasePageLayout>
   );
 }

@@ -3,40 +3,14 @@
 import { useRef } from 'react';
 import Link from 'next/link';
 import { motion, useInView } from 'framer-motion';
+import { upcomingEvents } from '@/lib/data/upcomingEvents';
 
 export default function UpcomingEvents() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, amount: 0.2 });
 
-  const events = [
-    {
-      title: "Spring Hackathon 2025",
-      date: "April 15-17, 2025",
-      location: "Tech Innovation Center, San Francisco",
-      ageGroups: ["High School", "Middle School"],
-      image: "/api/placeholder/600/400",
-      description: "Our flagship event featuring challenges in AI, web development, and game design. Over 200 students will compete for prizes and recognition.",
-      registrationLink: "/register/spring-2025"
-    },
-    {
-      title: "Summer Code Camp",
-      date: "June 10-14, 2025",
-      location: "University Tech Campus, Boston",
-      ageGroups: ["Elementary", "Middle School"],
-      image: "/api/placeholder/600/400",
-      description: "A week-long immersive experience with daily challenges, workshops, and mentorship. Perfect for beginners and intermediate coders.",
-      registrationLink: "/register/summer-2025"
-    },
-    {
-      title: "Fall Hackathon 2025",
-      date: "October 22-24, 2025",
-      location: "Downtown Convention Center, Chicago",
-      ageGroups: ["High School", "Middle School", "Elementary"],
-      image: "/api/placeholder/600/400",
-      description: "Our most inclusive event with challenges for all age groups. Focus on sustainable technology and solutions for social good.",
-      registrationLink: "/register/fall-2025"
-    }
-  ];
+  // Using the first three events from the upcomingEvents data
+  const displayedEvents = upcomingEvents.slice(0, 3);
 
   const cardVariants = {
     hidden: { opacity: 0, y: 50 },
@@ -61,7 +35,7 @@ export default function UpcomingEvents() {
         </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {events.map((event, index) => (
+          {displayedEvents.map((event, index) => (
             <motion.div
               key={index}
               variants={cardVariants}

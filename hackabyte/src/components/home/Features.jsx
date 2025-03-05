@@ -2,6 +2,7 @@
 
 import { useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
+import Section from '@/components/shared/Section';
 
 export default function Features() {
   const ref = useRef(null);
@@ -84,44 +85,46 @@ export default function Features() {
   };
 
   return (
-    <section className="py-20 bg-[#16161A]" id="about">
-      <div className="container-custom" ref={ref}>
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-16"
-        >
-          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-[#FF2247]">
-            Why Hackabyte?
-          </h2>
-          <div className="text-xl text-gray-300 max-w-3xl mx-auto">
-            We provide a comprehensive learning experience that goes beyond coding, 
-            preparing students for future success in technology and beyond.
-          </div>
-        </motion.div>
+    <Section 
+      id="about" 
+      className="bg-[#16161A]" 
+      ref={ref}
+    >
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+        transition={{ duration: 0.6 }}
+        className="text-center mb-16"
+      >
+        <h2 className="text-3xl md:text-4xl font-bold mb-4 text-[#FF2247]">
+          Why Hackabyte?
+        </h2>
+        <div className="text-xl text-gray-300 max-w-3xl mx-auto">
+          We provide a comprehensive learning experience that goes beyond coding, 
+          preparing students for future success in technology and beyond.
+        </div>
+      </motion.div>
 
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          animate={isInView ? "visible" : "hidden"}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
-        >
-          {features.map((feature, index) => (
-            <motion.div
-              key={index}
-              variants={itemVariants}
-              className="bg-[#1A1A1E] rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow duration-300 border border-gray-800 hover:border-[#F93236]/30"
-            >
-              <div className="text-[#FF2247] mb-4">
-                {feature.icon}
-              </div>
-              <h3 className="text-xl font-semibold mb-3 text-white">{feature.title}</h3>
-              <p className="text-gray-400">{feature.description}</p>
-            </motion.div>
-          ))}
-        </motion.div>
-      </div>
-    </section>
+      <motion.div
+        variants={containerVariants}
+        initial="hidden"
+        animate={isInView ? "visible" : "hidden"}
+        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+      >
+        {features.map((feature, index) => (
+          <motion.div
+            key={index}
+            variants={itemVariants}
+            className="bg-[#1A1A1E] rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow duration-300 border border-gray-800 hover:border-[#F93236]/30"
+          >
+            <div className="text-[#FF2247] mb-4">
+              {feature.icon}
+            </div>
+            <h3 className="text-xl font-semibold mb-3 text-white">{feature.title}</h3>
+            <p className="text-gray-400">{feature.description}</p>
+          </motion.div>
+        ))}
+      </motion.div>
+    </Section>
   );
 }

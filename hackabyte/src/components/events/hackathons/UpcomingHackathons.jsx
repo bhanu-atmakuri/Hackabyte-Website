@@ -3,31 +3,17 @@
 import { useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
 import Link from 'next/link';
+import { upcomingEvents } from '@/lib/data/upcomingEvents';
 
 export default function UpcomingHackathons() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, amount: 0.2 });
 
-  const upcomingHackathons = [
-    {
-      title: "Winter Hackathon - CA",
-      date: "March 8-9, 2025",
-      location: "DigiPen Institute of Technology",
-      city: "San Francisco, CA",
-      description: "Join us for our Winter Hackathon in California! This two-day event will feature exciting challenges, workshops, and opportunities to network with tech professionals.",
-      image: "/api/placeholder/600/400",
-      registrationLink: "/register/winter-ca-2025"
-    },
-    {
-      title: "Spring Hackathon - WA",
-      date: "March 29-30, 2025",
-      location: "DigiPen Institute of Technology",
-      city: "Redmond, WA",
-      description: "Our Spring Hackathon in Washington will be held at DigiPen Institute of Technology. Collaborate with peers and build innovative projects in this intensive weekend event.",
-      image: "/api/placeholder/600/400",
-      registrationLink: "/register/spring-wa-2025"
-    }
-  ];
+  // Filter events of type Hackathon that are coming up
+  const upcomingHackathons = upcomingEvents.filter(event => 
+    event.eventType === 'Hackathon' && 
+    new Date(event.date.split(',')[0]) > new Date()
+  ).slice(0, 2); // Get the next 2 hackathons
 
   return (
     <section className="py-20 bg-[#16161A]" ref={ref}>
@@ -87,7 +73,7 @@ export default function UpcomingHackathons() {
                     </svg>
                     <div>
                       <div>{hackathon.location}</div>
-                      <div className="text-sm text-gray-500">{hackathon.city}</div>
+                      <div className="text-sm text-gray-500">{hackathon.state}</div>
                     </div>
                   </div>
                   

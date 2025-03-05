@@ -1,9 +1,6 @@
 /** @type {import('tailwindcss').Config} */
-export default {
+module.exports = {
   content: [
-    './pages/**/*.{js,ts,jsx,tsx,mdx}',
-    './components/**/*.{js,ts,jsx,tsx,mdx}',
-    './app/**/*.{js,ts,jsx,tsx,mdx}',
     './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
     './src/components/**/*.{js,ts,jsx,tsx,mdx}',
     './src/app/**/*.{js,ts,jsx,tsx,mdx}',
@@ -11,30 +8,40 @@ export default {
   theme: {
     extend: {
       colors: {
-        primary: 'rgb(var(--primary))',
-        secondary: 'rgb(var(--secondary))',
-        accent: 'rgb(var(--accent))',
-      },
-      backgroundImage: {
-        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
-        'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
-      },
-      animation: {
-        'float': 'float 5s ease-in-out infinite',
-        'bounce-slow': 'bounce 3s infinite',
-        'gradient': 'gradient 8s linear infinite',
-      },
-      keyframes: {
-        float: {
-          '0%, 100%': { transform: 'translateY(0)' },
-          '50%': { transform: 'translateY(-10px)' },
-        },
-        gradient: {
-          '0%': { backgroundPosition: '0% 50%' },
-          '50%': { backgroundPosition: '100% 50%' },
-          '100%': { backgroundPosition: '0% 50%' },
+        primary: '#F93236',
+        secondary: '#FF003C',
+        accent: '#FF2247',
+        dark: {
+          DEFAULT: '#1A1A1E',
+          lighter: '#16161A',
+          lightest: '#1E1E22',
         },
       },
+      screens: {
+        '3xl': '1920px',  // Additional breakpoint for very large screens
+      },
+      maxWidth: {
+        'screen-xl': '1280px',
+        'screen-2xl': '1536px',
+        'screen-3xl': '1920px',
+      },
+      spacing: {
+        '128': '32rem',
+        '144': '36rem',
+      },
+      containers: {
+        xs: '20rem',    // 320px
+        sm: '24rem',    // 384px
+        md: '28rem',    // 448px
+        lg: '32rem',    // 512px
+        xl: '36rem',    // 576px
+        '2xl': '42rem', // 672px
+        '3xl': '48rem', // 768px
+        '4xl': '56rem', // 896px
+        '5xl': '64rem', // 1024px
+        '6xl': '72rem', // 1152px
+        '7xl': '80rem', // 1280px
+      }
     },
   },
   plugins: [],

@@ -2,6 +2,7 @@
 
 import { useRef, useState } from 'react';
 import { motion, useInView } from 'framer-motion';
+import { upcomingEvents } from '@/lib/data/upcomingEvents';
 
 export default function EventsCalendar() {
   const ref = useRef(null);
@@ -11,43 +12,39 @@ export default function EventsCalendar() {
   // Define all months
   const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
-  // Define events by month
-  const eventsByMonth = {
-    'January': [],
-    'February': [],
-    'March': [],
-    'April': [
-      { date: '15-17', title: 'Spring Hackathon 2025', location: 'San Francisco', type: 'Hackathon' }
-    ],
-    'May': [
-      { date: '15-17', title: 'National Coding Championship', location: 'San Francisco', type: 'Championship' },
-      { date: '24', title: 'Intro to Coding Workshop', location: 'Online', type: 'Workshop' }
-    ],
-    'June': [
-      { date: '10-14', title: 'Summer Code Camp', location: 'Boston', type: 'Camp' },
-      { date: '28', title: 'Web Development Masterclass', location: 'Chicago', type: 'Workshop' }
-    ],
-    'July': [
-      { date: '4', title: 'Independence Day Coding Challenge', location: 'Online', type: 'Challenge' },
-      { date: '22-24', title: 'Tech For Good', location: 'Chicago', type: 'Hackathon' }
-    ],
-    'August': [
-      { date: '12-15', title: 'Mobile App Development Sprint', location: 'Seattle', type: 'Hackathon' },
-      { date: '28-29', title: 'Back To School Coding Bash', location: 'Seattle', type: 'Hackathon' }
-    ],
-    'September': [
-      { date: '18', title: 'Coding Career Fair', location: 'New York', type: 'Networking' }
-    ],
-    'October': [
-      { date: '22-24', title: 'Fall Hackathon 2025', location: 'Chicago', type: 'Hackathon' }
-    ],
-    'November': [
-      { date: '15', title: 'Game Development Day', location: 'Los Angeles', type: 'Workshop' }
-    ],
-    'December': [
-      { date: '5-6', title: 'Winter Code Jam', location: 'Online', type: 'Hackathon' }
-    ]
+  // Function to convert event date strings to month-based organization
+  const getEventsByMonth = () => {
+    // Initialize all months with empty arrays
+    const eventMap = {};
+    months.forEach(month => {
+      eventMap[month] = [];
+    });
+
+    // Process events from the upcomingEvents data
+    upcomingEvents.forEach(event => {
+      // Extract month from date (assuming format like "March 8-9, 2025")
+      const dateString = event.date;
+      const monthName = dateString.split(' ')[0];
+      
+      if (months.includes(monthName)) {
+        // Extract date range
+        const datePart = dateString.split(',')[0];
+        const dateRange = datePart.substring(monthName.length).trim();
+        
+        eventMap[monthName].push({
+          date: dateRange,
+          title: event.title,
+          location: event.location,
+          type: event.eventType || 'Event'
+        });
+      }
+    });
+
+    return eventMap;
   };
+
+  // Get events organized by month
+  const eventsByMonth = getEventsByMonth();
 
   const getEventTypeColor = (type) => {
     switch(type) {
