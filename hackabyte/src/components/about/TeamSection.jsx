@@ -3,58 +3,46 @@
 import { useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
 
-export default function Team() {
+export default function TeamSection() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, amount: 0.2 });
 
-  const teamMembers = [
+  const boardMembers = [
     {
-      name: "Alex Rodriguez",
-      role: "Founder & Executive Director",
-      bio: "Former CS teacher with 12+ years of experience developing computer science curriculum and organizing educational events.",
-      image: "/api/placeholder/300/300"
+      name: "Bhanu Atmakuri",
+      role: "Board Member",
+      image: "/api/placeholder/300/300",
+      bio: "Passionate about technology education and creating opportunities for young coders to develop their skills."
     },
     {
-      name: "Maya Johnson",
-      role: "Director of Operations",
-      bio: "Tech industry veteran with expertise in managing large-scale educational initiatives and strategic partnerships.",
-      image: "/api/placeholder/300/300"
+      name: "Suraj Shivakumar",
+      role: "Board Member",
+      image: "/api/placeholder/300/300",
+      bio: "Experienced in organizing tech events and passionate about fostering innovation through collaborative coding."
     },
     {
-      name: "David Chen",
-      role: "Education Lead",
-      bio: "Former principal and school administrator with a passion for making CS education accessible to all students.",
-      image: "/api/placeholder/300/300"
+      name: "Gagan Shiva Kumara",
+      role: "Board Member",
+      image: "/api/placeholder/300/300",
+      bio: "Dedicated to creating inclusive tech communities where students of all backgrounds can learn and grow together."
     },
     {
-      name: "Priya Patel",
-      role: "Community Engagement",
-      bio: "Community organizer dedicated to increasing diversity in tech and building bridges between schools and industry.",
-      image: "/api/placeholder/300/300"
+      name: "Arjun Harsha",
+      role: "Board Member",
+      image: "/api/placeholder/300/300",
+      bio: "Committed to developing creative problem-solving through hackathons and collaborative learning environments."
     },
     {
-      name: "James Wilson",
-      role: "Technical Director",
-      bio: "Former software engineer and bootcamp instructor who specializes in developing age-appropriate coding challenges.",
-      image: "/api/placeholder/300/300"
+      name: "Krishna Senthil",
+      role: "Board Member",
+      image: "/api/placeholder/300/300",
+      bio: "Focused on connecting students with industry professionals and creating meaningful learning experiences."
     },
     {
-      name: "Sofia Alvarez",
-      role: "Outreach Coordinator",
-      bio: "Education advocate with experience implementing STEM programs in underserved communities across the country.",
-      image: "/api/placeholder/300/300"
-    },
-    {
-      name: "Michael Lee",
-      role: "Mentor Program Manager",
-      bio: "Industry professional focused on recruiting and training volunteer mentors to provide guidance to student teams.",
-      image: "/api/placeholder/300/300"
-    },
-    {
-      name: "Aisha Olson",
-      role: "Curriculum Designer",
-      bio: "Educational consultant specialized in developing project-based learning experiences that blend tech with other subjects.",
-      image: "/api/placeholder/300/300"
+      name: "Aaditya Rana",
+      role: "Board Member",
+      image: "/api/placeholder/300/300",
+      bio: "Specializes in volunteer coordination and ensuring smooth operations for all Hackabyte events."
     }
   ];
 
@@ -68,20 +56,20 @@ export default function Team() {
           className="text-center mb-16"
         >
           <h2 className="text-3xl md:text-4xl font-bold mb-4 text-[#FF2247]">
-            Our Team
+            Hackabyte Board
           </h2>
           <p className="text-xl text-white max-w-3xl mx-auto">
-            Meet the dedicated educators, technologists, and advocates who make Hackabyte's mission possible.
+            Meet the dedicated students who lead Hackabyte and make our events possible
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-          {teamMembers.map((member, index) => (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+          {boardMembers.map((member, index) => (
             <motion.div
               key={member.name}
               initial={{ opacity: 0, y: 30 }}
               animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
-              transition={{ duration: 0.5, delay: 0.1 * (index % 4) }}
+              transition={{ duration: 0.5, delay: 0.1 * (index % 3) }}
               className="bg-[#1A1A1E] rounded-xl overflow-hidden border border-gray-800 hover:border-[#FF2247]/30 transition-all duration-300"
             >
               <div className="relative h-48 overflow-hidden">
