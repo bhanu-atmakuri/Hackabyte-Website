@@ -42,7 +42,7 @@ export default function TeamSection() {
       name: "Aaditya Rana",
       role: "Board Member",
       image: "/api/placeholder/300/300",
-      bio: "Specializes in volunteer coordination and ensuring smooth operations for all Hackabyte events."
+      bio: "Dedicated to building and supporting the volunteer program to ensure successful and impactful hackathon experiences."
     }
   ];
 

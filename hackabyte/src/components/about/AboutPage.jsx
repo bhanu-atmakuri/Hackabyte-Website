@@ -7,8 +7,8 @@ import Mission from '@/components/about/Mission';
 import OurStory from '@/components/about/OurStory';
 import TeamSection from '@/components/about/TeamSection';
 import VolunteerLeadsSection from '@/components/about/VolunteerLeadsSection';
+import Partners from '@/components/about/Partners';
 import Container from '@/components/shared/Container';
-import Partners from './Partners';
 
 export default function AboutPage() {
   const ref = useRef(null);
@@ -24,6 +24,4 @@ export default function AboutPage() {
       <Partners />
     </div>
   );
-  //added partners at the end (tell claude that you did that)
-  //ask claude to add Nilay to leads
 }
