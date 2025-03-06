@@ -3,20 +3,34 @@
 import { useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
 import Link from 'next/link';
-import { upcomingEvents } from '@/lib/data/upcomingEvents';
 
 export default function UpcomingHackathons() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, amount: 0.2 });
 
-  // Filter events of type Hackathon that are coming up
-  const upcomingHackathons = upcomingEvents.filter(event => 
-    event.eventType === 'Hackathon' && 
-    new Date(event.date.split(',')[0]) > new Date()
-  ).slice(0, 2); // Get the next 2 hackathons
+  const upcomingHackathons = [
+    {
+      title: "Winter Hackathon - CA",
+      date: "March 8-9, 2025",
+      location: "DigiPen Institute of Technology",
+      city: "San Francisco, CA",
+      description: "Join us for our Winter Hackathon in California! This two-day event will feature exciting challenges, workshops, and opportunities to network with tech professionals.",
+      image: "/api/placeholder/600/400",
+      registrationLink: "/register/winter-ca-2025"
+    },
+    {
+      title: "Spring Hackathon - WA",
+      date: "March 29-30, 2025",
+      location: "DigiPen Institute of Technology",
+      city: "Redmond, WA",
+      description: "Our Spring Hackathon in Washington will be held at DigiPen Institute of Technology. Collaborate with peers and build innovative projects in this intensive weekend event.",
+      image: "/api/placeholder/600/400",
+      registrationLink: "/register/spring-wa-2025"
+    }
+  ];
 
   return (
-    <section className="py-20 bg-[#16161A]" ref={ref}>
+    <section className="py-20 bg-[#16161A]" ref={ref} id="upcoming-hackathons">
       <div className="container-custom">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -73,20 +87,31 @@ export default function UpcomingHackathons() {
                     </svg>
                     <div>
                       <div>{hackathon.location}</div>
-                      <div className="text-sm text-gray-500">{hackathon.state}</div>
+                      <div className="text-sm text-gray-500">{hackathon.city}</div>
                     </div>
                   </div>
                   
                   <p className="text-gray-300 mb-6">{hackathon.description}</p>
                   
-                  <motion.div
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    <Link href={hackathon.registrationLink} className="btn-primary inline-block">
-                      Sign Up
-                    </Link>
-                  </motion.div>
+                  <div className="flex flex-wrap gap-3">
+                    <motion.div
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                    >
+                      <Link href={hackathon.registrationLink} className="btn-primary inline-block">
+                        Sign Up
+                      </Link>
+                    </motion.div>
+                    
+                    <motion.div
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                    >
+                      <Link href={`/events/${hackathon.title.toLowerCase().replace(/\s+/g, '-')}`} className="btn-secondary inline-block">
+                        Learn More
+                      </Link>
+                    </motion.div>
+                  </div>
                 </div>
               </div>
             </motion.div>

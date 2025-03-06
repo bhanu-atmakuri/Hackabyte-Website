@@ -3,7 +3,7 @@
 import { useRef, useState } from 'react';
 import { motion, useInView } from 'framer-motion';
 import Link from 'next/link';
-import { upcomingEvents, availableStates } from '@/lib/data/upcomingEvents';
+import { upcomingEvents, availableStates, competitionLevels } from '@/lib/data/upcomingEvents';
 
 export default function UpcomingEventsList() {
   const ref = useRef(null);
@@ -11,7 +11,7 @@ export default function UpcomingEventsList() {
   const [activeFilter, setActiveFilter] = useState('All Events');
   const [selectedCountry, setSelectedCountry] = useState('United States');
   const [selectedState, setSelectedState] = useState('All States');
-  const [eventType, setEventType] = useState('All Types');
+  const [competitionLevel, setCompetitionLevel] = useState('All Levels');
 
   // Filter events based on selected criteria
   const filteredEvents = upcomingEvents.filter(event => {
@@ -25,12 +25,12 @@ export default function UpcomingEventsList() {
       selectedState === 'All States' || 
       event.state === selectedState;
     
-    // Filter by event type
-    const typeMatch =
-      eventType === 'All Types' ||
-      (event.eventType && event.eventType === eventType);
+    // Filter by competition level
+    const levelMatch =
+      competitionLevel === 'All Levels' ||
+      (event.competitionLevel && event.competitionLevel === competitionLevel);
     
-    return ageGroupMatch && stateMatch && typeMatch;
+    return ageGroupMatch && stateMatch && levelMatch;
   });
 
   const cardVariants = {
@@ -70,7 +70,7 @@ export default function UpcomingEventsList() {
               <div>
                 <label className="block text-gray-300 text-sm font-medium mb-2">Age Group</label>
                 <div className="flex flex-wrap gap-2">
-                  {['All Events', 'High School', 'Middle School', 'Elementary'].map((filter) => (
+                  {['All Events', 'High School', 'Middle School', 'College'].map((filter) => (
                     <button
                       key={filter}
                       onClick={() => setActiveFilter(filter)}
@@ -86,21 +86,21 @@ export default function UpcomingEventsList() {
                 </div>
               </div>
 
-              {/* Event Type Filter */}
+              {/* Competition Level Filter */}
               <div>
-                <label className="block text-gray-300 text-sm font-medium mb-2">Event Type</label>
+                <label className="block text-gray-300 text-sm font-medium mb-2">Competition Level</label>
                 <div className="flex flex-wrap gap-2">
-                  {['All Types', 'Hackathon', 'Workshop', 'Camp'].map((type) => (
+                  {competitionLevels.map((level) => (
                     <button
-                      key={type}
-                      onClick={() => setEventType(type)}
+                      key={level}
+                      onClick={() => setCompetitionLevel(level)}
                       className={`px-3 py-1 text-sm rounded-full transition-colors ${
-                        eventType === type
+                        competitionLevel === level
                           ? 'bg-[#FF2247] text-white'
                           : 'bg-[#1A1A1E] text-gray-300 hover:bg-[#1E1E22] border border-gray-700'
                       }`}
                     >
-                      {type}
+                      {level}
                     </button>
                   ))}
                 </div>
@@ -141,6 +141,7 @@ export default function UpcomingEventsList() {
             Showing {filteredEvents.length} events
             {selectedState !== 'All States' && ` in ${selectedState}`}
             {activeFilter !== 'All Events' && ` for ${activeFilter} students`}
+            {competitionLevel !== 'All Levels' && ` at ${competitionLevel} level`}
           </div>
         </motion.div>
 
@@ -183,6 +184,9 @@ export default function UpcomingEventsList() {
                           {group}
                         </span>
                       ))}
+                      <span className="px-2 py-1 text-xs font-semibold rounded-full text-white bg-[#444444]">
+                        {event.competitionLevel}
+                      </span>
                     </div>
                     <h3 className="text-xl font-bold text-white">{event.title}</h3>
                   </div>
@@ -229,7 +233,7 @@ export default function UpcomingEventsList() {
               onClick={() => {
                 setActiveFilter('All Events');
                 setSelectedState('All States');
-                setEventType('All Types');
+                setCompetitionLevel('All Levels');
               }}
               className="btn-primary"
             >

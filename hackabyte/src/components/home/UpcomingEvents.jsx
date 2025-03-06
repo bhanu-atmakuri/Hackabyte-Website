@@ -4,13 +4,14 @@ import { useRef } from 'react';
 import Link from 'next/link';
 import { motion, useInView } from 'framer-motion';
 import { upcomingEvents } from '@/lib/data/upcomingEvents';
+import Container from '@/components/shared/Container';
 
 export default function UpcomingEvents() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, amount: 0.2 });
 
-  // Using the first three events from the upcomingEvents data
-  const displayedEvents = upcomingEvents.slice(0, 3);
+  // Using the first two events from the upcomingEvents data
+  const displayedEvents = upcomingEvents.slice(0, 2);
 
   const cardVariants = {
     hidden: { opacity: 0, y: 50 },
@@ -19,7 +20,7 @@ export default function UpcomingEvents() {
 
   return (
     <section className="py-20 bg-[#1A1A1E]" id="events" ref={ref}>
-      <div className="container-custom">
+      <Container>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
@@ -34,7 +35,7 @@ export default function UpcomingEvents() {
           </div>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {displayedEvents.map((event, index) => (
             <motion.div
               key={index}
@@ -66,12 +67,15 @@ export default function UpcomingEvents() {
                             ? "bg-[#F93236]" 
                             : group === "Middle School" 
                             ? "bg-[#FF2247]" 
-                            : "bg-[#1B247C]"
+                            : "bg-[#333333]"
                         }`}
                       >
                         {group}
                       </span>
                     ))}
+                    <span className="px-2 py-1 text-xs font-semibold rounded-full text-white bg-[#444444]">
+                      {event.competitionLevel}
+                    </span>
                   </div>
                   <h3 className="text-xl font-bold text-white">{event.title}</h3>
                 </div>
@@ -107,7 +111,7 @@ export default function UpcomingEvents() {
             </motion.div>
           ))}
         </div>
-      </div>
+      </Container>
     </section>
   );
 }

@@ -74,15 +74,6 @@ export default function HackathonRules() {
             </motion.div>
           ))}
         </div>
-        
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-          transition={{ duration: 0.5, delay: 0.6 }}
-          className="mt-16 text-center"
-        >
-          <h3 className="text-2xl font-bold text-white mb-6">Join us for our upcoming hackathons!</h3>
-        </motion.div>
       </div>
     </section>
   );
