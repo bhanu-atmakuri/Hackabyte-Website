@@ -1,0 +1,101 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 20, 20, 22; /* Grey text */
+  --background-start-rgb: 26, 26, 30; /* Dark gray background */
+  --background-end-rgb: 20, 20, 22; /* Grey */
+  --primary: 249, 50, 54; /* Primary red F93236 */
+  --secondary: 255, 0, 60; /* More redder red FF003C */
+  --red-accent: 255, 34, 71; /* Red FF2247 */
+  --dark-gray: 26, 26, 30; /* Dark gray background 1A1A1E */
+  --darker-gray: 22, 22, 24; /* Darker gray 16161A */
+  --grey: 20, 20, 22; /* Grey 141416 */
+}
+
+/* Hide content until hydration is complete */
+html:not(.hydrated) body {
+  opacity: 0;
+}
+
+html.hydrated body {
+  opacity: 1;
+  transition: opacity 0.15s ease-in;
+}
+
+body {
+  color: rgb(255, 255, 255);
+  background: rgb(var(--dark-gray));
+  scroll-behavior: smooth;
+  overflow-x: hidden; /* Prevent horizontal scrolling */
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-[#F93236] text-white font-semibold py-3 px-6 rounded-lg shadow-md hover:bg-[#FF003C] transition-all duration-300 transform hover:scale-105;
+  }
+  
+  .btn-secondary {
+    @apply bg-[#333333] text-white font-semibold py-3 px-6 rounded-lg shadow-md hover:bg-[#444444] transition-all duration-300 transform hover:scale-105;
+  }
+  
+  /* Responsive container with proper horizontal padding based on screen size */
+  .container-custom {
+    @apply mx-auto w-full px-4 sm:px-6 lg:px-8 xl:px-6 2xl:px-0;
+    max-width: min(100%, 1280px); /* 1280px max-width, but never wider than viewport */
+  }
+  
+  /* For hero sections that need to be wider */
+  .container-wide {
+    @apply mx-auto w-full px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-8;
+    max-width: min(100%, 1600px);
+  }
+  
+  /* For narrow content sections that need to be more focused */
+  .container-narrow {
+    @apply mx-auto w-full px-4 sm:px-6 lg:px-8;
+    max-width: min(100%, 1024px);
+  }
+  
+  .heading-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-[#F93236] to-[#FF2247];
+  }
+}
+
+/* Responsive section padding that scales with screen size */
+.section-padding {
+  @apply py-16 md:py-20 lg:py-24;
+}
+
+/* Adjustable vertical spacing that adapts to screen size */
+.py-responsive {
+  @apply py-4 sm:py-6 md:py-8 lg:py-10;
+}
+
+.pt-responsive {
+  @apply pt-4 sm:pt-6 md:pt-8 lg:pt-10;
+}
+
+.pb-responsive {
+  @apply pb-4 sm:pb-6 md:pb-8 lg:pb-10;
+}
+
+/* Top spacing for pages to account for fixed navbar */
+.page-top-spacing {
+  @apply pt-20 md:pt-24;
+}
+
+/* Make sections have margins that eliminate gaps or excessive space */
+section + section {
+  @apply mt-0;
+}
+
+/* Media query to handle ultrawide monitors by adding side margins on very large screens */
+@media (min-width: 2000px) {
+  body {
+    max-width: 2000px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}

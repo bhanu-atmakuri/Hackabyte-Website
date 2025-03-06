@@ -1,92 +1,36 @@
-# Hackabyte Website
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-A modern, responsive website for Hackabyte - a student-led hackathon and coding education organization.
+## Getting Started
 
-## Project Setup
-
-Follow these steps to set up and run the project:
-
-### 1. Clone the repository
+First, run the development server:
 
 ```bash
-git clone https://github.com/your-username/hackabyte-website.git
-cd hackabyte-website
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
 ```
 
-### 2. Install dependencies
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-```bash
-npm install
-```
+You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
 
-### 3. Create folder structure for images
+This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-Create the following folder structure in the `public` directory:
+## Learn More
 
-```
-public/
-└── images/
-    ├── logo.png                  # The Hackabyte logo
-    ├── bg-particles.jpg          # Dark background with particles
-    ├── organizers/               # Board members & volunteers
-    │   ├── bhanu.jpg
-    │   ├── suraj.jpg
-    │   ├── gagan.jpg
-    │   └── ...
-    ├── team-luma/                # LUMA team members
-    │   ├── ekansh.jpg
-    │   ├── jash.jpg
-    │   └── ...
-    ├── sponsors/
-    │   ├── anaghas-math.png
-    │   ├── desmos.png
-    │   └── ...
-    ├── past-events/
-    │   ├── spring-2024.jpg
-    │   ├── winter-2024.jpg
-    │   └── ...
-    ├── event-pictures/
-    │   ├── digipen.jpg
-    │   ├── coding1.jpg
-    │   └── ...
-    └── social/                   # Social media icons
-        ├── instagram.svg
-        ├── discord.svg
-        ├── facebook.svg
-        └── ...
-```
+To learn more about Next.js, take a look at the following resources:
 
-### 4. Add your images
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-Add all your images to the appropriate folders in the public directory. Make sure the image paths in the data files match your actual image paths.
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-### 5. Run the development server
+## Deploy on Vercel
 
-```bash
-npm start
-```
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
-The website should now be running at [http://localhost:3000](http://localhost:3000).
-
-## Project Structure
-
-- `src/components/` - Reusable UI components
-- `src/pages/` - Top-level page components
-- `src/data/` - Data files for the website content
-- `public/images/` - Images used throughout the website
-
-## Deployment
-
-To build the project for production:
-
-```bash
-npm run build
-```
-
-This will create a `build` directory with the compiled assets. You can then deploy this to your preferred hosting service.
-
-## Technologies Used
-
-- React.js
-- React Router
-- Tailwind CSS
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
