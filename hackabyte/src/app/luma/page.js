@@ -5,9 +5,9 @@ import Navbar from '@/components/shared/Navbar';
 import Footer from '@/components/shared/Footer';
 import LumaHero from '@/components/luma/LumaHero';
 import LumaAbout from '@/components/luma/LumaAbout';
-import LumaOffers from '@/components/luma/LumaOffers';
+import LumaClasses from '@/components/luma/LumaClasses';
 import LumaTeam from '@/components/luma/LumaTeam';
-import LumaJoin from '@/components/luma/LumaJoin';
+import LumaVolunteer from '@/components/luma/LumaVolunteer';
 import useNoFlash from '@/lib/hooks/useNoFlash';
 
 export default function Luma() {
@@ -33,9 +33,9 @@ export default function Luma() {
       <div className="page-top-spacing">
         <LumaHero />
         <LumaAbout />
-        <LumaOffers />
+        <LumaClasses />
         <LumaTeam />
-        <LumaJoin />
+        <LumaVolunteer />
       </div>
       <Footer />
     </main>
