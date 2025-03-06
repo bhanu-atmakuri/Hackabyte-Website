@@ -3,63 +3,33 @@
 import { useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
 
-export default function Team() {
+export default function VolunteerLeadsSection() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, amount: 0.2 });
 
-  const teamMembers = [
+  const volunteerLeads = [
     {
-      name: "Alex Rodriguez",
-      role: "Founder & Executive Director",
-      bio: "Former CS teacher with 12+ years of experience developing computer science curriculum and organizing educational events.",
-      image: "/api/placeholder/300/300"
+      name: "Navneeth Sastri",
+      role: "Volunteer Lead",
+      image: "/api/placeholder/300/300",
+      bio: "Manages volunteer recruitment and training, ensuring our team is prepared to support participants."
     },
     {
-      name: "Maya Johnson",
-      role: "Director of Operations",
-      bio: "Tech industry veteran with expertise in managing large-scale educational initiatives and strategic partnerships.",
-      image: "/api/placeholder/300/300"
+      name: "Nilay Jadhav",
+      role: "Volunteer Lead",
+      image: "/api/placeholder/300/300",
+      bio: "Coordinates volunteer schedules and assignments to ensure smooth operations during events."
     },
     {
-      name: "David Chen",
-      role: "Education Lead",
-      bio: "Former principal and school administrator with a passion for making CS education accessible to all students.",
-      image: "/api/placeholder/300/300"
-    },
-    {
-      name: "Priya Patel",
-      role: "Community Engagement",
-      bio: "Community organizer dedicated to increasing diversity in tech and building bridges between schools and industry.",
-      image: "/api/placeholder/300/300"
-    },
-    {
-      name: "James Wilson",
-      role: "Technical Director",
-      bio: "Former software engineer and bootcamp instructor who specializes in developing age-appropriate coding challenges.",
-      image: "/api/placeholder/300/300"
-    },
-    {
-      name: "Sofia Alvarez",
-      role: "Outreach Coordinator",
-      bio: "Education advocate with experience implementing STEM programs in underserved communities across the country.",
-      image: "/api/placeholder/300/300"
-    },
-    {
-      name: "Michael Lee",
-      role: "Mentor Program Manager",
-      bio: "Industry professional focused on recruiting and training volunteer mentors to provide guidance to student teams.",
-      image: "/api/placeholder/300/300"
-    },
-    {
-      name: "Aisha Olson",
-      role: "Curriculum Designer",
-      bio: "Educational consultant specialized in developing project-based learning experiences that blend tech with other subjects.",
-      image: "/api/placeholder/300/300"
+      name: "Aryaman Agnihotri",
+      role: "Volunteer Lead",
+      image: "/api/placeholder/300/300",
+      bio: "Oversees volunteer resources and provides guidance to team members during hackathon events."
     }
   ];
 
   return (
-    <section className="py-20 bg-[#16161A]" ref={ref}>
+    <section className="py-20 bg-[#1A1A1E]" ref={ref}>
       <div className="container-custom">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -68,23 +38,23 @@ export default function Team() {
           className="text-center mb-16"
         >
           <h2 className="text-3xl md:text-4xl font-bold mb-4 text-[#FF2247]">
-            Our Team
+            Hackabyte Volunteer Leads
           </h2>
           <p className="text-xl text-white max-w-3xl mx-auto">
-            Meet the dedicated educators, technologists, and advocates who make Hackabyte's mission possible.
+            Meet the team that coordinates our volunteer efforts and supports our events
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-          {teamMembers.map((member, index) => (
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+          {volunteerLeads.map((member, index) => (
             <motion.div
               key={member.name}
               initial={{ opacity: 0, y: 30 }}
               animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
-              transition={{ duration: 0.5, delay: 0.1 * (index % 4) }}
-              className="bg-[#1A1A1E] rounded-xl overflow-hidden border border-gray-800 hover:border-[#FF2247]/30 transition-all duration-300"
+              transition={{ duration: 0.5, delay: 0.1 * index }}
+              className="bg-[#16161A] rounded-xl overflow-hidden border border-gray-800 hover:border-[#FF2247]/30 transition-all duration-300"
             >
-              <div className="relative h-48 overflow-hidden">
+              <div className="h-48 relative">
                 <div 
                   className="w-full h-full bg-gray-800"
                   style={{
@@ -93,13 +63,13 @@ export default function Team() {
                     backgroundPosition: 'center'
                   }}
                 ></div>
-                <div className="absolute inset-0 bg-gradient-to-t from-[#1A1A1E] to-transparent opacity-60"></div>
+                <div className="absolute inset-0 bg-gradient-to-t from-[#16161A] to-transparent opacity-60"></div>
               </div>
               
               <div className="p-6">
                 <h3 className="text-xl font-bold text-white mb-1">{member.name}</h3>
                 <p className="text-[#FF2247] font-medium mb-3">{member.role}</p>
-                <p className="text-gray-400 text-sm">{member.bio}</p>
+                <p className="text-gray-400">{member.bio}</p>
                 
                 <div className="flex mt-4 space-x-3">
                   <a href="#" className="text-gray-400 hover:text-[#FF2247] transition-colors">
@@ -122,6 +92,26 @@ export default function Team() {
             </motion.div>
           ))}
         </div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+          transition={{ duration: 0.5, delay: 0.3 }}
+          className="mt-16 text-center"
+        >
+          <h3 className="text-2xl font-semibold text-white mb-4">Join Our Volunteer Team</h3>
+          <p className="text-gray-300 max-w-2xl mx-auto mb-6">
+            We're always looking for passionate individuals to join our volunteer team and help make our events successful. Volunteers gain valuable experience, connect with industry professionals, and make a positive impact on the tech community.
+          </p>
+          <motion.div
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <a href="/volunteer" className="btn-primary inline-block">
+              Apply to Volunteer
+            </a>
+          </motion.div>
+        </motion.div>
       </div>
     </section>
   );

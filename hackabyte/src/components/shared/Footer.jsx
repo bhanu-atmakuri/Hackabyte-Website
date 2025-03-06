@@ -1,3 +1,4 @@
+// hackabyte/src/components/shared/Footer.jsx
 'use client';
 
 import Link from 'next/link';
@@ -56,24 +57,16 @@ export default function Footer() {
       <Container className="py-12">
         <div className="grid grid-cols-1 md:grid-cols-5 gap-8">
           {/* Logo and info */}
-          <div className="md:col-span-2">
+          <div className="md:col-span-1">
             <Link href="/" className="flex items-center space-x-2 mb-6">
               <motion.div whileHover={{ rotate: 10 }} transition={{ duration: 0.2 }}>
-                <svg 
-                  xmlns="http://www.w3.org/2000/svg" 
-                  width="32" 
-                  height="32" 
-                  viewBox="0 0 24 24" 
-                  fill="none" 
-                  stroke="currentColor" 
-                  strokeWidth="2" 
-                  strokeLinecap="round" 
-                  strokeLinejoin="round" 
-                  className="text-[#F93236]"
-                >
-                  <polyline points="16 18 22 12 16 6"></polyline>
-                  <polyline points="8 6 2 12 8 18"></polyline>
-                </svg>
+                <div className="w-10 h-10 relative">
+                  <img 
+                    src="/logo.png" 
+                    alt="Hackabyte Logo" 
+                    className="w-full h-full object-contain"
+                  />
+                </div>
               </motion.div>
               <span className="text-xl font-bold">Hackabyte</span>
             </Link>
@@ -107,9 +100,9 @@ export default function Footer() {
             </div>
           </div>
           
-          {/* Links */}
+          {/* Navigation Links - now 4 columns in a row */}
           {footerSections.map((section, index) => (
-            <div key={index}>
+            <div key={index} className="md:col-span-1">
               <h3 className="text-lg font-semibold mb-4 text-gray-200">{section.title}</h3>
               <ul className="space-y-2">
                 {section.links.map((link, linkIndex) => (
