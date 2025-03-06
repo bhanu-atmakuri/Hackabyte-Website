@@ -18,10 +18,13 @@ export default function Hero() {
         containerRef.current.style.backgroundPositionY = `${scrollY * 0.5}px`;
       };
 
+      // Add event listener
       window.addEventListener('scroll', handleScroll);
+      
+      // Clean up
       return () => window.removeEventListener('scroll', handleScroll);
     }
-  }, []);
+  }, []); // Empty dependency array ensures this only runs once
 
   const staggerContainer = {
     hidden: { opacity: 0 },
@@ -55,7 +58,7 @@ export default function Hero() {
   return (
     <section 
       ref={containerRef} 
-      className="min-h-screen flex items-center pt-24 pb-16 relative overflow-hidden bg-[#1A1A1E]"
+      className="min-h-screen pt-24 pb-16 relative overflow-hidden bg-[#1A1A1E] flex items-center"
       id="home"
     >
       {/* Background Elements */}
@@ -108,7 +111,7 @@ export default function Hero() {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
-                <Link href="#learn-more" className="btn-secondary block text-center">
+                <Link href="#about" className="btn-secondary block text-center">
                   Learn More
                 </Link>
               </motion.div>

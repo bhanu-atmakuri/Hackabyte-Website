@@ -1,45 +1,86 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
+import Container from './Container';
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState(null);
+  const dropdownRef = useRef(null);
 
+  // Handle scroll effect
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const handleScroll = () => {
-        if (window.scrollY > 10) {
-          setIsScrolled(true);
-        } else {
-          setIsScrolled(false);
-        }
-      };
+    const handleScroll = () => {
+      if (window.scrollY > 10) {
+        setIsScrolled(true);
+      } else {
+        setIsScrolled(false);
+      }
+    };
 
-      window.addEventListener('scroll', handleScroll);
-      return () => window.removeEventListener('scroll', handleScroll);
-    }
-  }, []);
+    // Add the event listener
+    window.addEventListener('scroll', handleScroll);
+    
+    // Initial check
+    handleScroll();
+    
+    // Clean up
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []); // Empty dependency array so it only runs once on mount
+
+  // Handle dropdown outside clicks
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setActiveDropdown(null);
+      }
+    };
+
+    // Handle keyboard events for accessibility
+    const handleKeyDown = (e) => {
+      if (e.key === 'Tab' || e.key === 'Escape') {
+        setActiveDropdown(null);
+      }
+    };
+
+    // Add event listeners
+    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener('keydown', handleKeyDown);
+    
+    // Clean up
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, []); // Empty dependency array ensures this only runs once
 
   const navItems = [
-    { name: 'Home', href: '/' },
-    { name: 'LUMA', href: '/luma' },
+    { name: 'Home', href: '/', hasDropdown: false },
+    { name: 'LUMA', href: '/luma', hasDropdown: false },
     { 
       name: 'Events', 
-      href: '/events',
+      href: '/events', 
       hasDropdown: true,
       dropdownItems: [
         { name: 'Hackathons', href: '/events/hackathons' },
         { name: 'Past Events', href: '/events/past-events' }
       ]
     },
-    { name: 'About', href: '/about' },
-    { name: 'Join Us', href: '/join-us' },
-    { name: 'Contact Us', href: '/contact' },
+    { name: 'About', href: '/about', hasDropdown: false },
+    { name: 'Join Us', href: '/join-us', hasDropdown: false },
+    { name: 'Contact Us', href: '/contact', hasDropdown: false },
   ];
+
+  const handleDropdownToggle = (index) => {
+    if (activeDropdown === index) {
+      setActiveDropdown(null);
+    } else {
+      setActiveDropdown(index);
+    }
+  };
 
   return (
     <motion.nav
@@ -52,45 +93,53 @@ export default function Navbar() {
           : 'bg-transparent py-5'
       }`}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <Container>
         <div className="flex items-center justify-between">
-          {/* Logo in Center for larger screens, Left for mobile */}
-          <div className="flex-1 flex items-center md:justify-center">
-            <Link href="/" className="flex items-center space-x-2">
-              <div className="w-10 h-10 relative">
-                <img 
-                  src="/logo.png" 
-                  alt="Hackabyte Logo" 
-                  className="w-full h-full object-contain"
-                />
-              </div>
-              <span className="text-2xl font-bold text-gray-100">Hackabyte</span>
-            </Link>
-          </div>
+          {/* Logo */}
+          <Link href="/" className="flex items-center space-x-2">
+            <div className="w-10 h-10 relative">
+              <img 
+                src="/logo.png" 
+                alt="Hackabyte Logo" 
+                className="w-full h-full object-contain"
+              />
+            </div>
+            <span className="text-2xl font-bold text-gray-100">Hackabyte</span>
+          </Link>
 
-          {/* Desktop Navigation (right-aligned) */}
+          {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-6">
-            {navItems.map((item) => (
-              <div key={item.name} className="relative group">
+            {navItems.map((item, index) => (
+              <div key={item.name} 
+                className={`relative ${item.hasDropdown ? 'group' : ''}`} 
+                ref={item.hasDropdown && index === 2 ? dropdownRef : null}
+              >
                 {item.hasDropdown ? (
-                  <div>
-                    <button className="text-white hover:text-[#FF2247] font-medium transition-colors flex items-center py-2">
+                  <>
+                    <Link
+                      href={item.href}
+                      className="text-white hover:text-[#FF2247] font-medium transition-colors flex items-center py-2"
+                      onClick={() => setActiveDropdown(null)}
+                    >
                       {item.name}
                       <svg 
                         xmlns="http://www.w3.org/2000/svg" 
-                        className="w-4 h-4 ml-1 transition-transform group-hover:rotate-180" 
+                        className={`w-4 h-4 ml-1 transition-transform group-hover:rotate-180`} 
                         fill="none" 
                         viewBox="0 0 24 24" 
                         stroke="currentColor"
                       >
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                       </svg>
-                    </button>
+                    </Link>
+                    
+                    {/* Invisible spacer to maintain hover area */}
+                    <div className="absolute h-2 w-full left-0 bottom-0 z-10"></div>
                     
                     {/* Dropdown Menu */}
                     <div className="absolute invisible group-hover:visible opacity-0 group-hover:opacity-100 left-0 top-full w-48 rounded-md shadow-lg bg-[#16161A] border border-gray-800 ring-1 ring-black ring-opacity-5 z-50 transition-all duration-200">
                       <div className="py-1">
-                        {item.dropdownItems?.map((dropdownItem) => (
+                        {item.dropdownItems.map((dropdownItem) => (
                           <Link
                             key={dropdownItem.name}
                             href={dropdownItem.href}
@@ -101,47 +150,55 @@ export default function Navbar() {
                         ))}
                       </div>
                     </div>
-                  </div>
+                  </>
                 ) : (
-                  <Link 
-                    href={item.href}
-                    className="text-white hover:text-[#FF2247] font-medium transition-colors"
+                  <motion.div
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.95 }}
                   >
-                    {item.name}
-                  </Link>
+                    <Link 
+                      href={item.href}
+                      className="text-white hover:text-[#FF2247] font-medium transition-colors"
+                    >
+                      {item.name}
+                    </Link>
+                  </motion.div>
                 )}
               </div>
             ))}
-            <Link href="/auth" className="bg-[#F93236] text-white font-semibold py-2 px-4 rounded-lg hover:bg-[#FF003C] transition-all duration-300">
-              Sign In
-            </Link>
+            <motion.div
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <Link href="/auth" className="btn-primary">
+                Sign In
+              </Link>
+            </motion.div>
           </div>
 
           {/* Mobile Menu Button */}
-          <div className="md:hidden flex items-center">
-            <button 
-              className="text-gray-300"
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          <button 
+            className="md:hidden text-gray-300"
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          >
+            <svg 
+              xmlns="http://www.w3.org/2000/svg" 
+              width="24" 
+              height="24" 
+              viewBox="0 0 24 24" 
+              fill="none" 
+              stroke="currentColor" 
+              strokeWidth="2" 
+              strokeLinecap="round" 
+              strokeLinejoin="round"
             >
-              <svg 
-                xmlns="http://www.w3.org/2000/svg" 
-                width="24" 
-                height="24" 
-                viewBox="0 0 24 24" 
-                fill="none" 
-                stroke="currentColor" 
-                strokeWidth="2" 
-                strokeLinecap="round" 
-                strokeLinejoin="round"
-              >
-                {isMobileMenuOpen ? (
-                  <path d="M18 6L6 18M6 6l12 12" />
-                ) : (
-                  <path d="M3 12h18M3 6h18M3 18h18" />
-                )}
-              </svg>
-            </button>
-          </div>
+              {isMobileMenuOpen ? (
+                <path d="M18 6L6 18M6 6l12 12" />
+              ) : (
+                <path d="M3 12h18M3 6h18M3 18h18" />
+              )}
+            </svg>
+          </button>
         </div>
 
         {/* Mobile Menu */}
@@ -155,28 +212,32 @@ export default function Navbar() {
               className="md:hidden mt-4"
             >
               <div className="flex flex-col space-y-0 py-4">
-                {navItems.map((item) => (
+                {navItems.map((item, index) => (
                   <div key={item.name}>
                     {item.hasDropdown ? (
                       <>
-                        <button
+                        <Link
+                          href={item.href}
                           className="text-white hover:text-[#FF2247] font-medium transition-colors px-4 py-3 w-full text-left flex items-center justify-between"
-                          onClick={() => setActiveDropdown(activeDropdown === item.name ? null : item.name)}
+                          onClick={() => {
+                            handleDropdownToggle(index);
+                            setIsMobileMenuOpen(false);
+                          }}
                         >
                           {item.name}
                           <svg 
                             xmlns="http://www.w3.org/2000/svg" 
-                            className={`w-4 h-4 transition-transform ${activeDropdown === item.name ? 'rotate-180' : ''}`} 
+                            className={`w-4 h-4 transition-transform ${activeDropdown === index ? 'rotate-180' : ''}`} 
                             fill="none" 
                             viewBox="0 0 24 24" 
                             stroke="currentColor"
                           >
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                           </svg>
-                        </button>
+                        </Link>
                         
                         <AnimatePresence>
-                          {activeDropdown === item.name && item.dropdownItems && (
+                          {activeDropdown === index && (
                             <motion.div
                               initial={{ opacity: 0, height: 0 }}
                               animate={{ opacity: 1, height: 'auto' }}
@@ -214,7 +275,7 @@ export default function Navbar() {
                 ))}
                 <Link 
                   href="/auth" 
-                  className="bg-[#F93236] text-white font-semibold py-2 px-4 mx-4 mt-4 rounded-lg text-center block hover:bg-[#FF003C] transition-all duration-300"
+                  className="btn-primary mx-4 mt-4 text-center"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   Sign In
@@ -223,7 +284,7 @@ export default function Navbar() {
             </motion.div>
           )}
         </AnimatePresence>
-      </div>
+      </Container>
     </motion.nav>
   );
 }

@@ -65,25 +65,30 @@ body {
 
 /* Responsive section padding that scales with screen size */
 .section-padding {
-  @apply py-12 sm:py-16 md:py-20 lg:py-24;
+  @apply py-16 md:py-20 lg:py-24;
 }
 
 /* Adjustable vertical spacing that adapts to screen size */
 .py-responsive {
-  @apply py-6 sm:py-8 md:py-10 lg:py-12;
+  @apply py-4 sm:py-6 md:py-8 lg:py-10;
 }
 
 .pt-responsive {
-  @apply pt-6 sm:pt-8 md:pt-10 lg:pt-12;
+  @apply pt-4 sm:pt-6 md:pt-8 lg:pt-10;
 }
 
 .pb-responsive {
-  @apply pb-6 sm:pb-8 md:pb-10 lg:pb-12;
+  @apply pb-4 sm:pb-6 md:pb-8 lg:pb-10;
 }
 
 /* Top spacing for pages to account for fixed navbar */
 .page-top-spacing {
-  @apply pt-24 md:pt-28 lg:pt-32;
+  @apply pt-20 md:pt-24;
+}
+
+/* Make sections have margins that eliminate gaps or excessive space */
+section + section {
+  @apply mt-0;
 }
 
 /* Media query to handle ultrawide monitors by adding side margins on very large screens */

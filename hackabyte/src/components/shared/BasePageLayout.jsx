@@ -1,8 +1,8 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import Navbar from '@/components/shared/Navbar';
-import Footer from '@/components/shared/Footer';
+import Navbar from './Navbar';
+import Footer from './Footer';
 import useNoFlash from '@/lib/hooks/useNoFlash';
 
 /**
@@ -22,7 +22,7 @@ export default function BasePageLayout({ children, className = '' }) {
   // Only render content after client-side hydration
   useEffect(() => {
     setIsMounted(true);
-  }, []);
+  }, []); // Empty dependency array to ensure it only runs once
   
   if (!isMounted) {
     return (
