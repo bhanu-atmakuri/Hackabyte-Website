@@ -165,17 +165,48 @@ export default function MentorProgram() {
             Many of our mentors find the experience rewarding and continue to participate in multiple events.
           </p>
           
-          <motion.div
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            <Link 
-              href="/mentor-application" 
-              className="btn-primary inline-block px-8 py-3"
+          <div className="flex flex-wrap justify-center gap-6">
+            <motion.div
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
             >
-              Apply to Be a Mentor
-            </Link>
-          </motion.div>
+              <Link href="/apply/mentor" className="btn-primary block px-8 py-3">
+                Apply as a Mentor
+              </Link>
+            </motion.div>
+            
+            <motion.div
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <Link href="/contact" className="btn-secondary block px-8 py-3">
+                Contact Us
+              </Link>
+            </motion.div>
+          </div>
+          
+          <div className="mt-10 max-w-4xl mx-auto px-6 py-8 bg-[#16161A] rounded-xl border border-gray-800">
+            <div className="flex flex-col md:flex-row items-center gap-6">
+              <div className="w-24 h-24 rounded-full bg-gray-800 flex-shrink-0 overflow-hidden">
+                <div 
+                  className="w-full h-full"
+                  style={{
+                    backgroundImage: 'url(/api/placeholder/120/120)',
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center'
+                  }}
+                ></div>
+              </div>
+              <div className="text-left">
+                <p className="text-gray-300 italic">
+                  "Being a mentor at Hackabyte's events has been incredibly rewarding. Watching students grow from uncertain beginners to confident developers over just a weekend is amazing. The energy and fresh ideas these young minds bring is inspiring!"
+                </p>
+                <p className="text-[#FF2247] font-semibold mt-4">
+                  — Sarah Chen, Software Engineer at TechCorp
+                </p>
+              </div>
+            </div>
+          </div>
         </motion.div>
       </div>
     </section>

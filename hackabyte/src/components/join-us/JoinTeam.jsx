@@ -8,41 +8,47 @@ export default function JoinTeam() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, amount: 0.2 });
 
-  const teamRoles = [
+  const openPositions = [
     {
-      title: "Operations Coordinator",
-      description: "Manage event logistics, coordinate with venues, and ensure smooth execution of hackathon events.",
-      skills: ["Project Management", "Communication", "Problem-Solving"]
+      title: "Event Coordinator",
+      type: "Full-time",
+      location: "San Francisco, CA or Remote",
+      description: "Plan and execute hackathon events, managing logistics, venue coordination, and event timelines. Work closely with schools and venue partners to ensure successful events.",
+      requirements: [
+        "2+ years experience in event planning or coordination",
+        "Strong organizational and communication skills",
+        "Experience working with educational institutions preferred",
+        "Ability to travel to event locations when necessary"
+      ]
     },
     {
-      title: "Marketing & Communications Specialist",
-      description: "Develop marketing strategies, manage social media, and create promotional content to attract participants and sponsors.",
-      skills: ["Digital Marketing", "Graphic Design", "Social Media Management"]
+      title: "Curriculum Developer",
+      type: "Part-time",
+      location: "Remote",
+      description: "Create age-appropriate coding challenges, workshops, and learning materials for our hackathon participants ranging from elementary to high school levels.",
+      requirements: [
+        "Background in computer science or related field",
+        "Experience developing educational content",
+        "Understanding of different age group learning capabilities",
+        "Familiarity with various programming languages and technologies"
+      ]
     },
     {
-      title: "Community Outreach Coordinator",
-      description: "Build partnerships with schools, universities, and tech communities to expand our reach and impact.",
-      skills: ["Networking", "Relationship Building", "Public Speaking"]
-    },
-    {
-      title: "Technology & Web Development",
-      description: "Develop and maintain our website, registration platforms, and digital infrastructure.",
-      skills: ["Web Development", "UI/UX Design", "Full-Stack Programming"]
-    },
-    {
-      title: "Sponsorship & Partnerships Manager",
-      description: "Identify, engage, and manage relationships with potential corporate and educational sponsors.",
-      skills: ["Business Development", "Negotiation", "Relationship Management"]
-    },
-    {
-      title: "Workshop & Content Curator",
-      description: "Design and coordinate educational content, workshops, and learning experiences for hackathon participants.",
-      skills: ["Curriculum Design", "Technical Writing", "Educational Strategy"]
+      title: "Community Outreach Specialist",
+      type: "Full-time",
+      location: "Multiple Locations",
+      description: "Develop relationships with schools, community organizations, and technology partners to expand Hackabyte's reach and impact, with a focus on underrepresented communities.",
+      requirements: [
+        "Strong networking and relationship-building skills",
+        "Experience in education, nonprofits, or community organizing",
+        "Passion for increasing diversity in technology",
+        "Excellent verbal and written communication abilities"
+      ]
     }
   ];
 
   return (
-    <section id="join-team" className="py-20 bg-[#1A1A1E]" ref={ref}>
+    <section id="careers" className="py-20 bg-[#16161A]" ref={ref}>
       <div className="container-custom">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -54,68 +60,183 @@ export default function JoinTeam() {
             Join Our Team
           </h2>
           <p className="text-xl text-white max-w-3xl mx-auto">
-            Be part of a passionate team dedicated to empowering the next generation of tech innovators. 
-            We're always looking for talented individuals who want to make a difference.
+            Become part of a mission-driven organization dedicated to empowering the next generation of technology innovators and problem-solvers.
           </p>
         </motion.div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {teamRoles.map((role, index) => (
-            <motion.div
-              key={role.title}
-              initial={{ opacity: 0, y: 30 }}
-              animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
-              transition={{ duration: 0.5, delay: 0.1 * index }}
-              className="bg-[#16161A] p-6 rounded-xl border border-gray-800 hover:border-[#FF2247]/30 transition-all"
-            >
-              <div className="text-[#FF2247] mb-4">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                </svg>
+        <div className="grid md:grid-cols-2 gap-8 mb-16">
+          <motion.div
+            initial={{ opacity: 0, x: -30 }}
+            animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -30 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            className="bg-[#1A1A1E] p-8 rounded-xl border border-gray-800"
+          >
+            <h3 className="text-2xl font-bold text-[#FF2247] mb-6">Why Work With Us?</h3>
+            
+            <div className="space-y-6">
+              <div>
+                <h4 className="text-lg font-bold text-white mb-2">Make an Impact</h4>
+                <p className="text-gray-300">
+                  Work that directly contributes to increasing coding literacy and technology skills among young students across diverse backgrounds.
+                </p>
               </div>
-              <h3 className="text-xl font-bold text-white mb-2">{role.title}</h3>
-              <p className="text-gray-300 mb-4">{role.description}</p>
               
-              <div className="mt-4">
-                <h4 className="text-md font-semibold text-[#FF2247] mb-2">Key Skills</h4>
-                <div className="flex flex-wrap gap-2">
-                  {role.skills.map((skill) => (
-                    <span 
-                      key={skill} 
-                      className="px-2 py-1 text-xs bg-[#1A1A1E] text-gray-300 rounded-full border border-gray-700"
-                    >
-                      {skill}
-                    </span>
-                  ))}
+              <div>
+                <h4 className="text-lg font-bold text-white mb-2">Collaborative Culture</h4>
+                <p className="text-gray-300">
+                  Join a team of passionate educators, technologists, and community builders who value collaboration, innovation, and inclusivity.
+                </p>
+              </div>
+              
+              <div>
+                <h4 className="text-lg font-bold text-white mb-2">Growth Opportunities</h4>
+                <p className="text-gray-300">
+                  Develop your professional skills while working on meaningful projects in a fast-growing organization.
+                </p>
+              </div>
+              
+              <div>
+                <h4 className="text-lg font-bold text-white mb-2">Flexible Work</h4>
+                <p className="text-gray-300">
+                  We offer remote work options and flexible schedules for many positions to support work-life balance.
+                </p>
+              </div>
+              
+              <div>
+                <h4 className="text-lg font-bold text-white mb-2">Competitive Benefits</h4>
+                <p className="text-gray-300">
+                  Full-time positions include health insurance, professional development stipends, paid time off, and other competitive benefits.
+                </p>
+              </div>
+            </div>
+          </motion.div>
+          
+          <motion.div
+            initial={{ opacity: 0, x: 30 }}
+            animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: 30 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            className="relative"
+          >
+            <div className="sticky top-24">
+              <div
+                className="h-80 rounded-xl overflow-hidden relative mb-6"
+                style={{
+                  backgroundImage: 'url(/api/placeholder/600/400)',
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'center'
+                }}
+              >
+                <div className="absolute inset-0 bg-gradient-to-t from-[#16161A] to-transparent"></div>
+                <div className="absolute bottom-0 left-0 right-0 p-6">
+                  <h3 className="text-xl font-bold text-white mb-2">Join Our Mission</h3>
+                  <p className="text-gray-300">
+                    Our team members share a passion for education, technology, and creating opportunities for young people.
+                  </p>
                 </div>
               </div>
-            </motion.div>
-          ))}
+              
+              <div className="bg-[#1A1A1E] p-6 rounded-xl border border-gray-800">
+                <h4 className="text-lg font-bold text-white mb-3">Our Values</h4>
+                <div className="space-y-3">
+                  <div className="flex items-center gap-3">
+                    <div className="w-3 h-3 rounded-full bg-[#FF2247]"></div>
+                    <p className="text-gray-300">Inclusivity & Diversity</p>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <div className="w-3 h-3 rounded-full bg-[#FF2247]"></div>
+                    <p className="text-gray-300">Innovation & Creativity</p>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <div className="w-3 h-3 rounded-full bg-[#FF2247]"></div>
+                    <p className="text-gray-300">Continuous Learning</p>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <div className="w-3 h-3 rounded-full bg-[#FF2247]"></div>
+                    <p className="text-gray-300">Collaborative Problem-Solving</p>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <div className="w-3 h-3 rounded-full bg-[#FF2247]"></div>
+                    <p className="text-gray-300">Community Impact</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </motion.div>
         </div>
 
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
-          transition={{ duration: 0.5, delay: 0.4 }}
-          className="text-center mt-16"
+          transition={{ duration: 0.5, delay: 0.3 }}
         >
-          <h3 className="text-2xl font-bold text-white mb-6">Ready to Make an Impact?</h3>
-          <p className="text-gray-300 max-w-2xl mx-auto mb-8">
-            We believe in creating opportunities for passionate individuals to grow and contribute. 
-            If you don't see a role that fits perfectly, we're always open to hearing from talented people.
-          </p>
+          <h3 className="text-2xl font-bold text-white mb-8 text-center">Open Positions</h3>
           
-          <motion.div
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            <Link 
-              href="/team-application" 
-              className="btn-primary inline-block px-8 py-3"
+          <div className="space-y-6">
+            {openPositions.map((position, index) => (
+              <motion.div
+                key={position.title}
+                initial={{ opacity: 0, y: 20 }}
+                animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+                transition={{ duration: 0.4, delay: 0.3 + (index * 0.1) }}
+                className="bg-[#1A1A1E] rounded-xl border border-gray-800 overflow-hidden"
+              >
+                <div className="p-6 md:p-8">
+                  <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-5">
+                    <div>
+                      <h4 className="text-xl font-bold text-white">{position.title}</h4>
+                      <div className="flex flex-wrap items-center gap-3 mt-2">
+                        <span className="text-sm bg-[#FF2247]/20 text-[#FF2247] px-3 py-1 rounded-full">
+                          {position.type}
+                        </span>
+                        <span className="text-sm text-gray-400">
+                          {position.location}
+                        </span>
+                      </div>
+                    </div>
+                    <motion.div
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      className="md:flex-shrink-0"
+                    >
+                      <Link href={`/careers/${position.title.toLowerCase().replace(/\s+/g, '-')}`} className="btn-primary block text-center whitespace-nowrap">
+                        Apply Now
+                      </Link>
+                    </motion.div>
+                  </div>
+                  
+                  <p className="text-gray-300 mb-6">
+                    {position.description}
+                  </p>
+                  
+                  <div>
+                    <h5 className="text-white font-semibold mb-2">Requirements:</h5>
+                    <ul className="list-disc pl-5 space-y-1 text-gray-300">
+                      {position.requirements.map((req, idx) => (
+                        <li key={idx}>{req}</li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+          
+          <div className="mt-12 text-center">
+            <h4 className="text-xl font-bold text-white mb-3">Don't see a position that fits your skills?</h4>
+            <p className="text-gray-300 max-w-2xl mx-auto mb-8">
+              We're always looking for talented individuals who are passionate about our mission. 
+              Send us your resume and tell us how you can contribute to Hackabyte.
+            </p>
+            <motion.div
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="inline-block"
             >
-              Apply to Join Our Team
-            </Link>
-          </motion.div>
+              <Link href="/contact?subject=General Application" className="btn-secondary inline-block px-8 py-3">
+                Submit General Application
+              </Link>
+            </motion.div>
+          </div>
         </motion.div>
       </div>
     </section>
