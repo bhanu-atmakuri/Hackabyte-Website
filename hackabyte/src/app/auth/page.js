@@ -27,11 +27,9 @@ export default function Auth() {
   return (
     <main className="min-h-screen bg-[#1A1A1E]">
       <Navbar />
-      <div className="page-top-spacing">
-        <Section containerSize="narrow">
-          <AuthForm />
-        </Section>
-      </div>
+      <Section containerSize="narrow">
+        <AuthForm />
+      </Section>
       <Footer />
     </main>
   );
