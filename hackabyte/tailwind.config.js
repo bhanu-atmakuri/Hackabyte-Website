@@ -1,3 +1,4 @@
+// hackabyte/tailwind.config.js
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
@@ -18,30 +19,20 @@ module.exports = {
         },
       },
       screens: {
-        '3xl': '1920px',  // Additional breakpoint for very large screens
+        '2xl': '1536px',   // Standard 2xl breakpoint
+        '3xl': '1920px',   // 2K screens
+        '4xl': '2560px',   // 4K screens
       },
-      maxWidth: {
-        'screen-xl': '1280px',
-        'screen-2xl': '1536px',
-        'screen-3xl': '1920px',
+      container: {
+        center: true,
+        padding: {
+          DEFAULT: '1rem',
+          sm: '1.5rem',
+          lg: '2rem',
+          xl: '3rem',
+          '2xl': '4rem',
+        },
       },
-      spacing: {
-        '128': '32rem',
-        '144': '36rem',
-      },
-      containers: {
-        xs: '20rem',    // 320px
-        sm: '24rem',    // 384px
-        md: '28rem',    // 448px
-        lg: '32rem',    // 512px
-        xl: '36rem',    // 576px
-        '2xl': '42rem', // 672px
-        '3xl': '48rem', // 768px
-        '4xl': '56rem', // 896px
-        '5xl': '64rem', // 1024px
-        '6xl': '72rem', // 1152px
-        '7xl': '80rem', // 1280px
-      }
     },
   },
   plugins: [],
