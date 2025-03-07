@@ -29,14 +29,12 @@ export default function JoinUs() {
 
   return (
     <main className="min-h-screen">
-      <Navbar />
-      <div className="page-top-spacing">
-        <JoinUsHero />
-        <VolunteerOpportunities />
-        <MentorProgram />
-        <JoinTeam />
-        <SponsorshipOptions />
-      </div>
+      <Navbar />\
+      <JoinUsHero />
+      <VolunteerOpportunities />
+      <MentorProgram />
+      {/*<JoinTeam />*/}
+      <SponsorshipOptions />
       <Footer />
     </main>
   );

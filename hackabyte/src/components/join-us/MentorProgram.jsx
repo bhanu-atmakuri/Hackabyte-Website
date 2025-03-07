@@ -164,3 +164,20 @@ export default function MentorProgram() {
             Join our community of mentors and make a lasting impact on students' learning journeys. 
             Many of our mentors find the experience rewarding and continue to participate in multiple events.
           </p>
+          
+          <motion.div
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <Link 
+              href="/mentor-application" 
+              className="btn-primary inline-block px-8 py-3"
+            >
+              Apply to Be a Mentor
+            </Link>
+          </motion.div>
+        </motion.div>
+      </div>
+    </section>
+  );
+}

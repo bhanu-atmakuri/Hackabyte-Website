@@ -26,22 +26,7 @@ export default function JoinUsHero() {
               Become part of our mission to inspire the next generation of innovators and empower young minds through coding challenges and collaboration.
             </p>
             
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
-              <motion.a 
-                href="#volunteer"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.2 }}
-                className="flex flex-col items-center p-6 bg-[#16161A] rounded-xl border border-gray-800 hover:border-[#FF2247]/30 transition-all"
-              >
-                <div className="text-[#FF2247] mb-3">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 11V9a2 2 0 00-2-2m2 4v4a2 2 0 104 0v-1m-4-3H9m2 0h4m6 1a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                </div>
-                <h3 className="text-lg font-bold text-white mb-1">Volunteer</h3>
-                <p className="text-gray-400 text-sm text-center">Help run our events and support students</p>
-              </motion.a>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
               
               <motion.a 
                 href="#mentor"
@@ -60,6 +45,24 @@ export default function JoinUsHero() {
               </motion.a>
               
               <motion.a 
+                href="#volunteer"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+                className="flex flex-col items-center p-6 bg-[#16161A] rounded-xl border border-gray-800 hover:border-[#FF2247]/30 transition-all"
+              >
+                <div className="text-[#FF2247] mb-3">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 11V9a2 2 0 00-2-2m2 4v4a2 2 0 104 0v-1m-4-3H9m2 0h4m6 1a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+                <h3 className="text-lg font-bold text-white mb-1">Volunteer</h3>
+                <p className="text-gray-400 text-sm text-center">Help run our events and support students</p>
+              </motion.a>
+
+              {
+              /*
+              <motion.a 
                 href="#join-team"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -74,7 +77,9 @@ export default function JoinUsHero() {
                 <h3 className="text-lg font-bold text-white mb-1">Join Our Team</h3>
                 <p className="text-gray-400 text-sm text-center">Explore career opportunities with us</p>
               </motion.a>
-              
+              */
+              }
+
               <motion.a 
                 href="#sponsor"
                 initial={{ opacity: 0, y: 20 }}
