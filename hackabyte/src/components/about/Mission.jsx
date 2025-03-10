@@ -2,6 +2,7 @@
 
 import { useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
+import Container from '../shared/Container';
 
 export default function Mission() {
   const ref = useRef(null);
@@ -48,7 +49,7 @@ export default function Mission() {
 
   return (
     <section className="py-20 bg-[#16161A]" ref={ref}>
-      <div className="container-custom max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <Container>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
@@ -105,7 +106,7 @@ export default function Mission() {
             ))}
           </div>
         </div>
-      </div>
+      </Container>
     </section>
   );
 }

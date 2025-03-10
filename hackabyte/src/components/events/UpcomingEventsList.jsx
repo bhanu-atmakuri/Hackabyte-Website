@@ -4,6 +4,7 @@ import { useRef, useState } from 'react';
 import { motion, useInView } from 'framer-motion';
 import Link from 'next/link';
 import { upcomingEvents, availableStates, competitionLevels } from '@/lib/data/upcomingEvents';
+import Container from '../shared/Container';
 
 export default function UpcomingEventsList() {
   const ref = useRef(null);
@@ -40,7 +41,7 @@ export default function UpcomingEventsList() {
 
   return (
     <section className="py-20 bg-[#1A1A1E]" id="upcoming" ref={ref}>
-      <div className="container-custom">
+      <Container size = "wide">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
@@ -65,7 +66,7 @@ export default function UpcomingEventsList() {
           <div className="bg-[#16161A] p-6 rounded-xl border border-gray-800 mb-6">
             <h3 className="text-xl font-bold text-white mb-4">Filter Events</h3>
             
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-6 flex items-center">
               {/* Age Group Filter */}
               <div>
                 <label className="block text-gray-300 text-sm font-medium mb-2">Age Group</label>
@@ -255,7 +256,7 @@ export default function UpcomingEventsList() {
             </svg>
           </Link>
         </motion.div>
-      </div>
+      </Container>
     </section>
   );
 }

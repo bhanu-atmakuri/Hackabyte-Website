@@ -25,8 +25,8 @@ export default function Newsletter() {
         <div className="absolute bottom-0 right-1/4 w-64 h-64 bg-[#FF2247]/20 rounded-full blur-3xl"></div>
       </div>
       
-      <Container size="narrow" className="relative z-10">
-        <div className="max-w-3xl mx-auto text-center">
+      <Container size = "half" className="relative z-10">
+        <div className="mx-auto text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}

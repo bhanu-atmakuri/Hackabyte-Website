@@ -58,7 +58,7 @@ export default function Hero() {
   return (
     <section 
       ref={containerRef} 
-      className="min-h-screen pt-24 pb-16 relative overflow-hidden bg-[#1A1A1E] flex items-center"
+      className="min-h-screen pt-8 pb-16 relative overflow-hidden bg-[#1A1A1E] flex items-center"
       id="home"
     >
       {/* Background Elements */}
@@ -68,7 +68,7 @@ export default function Hero() {
         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-[#FF003C] rounded-full blur-3xl"></div>
       </div>
 
-      <Container size="wide">
+      <Container>
         <div className="grid md:grid-cols-2 gap-8 items-center">
           {/* Left Column - Text Content */}
           <motion.div
@@ -158,13 +158,6 @@ export default function Hero() {
                         </span>
                       </motion.div>
                     ))}
-                    
-                    <motion.div
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      transition={{ duration: 0.3, delay: 2 }}
-                      className="absolute bottom-4 right-4 w-2 h-5 bg-white animate-pulse"
-                    />
                   </code>
                 </pre>
               </div>

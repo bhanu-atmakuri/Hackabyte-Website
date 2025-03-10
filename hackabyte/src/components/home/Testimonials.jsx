@@ -2,6 +2,7 @@
 
 import { useState, useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
+import Container from '@/components/shared/Container';
 
 export default function Testimonials() {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -49,7 +50,7 @@ export default function Testimonials() {
 
   return (
     <section className="py-20 bg-[#16161A]" id="testimonials" ref={ref}>
-      <div className="container-custom">
+      <Container>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
@@ -69,7 +70,7 @@ export default function Testimonials() {
           initial={{ opacity: 0, scale: 0.95 }}
           animate={isInView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.95 }}
           transition={{ duration: 0.5, delay: 0.3 }}
-          className="relative max-w-4xl mx-auto"
+          className="relative mx-auto"
         >
           <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
             <div className="flex flex-col md:flex-row">
@@ -169,7 +170,7 @@ export default function Testimonials() {
             </div>
           </div>
         </motion.div>
-      </div>
+      </Container>
     </section>
   );
 }

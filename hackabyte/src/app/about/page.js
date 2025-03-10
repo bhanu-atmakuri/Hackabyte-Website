@@ -2,8 +2,13 @@
 
 import { useEffect, useState } from 'react';
 import Navbar from '@/components/shared/Navbar';
+import AboutHero from '@/components/about/AboutHero';
+import Mission from '@/components/about/Mission';
+import OurStory from '@/components/about/OurStory';
+import TeamSection from '@/components/about/TeamSection';
+import VolunteerLeadsSection from '@/components/about/VolunteerLeadsSection';
+import Partners from '@/components/about/Partners';
 import Footer from '@/components/shared/Footer';
-import AboutPage from '@/components/about/AboutPage';
 import useNoFlash from '@/lib/hooks/useNoFlash';
 
 export default function About() {
@@ -26,9 +31,12 @@ export default function About() {
   return (
     <main className="min-h-screen">
       <Navbar />
-      <div className="page-top-spacing">
-        <AboutPage />
-      </div>
+      <AboutHero />
+      <Mission />
+      <OurStory />
+      <TeamSection />
+      <VolunteerLeadsSection />
+      <Partners />
       <Footer />
     </main>
   );

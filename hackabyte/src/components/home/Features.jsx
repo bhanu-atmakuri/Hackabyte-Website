@@ -85,7 +85,7 @@ export default function Features() {
   };
 
   return (
-    <section id="about" className="bg-[#16161A] py-16 md:py-20" ref={ref}>
+    <section id="about" className="bg-[#16161A] py-16 md:py-20 w-screen max-w-[100vw]" ref={ref}>
       <Container>
         <motion.div
           initial={{ opacity: 0, y: 20 }}

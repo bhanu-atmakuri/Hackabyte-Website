@@ -3,6 +3,7 @@
 import { useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
 import Link from 'next/link';
+import Container from '../shared/Container';
 
 export default function EventsRegistration() {
   const ref = useRef(null);
@@ -16,7 +17,7 @@ export default function EventsRegistration() {
         <div className="absolute bottom-0 left-1/4 w-64 h-64 bg-[#FF2247] rounded-full blur-3xl"></div>
       </div>
       
-      <div className="container-custom max-w-5xl">
+      <Container>
         <div className="bg-[#16161A] rounded-xl border border-gray-800 overflow-hidden">
           <div className="grid md:grid-cols-2 gap-0">
             {/* Left Column - Image */}
@@ -163,7 +164,7 @@ export default function EventsRegistration() {
             </Link>
           </motion.div>
         </div>
-      </div>
+      </Container>
     </section>
   );
 }

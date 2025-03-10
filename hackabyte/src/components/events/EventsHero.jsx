@@ -1,6 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import Container from '../shared/Container';
 
 export default function EventsHero() {
   return (
@@ -11,7 +12,7 @@ export default function EventsHero() {
         <div className="absolute bottom-20 left-20 w-72 h-72 bg-[#FF2247] rounded-full blur-3xl"></div>
       </div>
       
-      <div className="container-custom max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+      <Container>
         <div className="text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -65,7 +66,7 @@ export default function EventsHero() {
             </div>
           </motion.div>
         </div>
-      </div>
+      </Container>
     </section>
   );
 }

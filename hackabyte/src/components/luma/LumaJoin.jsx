@@ -3,6 +3,7 @@
 
 import { useRef, useState } from 'react';
 import { motion, useInView } from 'framer-motion';
+import Container from '../shared/Container';
 
 export default function LumaJoin() {
  const ref = useRef(null);
@@ -31,8 +32,8 @@ export default function LumaJoin() {
  };
 
  return (
-   <section className="py-20 bg-[#16161A]" ref={ref}>
-     <div className="container-custom max-w-4xl">
+   <section className="py-20 bg-[#16161A]" id="join" ref={ref}>
+     <Container size = "half">
        <motion.div
          initial={{ opacity: 0, y: 20 }}
          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
@@ -190,7 +191,7 @@ export default function LumaJoin() {
            <p className="text-gray-400">Develop your teaching abilities while strengthening your own technical knowledge and leadership skills.</p>
          </div>
        </motion.div>
-     </div>
+     </Container>
    </section>
  );
 }

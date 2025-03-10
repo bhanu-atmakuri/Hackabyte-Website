@@ -3,6 +3,7 @@
 import { useRef } from 'react';
 import Link from 'next/link';
 import { motion, useInView } from 'framer-motion';
+import Container from '@/components/shared/Container';
 
 export default function SponsorshipOptions() {
   const ref = useRef(null);
@@ -105,7 +106,7 @@ export default function SponsorshipOptions() {
 
   return (
     <section id="sponsor" className="py-20 bg-[#16161A]" ref={ref}>
-      <div className="container-custom">
+      <Container>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
@@ -258,7 +259,7 @@ export default function SponsorshipOptions() {
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-[#FF2247] mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                   </svg>
-                  <span className="text-gray-300">sponsors@hackabyte.org</span>
+                  <span className="text-gray-300">teamhackabyte@gmail.com</span>
                 </div>
                 
                 <div className="flex items-center">
@@ -281,7 +282,7 @@ export default function SponsorshipOptions() {
             </div>
           </div>
         </motion.div>
-      </div>
+      </Container>
     </section>
   );
 }

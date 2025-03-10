@@ -3,6 +3,7 @@
 import { useRef } from 'react';
 import Link from 'next/link';
 import { motion, useInView } from 'framer-motion';
+import Container from '@/components/shared/Container';
 
 export default function MentorProgram() {
   const ref = useRef(null);
@@ -37,7 +38,7 @@ export default function MentorProgram() {
 
   return (
     <section id="mentor" className="py-20 bg-[#1A1A1E]" ref={ref}>
-      <div className="container-custom">
+      <Container>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
@@ -208,7 +209,7 @@ export default function MentorProgram() {
             </div>
           </div>
         </motion.div>
-      </div>
+      </Container>
     </section>
   );
 }

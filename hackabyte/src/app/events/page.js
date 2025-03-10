@@ -6,7 +6,6 @@ import Footer from '@/components/shared/Footer';
 import EventsHero from '@/components/events/EventsHero';
 import FeaturedEvent from '@/components/events/FeaturedEvent';
 import UpcomingEventsList from '@/components/events/UpcomingEventsList';
-import EventsCalendar from '@/components/events/EventsCalendar';
 import EventsRegistration from '@/components/events/EventsRegistration';
 import useNoFlash from '@/lib/hooks/useNoFlash';
 
@@ -34,7 +33,6 @@ export default function Events() {
         <EventsHero />
         <FeaturedEvent />
         <UpcomingEventsList />
-        <EventsCalendar />
         <EventsRegistration />
       </div>
       <Footer />

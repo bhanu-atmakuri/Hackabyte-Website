@@ -2,17 +2,18 @@
 'use client';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
+import Container from '../shared/Container';
 
 export default function LumaHero() {
   return (
-    <section className="relative pt-10 pb-20 bg-[#1A1A1E]">
+    <section className="min-h-screen relative pt-10 pb-20 bg-[#1A1A1E] flex items-center">
       {/* Background Elements */}
       <div className="absolute inset-0 -z-10 opacity-10">
         <div className="absolute top-20 right-20 w-64 h-64 bg-[#BADA55] rounded-full blur-3xl"></div>
         <div className="absolute bottom-20 left-20 w-72 h-72 bg-[#BADA55] rounded-full blur-3xl"></div>
       </div>
      
-      <div className="container-custom max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+      <Container>
         <div className="text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -69,7 +70,7 @@ export default function LumaHero() {
             </div>
           </motion.div>
         </div>
-      </div>
+      </Container>
     </section>
   );
 }

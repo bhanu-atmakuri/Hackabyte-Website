@@ -2,6 +2,7 @@
 
 import { useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
+import Container from '../shared/Container';
 
 export default function VolunteerLeadsSection() {
   const ref = useRef(null);
@@ -29,8 +30,8 @@ export default function VolunteerLeadsSection() {
   ];
 
   return (
-    <section className="py-20 bg-[#1A1A1E]" ref={ref}>
-      <div className="container-custom">
+    <section className="py-20 bg-[#16161A]" ref={ref}>
+      <Container>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
@@ -112,7 +113,7 @@ export default function VolunteerLeadsSection() {
             </a>
           </motion.div>
         </motion.div>
-      </div>
+      </Container>
     </section>
   );
 }

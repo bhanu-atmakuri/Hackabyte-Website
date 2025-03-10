@@ -2,6 +2,7 @@
 
 import { useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
+import Container from '@/components/shared/Container';
 
 export default function HackathonRules() {
   const ref = useRef(null);
@@ -38,7 +39,7 @@ export default function HackathonRules() {
         <div className="absolute bottom-20 left-20 w-72 h-72 bg-[#FF2247] rounded-full blur-3xl"></div>
       </div>
       
-      <div className="container-custom max-w-5xl">
+      <Container size = "wide">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
@@ -74,7 +75,7 @@ export default function HackathonRules() {
             </motion.div>
           ))}
         </div>
-      </div>
+      </Container>
     </section>
   );
 }

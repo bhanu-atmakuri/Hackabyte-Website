@@ -1,5 +1,6 @@
 'use client';
 
+import Container from '@/components/shared/Container';
 import { motion } from 'framer-motion';
 
 export default function HackathonsHero() {
@@ -11,7 +12,7 @@ export default function HackathonsHero() {
         <div className="absolute bottom-20 left-20 w-72 h-72 bg-[#FF2247] rounded-full blur-3xl"></div>
       </div>
       
-      <div className="container-custom max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+      <Container>
         <div className="text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -22,7 +23,7 @@ export default function HackathonsHero() {
               Hackathons
             </h1>
             
-            <div className="bg-[#16161A] p-6 rounded-xl border border-gray-800 max-w-4xl mx-auto">
+            <Container size = "wide" className="bg-[#16161A] p-6 rounded-xl border border-gray-800 mx-auto">
               <h2 className="text-2xl font-bold text-white mb-3">What is a Hackathon?</h2>
               
               <p className="text-lg text-gray-300 mb-4">
@@ -61,10 +62,18 @@ export default function HackathonsHero() {
                   <p className="text-gray-400 text-sm">Compete for over $3,000 in prizes while building your portfolio and making connections.</p>
                 </div>
               </div>
-            </div>
+            </Container>
             
             {/* Added quick links */}
-            <div className="mt-6 flex flex-wrap justify-center gap-4">
+            <div className="mt-6 flex flex-wrap justify-center gap-4">'
+            <motion.a 
+                href="/register"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="px-5 py-2 bg-[#FF2247] rounded-lg text-white hover:bg-[#F93236] transition-colors"
+              >
+                Register Now
+              </motion.a>
               <motion.a 
                 href="#upcoming-hackathons"
                 whileHover={{ scale: 1.05 }}
@@ -73,18 +82,10 @@ export default function HackathonsHero() {
               >
                 See Upcoming Hackathons
               </motion.a>
-              <motion.a 
-                href="/register"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="px-5 py-2 bg-[#FF2247] rounded-lg text-white hover:bg-[#F93236] transition-colors"
-              >
-                Register Now
-              </motion.a>
             </div>
           </motion.div>
         </div>
-      </div>
+      </Container>
     </section>
   );
 }

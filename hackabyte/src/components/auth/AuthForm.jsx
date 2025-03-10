@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { motion } from 'framer-motion';
+import Container from '../shared/Container';
 
 export default function AuthForm() {
   const [isLogin, setIsLogin] = useState(true);
@@ -27,7 +28,7 @@ export default function AuthForm() {
   };
 
   return (
-    <div className="container-custom max-w-md mx-auto">
+    <Container size = 'half'>
       <div className="bg-[#16161A] rounded-xl shadow-xl overflow-hidden border border-gray-800">
         <div className="p-8">
           {/* Tabs */}
@@ -168,6 +169,6 @@ export default function AuthForm() {
           </motion.form>
         </div>
       </div>
-    </div>
+    </Container>
   );
 }

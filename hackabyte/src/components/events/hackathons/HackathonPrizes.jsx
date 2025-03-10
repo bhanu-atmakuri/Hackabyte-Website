@@ -2,6 +2,7 @@
 
 import { useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
+import Container from '@/components/shared/Container';
 
 export default function HackathonPrizes() {
   const ref = useRef(null);
@@ -9,7 +10,7 @@ export default function HackathonPrizes() {
 
   return (
     <section className="py-20 bg-[#16161A]" ref={ref}>
-      <div className="container-custom max-w-6xl">
+      <Container>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
@@ -102,7 +103,7 @@ export default function HackathonPrizes() {
             There is a $75 prize for 3 runner-ups and $50 for honorable mentions, awarded to 6 teams, along with additional awards from sponsors!
           </p>
         </motion.div>
-      </div>
+      </Container>
     </section>
   );
 }
