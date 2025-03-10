@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react';
 import Navbar from '@/components/shared/Navbar';
 import Footer from '@/components/shared/Footer';
 import HackathonsHero from '@/components/events/hackathons/HackathonsHero';
-import UpcomingHackathons from '@/components/events/hackathons/UpcomingHackathons';
 import HackathonInfo from '@/components/events/hackathons/HackathonInfo';
 import HackathonPrizes from '@/components/events/hackathons/HackathonPrizes';
 import HackathonRules from '@/components/events/hackathons/HackathonRules';
@@ -32,7 +31,6 @@ export default function Hackathons() {
       <Navbar />
       <div className="page-top-spacing">
         <HackathonsHero />
-        <UpcomingHackathons />
         <HackathonInfo />
         <HackathonPrizes />
         <HackathonRules />
