@@ -1,4 +1,3 @@
-// hackabyte/src/app/layout.js
 import { Inter } from 'next/font/google';
 import './globals.css';
 
@@ -11,14 +10,13 @@ const inter = Inter({
 export const metadata = {
   title: 'Hackabyte - Hackathons for Students',
   description: 'Hackabyte hosts in-person hackathons for high school, middle school, and elementary students, building coding experience, problem-solving skills, and mentor connections.',
-  viewport: 'width=device-width, initial-scale=1, viewport-fit=cover'
 };
 
 // Using a function component instead of just returning JSX to handle hydration more carefully
 export default function RootLayout({ children }) {
   return (
     <html lang="en" suppressHydrationWarning className="scroll-smooth">
-      <body className={`${inter.className} antialiased text-white bg-[#1A1A1E]`} suppressHydrationWarning>
+      <body className={`${inter.className} antialiased`} suppressHydrationWarning>
         {children}
       </body>
     </html>

@@ -1,4 +1,3 @@
-// hackabyte/src/components/shared/Navbar.jsx
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
@@ -88,7 +87,7 @@ export default function Navbar() {
       initial={{ y: -100 }}
       animate={{ y: 0 }}
       transition={{ duration: 0.5 }}
-      className={`z-50 transition-all duration-300 ${
+      className={`fixed w-full z-50 transition-all duration-300 ${
         isScrolled 
           ? 'bg-[#1A1A1E]/90 backdrop-blur-md shadow-md py-3' 
           : 'bg-transparent py-5'
@@ -97,7 +96,7 @@ export default function Navbar() {
       <Container>
         <div className="flex items-center justify-between">
           {/* Logo */}
-          <Link href="/" className="flex items-center space-x-2 flex-shrink-0">
+          <Link href="/" className="flex items-center space-x-2">
             <div className="w-10 h-10 relative">
               <img 
                 src="/logo.png" 
@@ -108,85 +107,79 @@ export default function Navbar() {
             <span className="text-2xl font-bold text-gray-100">Hackabyte</span>
           </Link>
 
-          {/* Desktop Navigation - Centered */}
-          <div className="hidden md:flex items-center justify-center mx-auto">
-            <div className="flex items-center space-x-8">
-              {navItems.map((item, index) => (
-                <div key={item.name} 
-                  className={`relative ${item.hasDropdown ? 'group' : ''}`} 
-                  ref={item.hasDropdown && index === 2 ? dropdownRef : null}
-                >
-                  {item.hasDropdown ? (
-                    <>
-                      <Link
-                        href={item.href}
-                        className="text-white hover:text-[#FF2247] font-medium transition-colors flex items-center py-2"
-                        onClick={() => setActiveDropdown(null)}
-                      >
-                        {item.name}
-                        <svg 
-                          xmlns="http://www.w3.org/2000/svg" 
-                          className={`w-4 h-4 ml-1 transition-transform group-hover:rotate-180`} 
-                          fill="none" 
-                          viewBox="0 0 24 24" 
-                          stroke="currentColor"
-                        >
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                        </svg>
-                      </Link>
-                      
-                      {/* Invisible spacer to maintain hover area */}
-                      <div className="absolute h-2 w-full left-0 bottom-0 z-10"></div>
-                      
-                      {/* Dropdown Menu */}
-                      <div className="absolute invisible group-hover:visible opacity-0 group-hover:opacity-100 left-0 top-full w-48 rounded-md shadow-lg bg-[#16161A] border border-gray-800 ring-1 ring-black ring-opacity-5 z-50 transition-all duration-200">
-                        <div className="py-1">
-                          {item.dropdownItems.map((dropdownItem) => (
-                            <Link
-                              key={dropdownItem.name}
-                              href={dropdownItem.href}
-                              className="block px-4 py-2 text-sm text-gray-300 hover:bg-[#1A1A1E] hover:text-[#FF2247]"
-                            >
-                              {dropdownItem.name}
-                            </Link>
-                          ))}
-                        </div>
-                      </div>
-                    </>
-                  ) : (
-                    <motion.div
-                      whileHover={{ scale: 1.1 }}
-                      whileTap={{ scale: 0.95 }}
+          {/* Desktop Navigation */}
+          <div className="hidden md:flex items-center space-x-6">
+            {navItems.map((item, index) => (
+              <div key={item.name} 
+                className={`relative ${item.hasDropdown ? 'group' : ''}`} 
+                ref={item.hasDropdown && index === 2 ? dropdownRef : null}
+              >
+                {item.hasDropdown ? (
+                  <>
+                    <Link
+                      href={item.href}
+                      className="text-white hover:text-[#FF2247] font-medium transition-colors flex items-center py-2"
+                      onClick={() => setActiveDropdown(null)}
                     >
-                      <Link 
-                        href={item.href}
-                        className="text-white hover:text-[#FF2247] font-medium transition-colors"
+                      {item.name}
+                      <svg 
+                        xmlns="http://www.w3.org/2000/svg" 
+                        className={`w-4 h-4 ml-1 transition-transform group-hover:rotate-180`} 
+                        fill="none" 
+                        viewBox="0 0 24 24" 
+                        stroke="currentColor"
                       >
-                        {item.name}
-                      </Link>
-                    </motion.div>
-                  )}
-                </div>
-              ))}
-            </div>
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                      </svg>
+                    </Link>
+                    
+                    {/* Invisible spacer to maintain hover area */}
+                    <div className="absolute h-2 w-full left-0 bottom-0 z-10"></div>
+                    
+                    {/* Dropdown Menu */}
+                    <div className="absolute invisible group-hover:visible opacity-0 group-hover:opacity-100 left-0 top-full w-48 rounded-md shadow-lg bg-[#16161A] border border-gray-800 ring-1 ring-black ring-opacity-5 z-50 transition-all duration-200">
+                      <div className="py-1">
+                        {item.dropdownItems.map((dropdownItem) => (
+                          <Link
+                            key={dropdownItem.name}
+                            href={dropdownItem.href}
+                            className="block px-4 py-2 text-sm text-gray-300 hover:bg-[#1A1A1E] hover:text-[#FF2247]"
+                          >
+                            {dropdownItem.name}
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
+                  </>
+                ) : (
+                  <motion.div
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    <Link 
+                      href={item.href}
+                      className="text-white hover:text-[#FF2247] font-medium transition-colors"
+                    >
+                      {item.name}
+                    </Link>
+                  </motion.div>
+                )}
+              </div>
+            ))}
+            <motion.div
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <Link href="/auth" className="btn-primary">
+                Sign In
+              </Link>
+            </motion.div>
           </div>
-
-          {/* Sign In Button */}
-          <motion.div
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="hidden md:block flex-shrink-0"
-          >
-            <Link href="/auth" className="btn-primary">
-              Sign In
-            </Link>
-          </motion.div>
 
           {/* Mobile Menu Button */}
           <button 
             className="md:hidden text-gray-300"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            aria-label="Toggle mobile menu"
           >
             <svg 
               xmlns="http://www.w3.org/2000/svg" 
@@ -223,9 +216,13 @@ export default function Navbar() {
                   <div key={item.name}>
                     {item.hasDropdown ? (
                       <>
-                        <button
-                          onClick={() => handleDropdownToggle(index)}
+                        <Link
+                          href={item.href}
                           className="text-white hover:text-[#FF2247] font-medium transition-colors px-4 py-3 w-full text-left flex items-center justify-between"
+                          onClick={() => {
+                            handleDropdownToggle(index);
+                            setIsMobileMenuOpen(false);
+                          }}
                         >
                           {item.name}
                           <svg 
@@ -237,7 +234,7 @@ export default function Navbar() {
                           >
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                           </svg>
-                        </button>
+                        </Link>
                         
                         <AnimatePresence>
                           {activeDropdown === index && (
