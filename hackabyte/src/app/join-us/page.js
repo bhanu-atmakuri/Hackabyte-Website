@@ -6,8 +6,7 @@ import Footer from '@/components/shared/Footer';
 import JoinUsHero from '@/components/join-us/JoinUsHero';
 import VolunteerOpportunities from '@/components/join-us/VolunteerOpportunities';
 import MentorProgram from '@/components/join-us/MentorProgram';
-import JoinTeam from '@/components/join-us/JoinTeam';
-import SponsorshipOptions from '@/components/join-us/SponsorshipOptions';
+import SponsorshipOptions from '@/components/join-us/SponsorShipOptions';
 import useNoFlash from '@/lib/hooks/useNoFlash';
 
 export default function JoinUs() {
