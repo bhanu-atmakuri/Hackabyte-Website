@@ -65,8 +65,8 @@ export default function HackathonsHero() {
             </Container>
             
             {/* Added quick links */}
-            <div className="mt-6 flex flex-wrap justify-center gap-4">'
-            <motion.a 
+            <div className="mt-6 flex flex-wrap justify-center gap-4">
+              <motion.a 
                 href="/register"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
