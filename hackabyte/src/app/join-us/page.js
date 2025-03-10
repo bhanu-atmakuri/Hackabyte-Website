@@ -12,7 +12,7 @@ import useNoFlash from '@/lib/hooks/useNoFlash';
 export default function JoinUs() {
   const [isMounted, setIsMounted] = useState(false);
   
-  // Use the no-flash hooks
+  // Use the no-flash hook
   useNoFlash();
   
   // Only render content after client-side hydration
