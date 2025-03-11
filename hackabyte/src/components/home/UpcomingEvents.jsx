@@ -104,7 +104,7 @@ export default function UpcomingEvents() {
                   className="mt-auto"
                 >
                   <Link href="/events#registration" className="btn-primary w-full block text-center">
-                    Learn More
+                    Sign Up
                   </Link>
                 </motion.div>
               </div>
