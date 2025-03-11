@@ -213,7 +213,7 @@ export default function UpcomingEventsList() {
                   <motion.div
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
-                    className="mt-auto"
+                    className="mt-auto pt-6"
                   >
                     <Link href="#registration" className="btn-primary w-full block text-center">
                       Sign Up Now
