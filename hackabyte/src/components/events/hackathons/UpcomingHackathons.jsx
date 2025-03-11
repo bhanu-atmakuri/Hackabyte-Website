@@ -17,7 +17,7 @@ export default function UpcomingHackathons() {
       city: "San Francisco, CA",
       description: "Join us for our Winter Hackathon in California! This two-day event will feature exciting challenges, workshops, and opportunities to network with tech professionals.",
       image: "/api/placeholder/600/400",
-      registrationLink: "/register/winter-ca-2025"
+      registrationLink: "/events#registration"
     },
     {
       title: "Spring Hackathon - WA",
@@ -26,7 +26,7 @@ export default function UpcomingHackathons() {
       city: "Redmond, WA",
       description: "Our Spring Hackathon in Washington will be held at DigiPen Institute of Technology. Collaborate with peers and build innovative projects in this intensive weekend event.",
       image: "/api/placeholder/600/400",
-      registrationLink: "/register/spring-wa-2025"
+      registrationLink: "/events#registration"
     }
   ];
 
@@ -108,7 +108,7 @@ export default function UpcomingHackathons() {
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
                     >
-                      <Link href={`/events/${hackathon.title.toLowerCase().replace(/\s+/g, '-')}`} className="btn-secondary inline-block">
+                      <Link href="/events/hackathons" className="btn-secondary inline-block">
                         Learn More
                       </Link>
                     </motion.div>

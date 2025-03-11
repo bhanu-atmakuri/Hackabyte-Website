@@ -46,7 +46,7 @@ export default function LumaHero() {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
-                <Link href="#" className="bg-[#1A1A1E] text-white border border-[#BADA55] font-semibold py-3 px-6 rounded-lg shadow-md hover:bg-[#BADA55]/10 transition-all duration-300 transform hover:scale-105">
+                <Link href="/contact?subject=Discord%20Inquiry" className="bg-[#1A1A1E] text-white border border-[#BADA55] font-semibold py-3 px-6 rounded-lg shadow-md hover:bg-[#BADA55]/10 transition-all duration-300 transform hover:scale-105">
                   Join Discord
                 </Link>
               </motion.div>

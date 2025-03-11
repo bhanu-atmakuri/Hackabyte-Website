@@ -149,7 +149,7 @@ export default function LumaJoin() {
            <p className="text-gray-300 mb-6">
              Thank you for your interest in joining Team LUMA. We've received your application and will be in touch with you shortly.
            </p>
-           <a href="#" className="inline-block px-6 py-3 bg-[#BADA55] text-black font-bold rounded-lg hover:bg-[#a5c544] transition-colors">
+           <a href="/contact?subject=Discord%20Inquiry" className="inline-block px-6 py-3 bg-[#BADA55] text-black font-bold rounded-lg hover:bg-[#a5c544] transition-colors">
              Join Our Discord
            </a>
          </motion.div>
