@@ -92,12 +92,13 @@ export default function Navbar() {
           ? 'bg-[#1A1A1E]/90 backdrop-blur-md shadow-md py-3' 
           : 'bg-transparent py-5'
       }`}
+      style={{WebkitTransform: 'translate3d(0,0,0)'}}
     >
       <Container>
         <div className="flex items-center justify-between w-full">
           {/* Logo */}
-          <Link href="/" className="flex items-center space-x-2 justify-start mr-auto">
-            <div className="h-8 sm:h-9 md:h-10 lg:h-11 relative w-auto">
+          <Link href="/" className="flex items-center space-x-2 justify-start mr-auto" style={{display: 'flex', WebkitBoxAlign: 'center'}}>
+            <div className="h-8 sm:h-9 md:h-10 lg:h-11 relative w-auto" style={{minWidth: '40px'}}>
               <img 
                 src="/logo.png" 
                 alt="Hackabyte Logo" 
@@ -118,7 +119,7 @@ export default function Navbar() {
                   <>
                     <Link
                       href={item.href}
-                      className="text-lg sm:text-xl md:text-xl lg:text-2xl text-white hover:text-[#FF2247] font-medium transition-colors flex items-center py-2"
+                      className="text-sm sm:text-base md:text-lg lg:text-xl text-white hover:text-[#FF2247] font-medium transition-colors flex items-center py-2 whitespace-nowrap"
                       onClick={() => setActiveDropdown(null)}
                     >
                       {item.name}
@@ -137,13 +138,13 @@ export default function Navbar() {
                     <div className="absolute h-2 w-full left-0 bottom-0 z-10"></div>
                     
                     {/* Dropdown Menu */}
-                    <div className="absolute invisible group-hover:visible opacity-0 group-hover:opacity-100 left-0 top-full w-48 rounded-md shadow-lg bg-[#16161A] border border-gray-800 ring-1 ring-black ring-opacity-5 z-50 transition-all duration-200">
+                    <div className="absolute invisible group-hover:visible opacity-0 group-hover:opacity-100 left-0 top-full w-48 rounded-md shadow-lg bg-[#16161A] border border-gray-800 ring-1 ring-black ring-opacity-5 z-50 transition-all duration-200" style={{backdropFilter: 'blur(8px)'}}>
                       <div className="py-1">
                         {item.dropdownItems.map((dropdownItem) => (
                           <Link
                             key={dropdownItem.name}
                             href={dropdownItem.href}
-                            className="block px-4 py-2 text-lg sm:text-xl md:text-xl lg:text-2xl text-gray-300 hover:bg-[#1A1A1E] hover:text-[#FF2247]"
+                            className="block px-4 py-2 text-sm sm:text-base md:text-lg lg:text-xl text-gray-300 hover:bg-[#1A1A1E] hover:text-[#FF2247] whitespace-nowrap"
                           >
                             {dropdownItem.name}
                           </Link>
@@ -158,7 +159,7 @@ export default function Navbar() {
                   >
                     <Link 
                       href={item.href}
-                      className="text-lg sm:text-xl md:text-xl lg:text-2xl text-white hover:text-[#FF2247] font-medium transition-colors"
+                      className="text-sm sm:text-base md:text-lg lg:text-xl text-white hover:text-[#FF2247] font-medium transition-colors whitespace-nowrap"
                     >
                       {item.name}
                     </Link>
@@ -170,7 +171,7 @@ export default function Navbar() {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
-              <Link href="/auth" className="text-lg sm:text-xl md:text-xl lg:text-2xl btn-primary">
+              <Link href="/auth" className="text-sm sm:text-base md:text-lg lg:text-xl btn-primary whitespace-nowrap">
                 Sign In
               </Link>
             </motion.div>
@@ -209,7 +210,7 @@ export default function Navbar() {
               animate={{ opacity: 1, height: 'auto' }}
               exit={{ opacity: 0, height: 0 }}
               transition={{ duration: 0.3 }}
-              className="md:hidden mt-4"
+              className="md:hidden mt-4 bg-[#1A1A1E] shadow-lg rounded-b-md"
             >
               <div className="flex flex-col space-y-0 py-4">
                 {navItems.map((item, index) => (
@@ -218,7 +219,7 @@ export default function Navbar() {
                       <>
                         <Link
                           href={item.href}
-                          className="text-lg sm:text-xl md:text-xl lg:text-2xl text-white hover:text-[#FF2247] font-medium transition-colors px-4 py-3 w-full text-left flex items-center justify-between"
+                          className="text-sm sm:text-base md:text-lg lg:text-xl text-white hover:text-[#FF2247] font-medium transition-colors px-4 py-3 w-full text-left flex items-center justify-between whitespace-nowrap"
                           onClick={() => {
                             handleDropdownToggle(index);
                             setIsMobileMenuOpen(false);
@@ -249,7 +250,7 @@ export default function Navbar() {
                                 <Link 
                                   key={dropdownItem.name}
                                   href={dropdownItem.href}
-                                  className="block py-2 px-4 text-lg sm:text-xl md:text-xl lg:text-2xl text-gray-300 hover:text-[#FF2247]"
+                                  className="block py-2 px-4 text-sm sm:text-base md:text-lg lg:text-xl text-gray-300 hover:text-[#FF2247] whitespace-nowrap"
                                   onClick={() => {
                                     setActiveDropdown(null);
                                     setIsMobileMenuOpen(false);
@@ -265,7 +266,7 @@ export default function Navbar() {
                     ) : (
                       <Link 
                         href={item.href}
-                        className="text-lg sm:text-xl md:text-xl lg:text-2xl text-white hover:text-[#FF2247] font-medium transition-colors px-4 py-3 block"
+                        className="text-sm sm:text-base md:text-lg lg:text-xl text-white hover:text-[#FF2247] font-medium transition-colors px-4 py-3 block whitespace-nowrap"
                         onClick={() => setIsMobileMenuOpen(false)}
                       >
                         {item.name}
@@ -275,7 +276,7 @@ export default function Navbar() {
                 ))}
                 <Link 
                   href="/auth" 
-                  className="text-lg sm:text-xl md:text-xl lg:text-2xl btn-primary mx-4 mt-4 text-center"
+                  className="text-sm sm:text-base md:text-lg lg:text-xl btn-primary mx-4 mt-4 text-center"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   Sign In

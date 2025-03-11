@@ -111,7 +111,7 @@ export default function Hero() {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
-                <Link href="#about" className="btn-secondary block text-center">
+                <Link href="/#about" className="btn-secondary block text-center">
                   Learn More
                 </Link>
               </motion.div>
