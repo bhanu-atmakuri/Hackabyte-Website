@@ -22,7 +22,7 @@ export default function FeaturedEvent() {
       "Networking opportunities with tech companies",
       "Special keynote from renowned tech innovators"
     ],
-    registrationLink: "/register/national-championship-2025"
+    registrationLink: "/events#registration"
   };
 
   const featureAnimation = {
@@ -123,7 +123,7 @@ export default function FeaturedEvent() {
                 className="inline-block"
               >
                 <Link href={featuredEvent.registrationLink} className="btn-primary">
-                  Register Now
+                  Learn More
                 </Link>
               </motion.div>
             </motion.div>

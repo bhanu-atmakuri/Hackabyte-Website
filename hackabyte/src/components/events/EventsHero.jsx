@@ -42,7 +42,7 @@ export default function EventsHero() {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
-                <a href="#past-events" className="btn-secondary">
+                <a href="/events/past-events" className="btn-secondary">
                   Past Events
                 </a>
               </motion.div>

@@ -171,7 +171,7 @@ export default function MentorProgram() {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
-              <Link href="/apply/mentor" className="btn-primary block px-8 py-3">
+              <Link href="/contact?subject=Mentor Application" className="btn-primary block px-8 py-3">
                 Apply as a Mentor
               </Link>
             </motion.div>

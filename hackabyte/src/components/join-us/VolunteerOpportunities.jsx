@@ -153,7 +153,7 @@ export default function VolunteerOpportunities() {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
-              <Link href="/volunteer-application" className="btn-primary inline-block">
+              <Link href="/contact?subject=Volunteer Application" className="btn-primary inline-block">
                 Apply to Volunteer
               </Link>
             </motion.div>

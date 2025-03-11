@@ -199,7 +199,7 @@ export default function JoinTeam() {
                       whileTap={{ scale: 0.95 }}
                       className="md:flex-shrink-0"
                     >
-                      <Link href={`/careers/${position.title.toLowerCase().replace(/\s+/g, '-')}`} className="btn-primary block text-center whitespace-nowrap">
+                      <Link href="/contact?subject=Job Application" className="btn-primary block text-center whitespace-nowrap">
                         Apply Now
                       </Link>
                     </motion.div>
@@ -233,7 +233,7 @@ export default function JoinTeam() {
               whileTap={{ scale: 0.95 }}
               className="inline-block"
             >
-              <Link href="/contact?subject=General Application" className="btn-secondary inline-block px-8 py-3">
+              <Link href="/contact" className="btn-secondary inline-block px-8 py-3">
                 Submit General Application
               </Link>
             </motion.div>
