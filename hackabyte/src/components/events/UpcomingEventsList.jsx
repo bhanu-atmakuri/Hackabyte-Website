@@ -155,7 +155,7 @@ export default function UpcomingEventsList() {
                 initial="hidden"
                 animate={isInView ? "visible" : "hidden"}
                 transition={{ delay: index * 0.1 }}
-                className="bg-[#16161A] rounded-xl shadow-lg overflow-hidden border border-gray-800 hover:border-[#FF2247]/30 transition-all duration-300"
+                className="bg-[#16161A] rounded-xl shadow-lg overflow-hidden border border-gray-800 hover:border-[#FF2247]/30 transition-all duration-300 flex flex-col"
               >
                 <div className="relative h-48 overflow-hidden">
                   {/* Using div with background image instead of img to avoid hydration issues */}
@@ -193,7 +193,7 @@ export default function UpcomingEventsList() {
                   </div>
                 </div>
                 
-                <div className="p-6">
+                <div className="p-6 flex flex-col flex-grow">
                   <div className="flex items-center text-gray-400 mb-4">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 mr-2">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
