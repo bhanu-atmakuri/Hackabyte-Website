@@ -94,10 +94,10 @@ export default function Navbar() {
       }`}
     >
       <Container>
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between w-full">
           {/* Logo */}
-          <Link href="/" className="flex items-center space-x-2">
-            <div className="w-full h-8 sm:h-9 md:h-10 lg:h-11 relative">
+          <Link href="/" className="flex items-center space-x-2 justify-start mr-auto">
+            <div className="h-8 sm:h-9 md:h-10 lg:h-11 relative w-auto">
               <img 
                 src="/logo.png" 
                 alt="Hackabyte Logo" 
@@ -243,7 +243,7 @@ export default function Navbar() {
                               animate={{ opacity: 1, height: 'auto' }}
                               exit={{ opacity: 0, height: 0 }}
                               transition={{ duration: 0.2 }}
-                              className="pl-6 bg-[#1A1A1E]/50 border-l-2 border-[#F93236]/30 ml-4"
+                              className="pl-6 bg-[#1A1A1E] border-l-2 border-[#F93236]/30 ml-4 shadow-lg rounded-b-md"
                             >
                               {item.dropdownItems.map((dropdownItem) => (
                                 <Link 
