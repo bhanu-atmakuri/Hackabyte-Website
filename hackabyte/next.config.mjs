@@ -1,17 +1,18 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Ensure trailing slashes are handled consistently
-  trailingSlash: false,
+  // Force static HTML export for Vercel deployment
+  output: 'export',
   
-  // Proper image optimization for Vercel
+  // Specify output directory
+  distDir: 'out',
+  
+  // Required for static export with images
   images: {
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: '**',
-      },
-    ],
+    unoptimized: true
   },
+  
+  // Ensure consistent URL handling
+  trailingSlash: true,
   
   // Ensures proper handling of rewrites and redirects for Vercel
   poweredByHeader: false,
