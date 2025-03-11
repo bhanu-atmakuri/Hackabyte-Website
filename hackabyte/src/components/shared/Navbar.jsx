@@ -97,14 +97,14 @@ export default function Navbar() {
         <div className="flex items-center justify-between">
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-2">
-            <div className="w-full h-11 relative">
+            <div className="w-full h-8 sm:h-9 md:h-10 lg:h-11 relative">
               <img 
                 src="/logo.png" 
                 alt="Hackabyte Logo" 
                 className="w-full h-full object-contain"
               />
             </div>
-            <span className="text-3xl font-bold text-gray-100">Hackabyte</span>
+            <span className="text-xl sm:text-2xl md:text-2xl lg:text-3xl font-bold text-gray-100">Hackabyte</span>
           </Link>
 
           {/* Desktop Navigation */}
@@ -118,7 +118,7 @@ export default function Navbar() {
                   <>
                     <Link
                       href={item.href}
-                      className="text-2xl text-white hover:text-[#FF2247] font-medium transition-colors flex items-center py-2"
+                      className="text-lg sm:text-xl md:text-xl lg:text-2xl text-white hover:text-[#FF2247] font-medium transition-colors flex items-center py-2"
                       onClick={() => setActiveDropdown(null)}
                     >
                       {item.name}
@@ -143,7 +143,7 @@ export default function Navbar() {
                           <Link
                             key={dropdownItem.name}
                             href={dropdownItem.href}
-                            className="block px-4 py-2 text-2xl text-gray-300 hover:bg-[#1A1A1E] hover:text-[#FF2247]"
+                            className="block px-4 py-2 text-lg sm:text-xl md:text-xl lg:text-2xl text-gray-300 hover:bg-[#1A1A1E] hover:text-[#FF2247]"
                           >
                             {dropdownItem.name}
                           </Link>
@@ -158,7 +158,7 @@ export default function Navbar() {
                   >
                     <Link 
                       href={item.href}
-                      className="text-2xl text-white hover:text-[#FF2247] font-medium transition-colors"
+                      className="text-lg sm:text-xl md:text-xl lg:text-2xl text-white hover:text-[#FF2247] font-medium transition-colors"
                     >
                       {item.name}
                     </Link>
@@ -170,7 +170,7 @@ export default function Navbar() {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
-              <Link href="/auth" className="text-2xl btn-primary">
+              <Link href="/auth" className="text-lg sm:text-xl md:text-xl lg:text-2xl btn-primary">
                 Sign In
               </Link>
             </motion.div>
@@ -218,7 +218,7 @@ export default function Navbar() {
                       <>
                         <Link
                           href={item.href}
-                          className="text-2xl text-white hover:text-[#FF2247] font-medium transition-colors px-4 py-3 w-full text-left flex items-center justify-between"
+                          className="text-lg sm:text-xl md:text-xl lg:text-2xl text-white hover:text-[#FF2247] font-medium transition-colors px-4 py-3 w-full text-left flex items-center justify-between"
                           onClick={() => {
                             handleDropdownToggle(index);
                             setIsMobileMenuOpen(false);
@@ -249,7 +249,7 @@ export default function Navbar() {
                                 <Link 
                                   key={dropdownItem.name}
                                   href={dropdownItem.href}
-                                  className="block py-2 px-4 text-gray-300 hover:text-[#FF2247]"
+                                  className="block py-2 px-4 text-lg sm:text-xl md:text-xl lg:text-2xl text-gray-300 hover:text-[#FF2247]"
                                   onClick={() => {
                                     setActiveDropdown(null);
                                     setIsMobileMenuOpen(false);
@@ -265,7 +265,7 @@ export default function Navbar() {
                     ) : (
                       <Link 
                         href={item.href}
-                        className="text-2xl text-white hover:text-[#FF2247] font-medium transition-colors px-4 py-3 block"
+                        className="text-lg sm:text-xl md:text-xl lg:text-2xl text-white hover:text-[#FF2247] font-medium transition-colors px-4 py-3 block"
                         onClick={() => setIsMobileMenuOpen(false)}
                       >
                         {item.name}
@@ -275,7 +275,7 @@ export default function Navbar() {
                 ))}
                 <Link 
                   href="/auth" 
-                  className="btn-primary mx-4 mt-4 text-center"
+                  className="text-lg sm:text-xl md:text-xl lg:text-2xl btn-primary mx-4 mt-4 text-center"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   Sign In
