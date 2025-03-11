@@ -7,7 +7,7 @@ export const upcomingEvents = [
     ageGroups: ["High School", "Middle School"],
     image: "/api/placeholder/600/400",
     description: "Join us for our Winter Hackathon in California! This two-day event will feature exciting challenges, workshops, and opportunities to network with tech professionals.",
-    registrationLink: "/register/winter-ca-2025",
+    registrationLink: "/events#registration",
     eventType: "Hackathon",
     competitionLevel: "State"
   },
@@ -19,7 +19,7 @@ export const upcomingEvents = [
     ageGroups: ["High School", "Middle School", "College"],
     image: "/api/placeholder/600/400",
     description: "Our Spring Hackathon in Washington will be held at DigiPen Institute of Technology. Collaborate with peers and build innovative projects in this intensive weekend event.",
-    registrationLink: "/register/spring-wa-2025",
+    registrationLink: "/events#registration",
     eventType: "Hackathon",
     competitionLevel: "State"
   }

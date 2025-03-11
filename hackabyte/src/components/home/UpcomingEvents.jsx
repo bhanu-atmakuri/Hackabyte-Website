@@ -103,8 +103,8 @@ export default function UpcomingEvents() {
                   whileTap={{ scale: 0.95 }}
                   className="mt-auto"
                 >
-                  <Link href={event.registrationLink} className="btn-primary w-full block text-center">
-                    Register Now
+                  <Link href="/events#registration" className="btn-primary w-full block text-center">
+                    Learn More
                   </Link>
                 </motion.div>
               </div>

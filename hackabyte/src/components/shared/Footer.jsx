@@ -13,41 +13,41 @@ export default function Footer() {
     {
       title: "About",
       links: [
-        { name: "Our Mission", href: "/mission" },
-        { name: "Our Team", href: "/team" },
-        { name: "Sponsors", href: "/sponsors" },
-        { name: "Careers", href: "/careers" },
-        { name: "Press", href: "/press" }
+        { name: "Our Mission", href: "/about#mission" },
+        { name: "Our Team", href: "/about#team" },
+        { name: "Join Us", href: "/join-us" },
+        { name: "Contact", href: "/contact" },
+        { name: "LUMA Program", href: "/luma" }
       ]
     },
     {
       title: "Events",
       links: [
-        { name: "Upcoming Hackathons", href: "/events" },
-        { name: "Past Events", href: "/past-events" },
-        { name: "Photo Gallery", href: "/gallery" },
-        { name: "Success Stories", href: "/success-stories" },
-        { name: "Volunteer", href: "/volunteer" }
+        { name: "Upcoming Hackathons", href: "/events#upcoming" },
+        { name: "Past Events", href: "/events/past-events" },
+        { name: "Hackathon Details", href: "/events/hackathons" },
+        { name: "Registration", href: "/events#registration" },
+        { name: "Volunteer", href: "/join-us#volunteer" }
       ]
     },
     {
       title: "Resources",
       links: [
-        { name: "Coding Tutorials", href: "/tutorials" },
-        { name: "Mentorship", href: "/mentorship" },
-        { name: "FAQs", href: "/faqs" },
-        { name: "Blog", href: "/blog" },
-        { name: "Starter Kits", href: "/starter-kits" }
+        { name: "Mentorship", href: "/join-us#mentor" },
+        { name: "Sponsorship", href: "/join-us#sponsor" },
+        { name: "Join Team", href: "/join-us#team" },
+        { name: "Sign In", href: "/auth" },
+        { name: "Age Groups", href: "/#age-groups" }
       ]
     },
     {
       title: "Contact",
       links: [
         { name: "info@hackabyte.org", href: "mailto:info@hackabyte.org" },
-        { name: "Support", href: "/support" },
-        { name: "Partner With Us", href: "/partners" },
-        { name: "Sponsor an Event", href: "/sponsor" },
-        { name: "Locations", href: "/locations" }
+        { name: "Support", href: "/contact" },
+        { name: "Partner With Us", href: "/join-us#sponsor" },
+        { name: "Sponsor an Event", href: "/join-us#sponsor" },
+        { name: "Contact Form", href: "/contact" }
       ]
     }
   ];
@@ -128,14 +128,14 @@ export default function Footer() {
           </div>
           
           <div className="flex space-x-6">
-            <Link href="/privacy" className="text-gray-400 text-sm hover:text-[#FF2247] transition-colors">
+            <Link href="/contact" className="text-gray-400 text-sm hover:text-[#FF2247] transition-colors">
               Privacy Policy
             </Link>
-            <Link href="/terms" className="text-gray-400 text-sm hover:text-[#FF2247] transition-colors">
+            <Link href="/contact" className="text-gray-400 text-sm hover:text-[#FF2247] transition-colors">
               Terms of Service
             </Link>
-            <Link href="/cookies" className="text-gray-400 text-sm hover:text-[#FF2247] transition-colors">
-              Cookie Policy
+            <Link href="/contact" className="text-gray-400 text-sm hover:text-[#FF2247] transition-colors">
+              Contact Us
             </Link>
           </div>
         </div>

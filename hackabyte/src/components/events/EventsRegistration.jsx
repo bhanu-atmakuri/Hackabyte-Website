@@ -93,8 +93,8 @@ export default function EventsRegistration() {
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
-                  <Link href="/register" className="btn-primary block text-center">
-                    Register for an Event
+                  <Link href="#upcoming" className="btn-primary block text-center">
+                    View Upcoming Events
                   </Link>
                 </motion.div>
                 
@@ -159,8 +159,8 @@ export default function EventsRegistration() {
             </div>
             <h3 className="text-lg font-semibold text-white mb-2">FAQs</h3>
             <p className="text-gray-400">Check our frequently asked questions for more details about our events, or reach out with specific inquiries.</p>
-            <Link href="/faq" className="text-[#FF2247] hover:underline mt-2 inline-block">
-              View FAQs
+            <Link href="/contact" className="text-[#FF2247] hover:underline mt-2 inline-block">
+              Ask a Question
             </Link>
           </motion.div>
         </div>
