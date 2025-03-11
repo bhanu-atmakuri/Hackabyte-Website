@@ -10,7 +10,7 @@ export default function OurStory() {
 
   return (
     <section className="py-20 bg-[#1A1A1E]" ref={ref}>
-      <Container>
+      <Container size = "half">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
