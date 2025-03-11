@@ -92,20 +92,56 @@ export default function Navbar() {
           ? 'bg-[#1A1A1E]/90 backdrop-blur-md shadow-md py-3' 
           : 'bg-transparent py-5'
       }`}
-      style={{WebkitTransform: 'translate3d(0,0,0)'}}
+      style={{
+        WebkitTransform: 'translate3d(0,0,0)',
+        WebkitBackfaceVisibility: 'hidden'
+      }}
     >
       <Container>
         <div className="flex items-center justify-between w-full">
           {/* Logo */}
-          <Link href="/" className="flex items-center space-x-2 justify-start mr-auto" style={{display: 'flex', WebkitBoxAlign: 'center'}}>
-            <div className="h-8 sm:h-9 md:h-10 lg:h-11 relative w-auto" style={{minWidth: '40px'}}>
+          <Link 
+            href="/" 
+            className="flex items-center space-x-2 justify-start mr-auto safari-fix" 
+            style={{
+              display: '-webkit-box',
+              display: 'flex',
+              WebkitBoxAlign: 'center',
+              WebkitBoxPack: 'start',
+              WebkitAlignItems: 'center',
+              alignItems: 'center'
+            }}
+          >
+            <div 
+              className="h-8 sm:h-9 md:h-10 lg:h-11 relative safari-logo-container" 
+              style={{
+                minWidth: '40px',
+                width: '40px',
+                display: 'block',
+                WebkitFlexShrink: 0,
+                flexShrink: 0
+              }}
+            >
               <img 
                 src="/logo.png" 
                 alt="Hackabyte Logo" 
-                className="w-full h-full object-contain"
+                className="w-full h-full object-contain safari-logo-img"
+                style={{
+                  WebkitObjectFit: 'contain',
+                  objectFit: 'contain'
+                }}
               />
             </div>
-            <span className="text-xl sm:text-2xl md:text-2xl lg:text-3xl font-bold text-gray-100">Hackabyte</span>
+            <span 
+              className="text-xl sm:text-2xl md:text-2xl lg:text-3xl font-bold text-gray-100 safari-text"
+              style={{
+                WebkitBoxFlex: '0',
+                WebkitFlex: '0 0 auto',
+                flex: '0 0 auto'
+              }}
+            >
+              Hackabyte
+            </span>
           </Link>
 
           {/* Desktop Navigation */}
@@ -119,7 +155,7 @@ export default function Navbar() {
                   <>
                     <Link
                       href={item.href}
-                      className="text-sm sm:text-base md:text-lg lg:text-xl text-white hover:text-[#FF2247] font-medium transition-colors flex items-center py-2 whitespace-nowrap"
+                      className="text-sm sm:text-base md:text-lg lg:text-xl text-white hover:text-[#FF2247] font-medium transition-colors flex items-center py-2 whitespace-nowrap safari-nav-item"
                       onClick={() => setActiveDropdown(null)}
                     >
                       {item.name}
@@ -159,7 +195,7 @@ export default function Navbar() {
                   >
                     <Link 
                       href={item.href}
-                      className="text-sm sm:text-base md:text-lg lg:text-xl text-white hover:text-[#FF2247] font-medium transition-colors whitespace-nowrap"
+                      className="text-sm sm:text-base md:text-lg lg:text-xl text-white hover:text-[#FF2247] font-medium transition-colors whitespace-nowrap safari-nav-item"
                     >
                       {item.name}
                     </Link>
