@@ -102,7 +102,7 @@ export default function Hero() {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
-                <Link href="/register" className="btn-primary block text-center">
+                <Link href="/events#upcoming" className="btn-primary block text-center">
                   Register for Next Event
                 </Link>
               </motion.div>
