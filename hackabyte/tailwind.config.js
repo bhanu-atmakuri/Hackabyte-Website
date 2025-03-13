@@ -19,6 +19,11 @@ module.exports = {
         },
       },
       screens: {
+        'xs': '375px',     // Small phones
+        'sm': '640px',     // Default sm breakpoint
+        'md': '768px',     // Default md breakpoint
+        'lg': '1024px',    // Default lg breakpoint
+        'xl': '1280px',    // Default xl breakpoint
         '2xl': '1536px',   // Standard 2xl breakpoint
         '3xl': '1920px',   // 2K screens
         '4xl': '2560px',   // 4K screens

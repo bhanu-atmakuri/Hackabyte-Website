@@ -58,7 +58,7 @@ export default function Hero() {
   return (
     <section 
       ref={containerRef} 
-      className="min-h-screen pt-8 pb-16 relative overflow-hidden bg-[#1A1A1E] flex items-center"
+      className="min-h-screen pt-16 xs:pt-20 md:pt-24 pb-16 relative overflow-hidden bg-[#1A1A1E] flex items-center"
       id="home"
     >
       {/* Background Elements */}
@@ -77,18 +77,18 @@ export default function Hero() {
             animate="show"
           >
             <motion.div variants={item}>
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
+              <h1 className="text-3xl xs:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 xs:mb-6">
                 <span className="text-[#FF2247]">Hack. Build. Learn.</span>
               </h1>
             </motion.div>
 
             <motion.div variants={item}>
-              <h2 className="text-2xl md:text-3xl font-semibold mb-4">
+              <h2 className="text-xl xs:text-2xl md:text-3xl font-semibold mb-3 xs:mb-4">
                 Empowering Young Minds Through Coding Challenges
               </h2>
             </motion.div>
 
-            <motion.div variants={item} className="text-lg text-gray-300 mb-8">
+            <motion.div variants={item} className="text-base xs:text-lg text-gray-300 mb-6 xs:mb-8">
               Hackabyte hosts immersive in-person hackathons for students of all ages, 
               from elementary to high school. Build technical skills, solve real-world problems, 
               and connect with mentors in a collaborative environment.
@@ -96,22 +96,24 @@ export default function Hero() {
 
             <motion.div 
               variants={item}
-              className="flex flex-col sm:flex-row gap-4"
+              className="flex flex-col xs:flex-row gap-3 xs:gap-4"
             >
               <motion.div
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
+                className="w-full xs:w-auto"
               >
-                <Link href="/events#upcoming" className="btn-primary block text-center">
-                  Register for Next Event
+                <Link href="/events#upcoming" className="btn-primary block text-center w-full">
+                  Register for Event
                 </Link>
               </motion.div>
               
               <motion.div
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
+                className="w-full xs:w-auto"
               >
-                <Link href="/#about" className="btn-secondary block text-center">
+                <Link href="/#about" className="btn-secondary block text-center w-full">
                   Learn More
                 </Link>
               </motion.div>

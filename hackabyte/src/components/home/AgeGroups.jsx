@@ -48,24 +48,24 @@ export default function AgeGroups() {
   ];
 
   return (
-    <section className="py-20 bg-[#1A1A1E]" id="age-groups" ref={ref}>
+    <section className="py-12 xs:py-16 md:py-20 bg-[#1A1A1E]" id="age-groups" ref={ref}>
       <Container>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
           transition={{ duration: 0.6 }}
-          className="text-center mb-16"
+          className="text-center mb-10 xs:mb-16"
         >
-          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-[#FF2247]">
+          <h2 className="text-2xl xs:text-3xl md:text-4xl font-bold mb-3 xs:mb-4 text-[#FF2247]">
             Challenges for All Ages
           </h2>
-          <div className="text-xl text-gray-300 max-w-3xl mx-auto">
+          <div className="text-base xs:text-lg md:text-xl text-gray-300 max-w-3xl mx-auto">
             We tailor hackathon challenges to different age groups, ensuring that all students 
             can participate and grow at an appropriate level.
           </div>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 xs:gap-6 md:gap-8">
           {ageGroups.map((group, index) => (
             <motion.div
               key={index}
@@ -78,17 +78,19 @@ export default function AgeGroups() {
                 {/* Gradient Top Border */}
                 <div className={`h-2 w-full bg-gradient-to-r ${group.color}`}></div>
                 
-                <div className="p-8">
-                  <div className={`${group.textColor} mb-6`}>
-                    {group.icon}
+                <div className="p-5 xs:p-6 sm:p-8">
+                  <div className={`${group.textColor} mb-4 xs:mb-6`}>
+                    <div className="w-12 h-12 xs:w-14 xs:h-14 md:w-16 md:h-16">
+                      {group.icon}
+                    </div>
                   </div>
                   
-                  <h3 className="text-2xl font-bold mb-2 text-white">{group.title}</h3>
-                  <p className="text-gray-400 mb-4">{group.ageRange}</p>
-                  <p className="text-gray-300">{group.description}</p>
+                  <h3 className="text-xl xs:text-2xl font-bold mb-1 xs:mb-2 text-white">{group.title}</h3>
+                  <p className="text-sm xs:text-base text-gray-400 mb-3 xs:mb-4">{group.ageRange}</p>
+                  <p className="text-sm xs:text-base text-gray-300">{group.description}</p>
                   
                   <motion.div 
-                    className="mt-6 inline-block"
+                    className="mt-4 xs:mt-6 inline-block"
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                   >
@@ -97,7 +99,7 @@ export default function AgeGroups() {
                       className={`${group.textColor} font-medium flex items-center`}
                     >
                       See Events
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 ml-1">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4 xs:w-5 xs:h-5 ml-1">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
                       </svg>
                     </a>
