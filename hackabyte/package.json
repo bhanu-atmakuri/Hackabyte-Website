@@ -9,7 +9,8 @@
     "start": "next start",
     "lint": "next lint",
     "test:auth": "node scripts/test-auth.js",
-    "test:build": "node scripts/build-test.js"
+    "test:build": "node scripts/build-test.js",
+    "deploy:check": "node scripts/deploy.js"
   },
   "dependencies": {
     "@sendgrid/mail": "^8.1.0",

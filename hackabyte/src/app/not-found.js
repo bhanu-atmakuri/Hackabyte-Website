@@ -1,39 +1,40 @@
-'use client';
-
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
-import Navbar from '@/components/shared/Navbar';
-import Footer from '@/components/shared/Footer';
-import useNoFlash from '@/lib/hooks/useNoFlash';
+import Container from '../components/shared/Container';
 
+/**
+ * Custom 404 Not Found Page
+ * 
+ * This page is shown when a user navigates to a route that doesn't exist
+ */
 export default function NotFound() {
-  const [isMounted, setIsMounted] = useState(false);
-  
-  // Use the no-flash hook
-  useNoFlash();
-  
-  // Only render content after client-side hydration
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
-  
-  if (!isMounted) {
-    return <div className="min-h-screen flex items-center justify-center">
-      <div className="animate-pulse text-gray-400">Loading...</div>
-    </div>;
-  }
-
   return (
-    <main className="min-h-screen">
-      <Navbar />
-      <div className="flex flex-col items-center justify-center py-24 px-4 text-center">
-        <h1 className="text-4xl md:text-6xl font-bold mb-4">404 - Page Not Found</h1>
-        <p className="text-xl mb-8">The page you are looking for does not exist or has been moved.</p>
-        <Link href="/" className="bg-[#FF5C00] hover:bg-[#D94C00] text-white font-bold py-2 px-6 rounded-full transition duration-300">
-          Return to Homepage
-        </Link>
+    <Container>
+      <div className="min-h-[70vh] flex flex-col items-center justify-center py-12 px-4">
+        <div className="text-center max-w-2xl mx-auto">
+          <h1 className="text-5xl font-bold mb-4 text-[#FF2247]">404</h1>
+          <h2 className="text-3xl font-semibold mb-6">Page Not Found</h2>
+          
+          <p className="text-gray-300 mb-8 text-lg">
+            The page you're looking for doesn't exist or has been moved.
+          </p>
+          
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link 
+              href="/"
+              className="px-6 py-3 bg-[#FF2247] hover:bg-[#FF3557] text-white font-semibold rounded-lg transition-colors"
+            >
+              Go to Homepage
+            </Link>
+            
+            <Link 
+              href="/events"
+              className="px-6 py-3 bg-gray-800 hover:bg-gray-700 text-white font-semibold rounded-lg transition-colors"
+            >
+              Browse Events
+            </Link>
+          </div>
+        </div>
       </div>
-      <Footer />
-    </main>
+    </Container>
   );
 }

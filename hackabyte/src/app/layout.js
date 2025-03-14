@@ -2,6 +2,7 @@ import './globals.css';
 import { AuthProvider } from '../lib/auth/AuthContext';
 import Navbar from '../components/shared/Navbar';
 import Footer from '../components/shared/Footer';
+import ErrorBoundary from '../components/shared/ErrorBoundary';
 
 export const metadata = {
   title: 'Hackabyte - Tech Education for Youth',
@@ -13,9 +14,11 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body className="bg-black text-white min-h-screen flex flex-col">
         <AuthProvider>
-          <Navbar />
-          <main className="flex-grow">{children}</main>
-          <Footer />
+          <ErrorBoundary>
+            <Navbar />
+            <main className="flex-grow">{children}</main>
+            <Footer />
+          </ErrorBoundary>
         </AuthProvider>
       </body>
     </html>
