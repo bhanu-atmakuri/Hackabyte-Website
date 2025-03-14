@@ -7,11 +7,12 @@
  * - JWT operations
  */
 
-import { handlers } from 'next-auth/next';
+import NextAuth from 'next-auth/next';
 import { authOptions } from '../../../../lib/auth/auth';
 
 /**
- * NextAuth handlers for GET and POST operations
- * Using App Router specific pattern
+ * NextAuth handler for all auth operations
  */
-export const { GET, POST } = handlers(authOptions);
+const handler = NextAuth(authOptions);
+
+export { handler as GET, handler as POST };
