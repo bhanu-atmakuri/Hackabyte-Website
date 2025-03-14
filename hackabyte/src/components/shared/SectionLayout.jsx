@@ -1,4 +1,15 @@
-// hackabyte/src/components/shared/SectionLayout.jsx
+/**
+ * Section Layout Component
+ * 
+ * A wrapper component that provides consistent section styling with:
+ * - Responsive padding at different screen sizes
+ * - Consistent container width through the Container component
+ * - Customizable background colors
+ * - Optional ID for anchor links
+ * - Support for different container widths (default, narrow, wide)
+ * - Standardized structure across the site for uniform appearance
+ */
+
 'use client';
 
 import Container from './Container';

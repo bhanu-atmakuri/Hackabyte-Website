@@ -1,3 +1,16 @@
+/**
+ * Past Events List Component
+ * 
+ * Displays a comprehensive archive of previous Hackabyte events with:
+ * - Multi-criteria filtering (age group, year, location)
+ * - Interactive filter UI with toggle buttons and dropdowns
+ * - Grid layout of past event cards with winner information
+ * - Empty state handling when no events match filter criteria
+ * - Navigation links to event recap pages and upcoming events
+ * - Responsive design that adapts to different screen sizes
+ * - Animated content reveal when scrolling into view
+ */
+
 'use client';
 
 import { useRef, useState } from 'react';
@@ -7,14 +20,21 @@ import { pastEvents, pastEventYears, availableStates } from '@/lib/data/pastEven
 import Container from '../../shared/Container';
 
 export default function PastEventsList() {
+  // Reference for scroll-triggered animations
   const ref = useRef(null);
+  // Detect when section enters viewport (20% visibility triggers animation)
   const isInView = useInView(ref, { once: true, amount: 0.2 });
+  
+  // Filter state variables for event refining
   const [activeFilter, setActiveFilter] = useState('All Events');
   const [selectedCountry, setSelectedCountry] = useState('United States');
   const [selectedState, setSelectedState] = useState('All States');
   const [selectedYear, setSelectedYear] = useState(2024);
 
-  // Filter events based on selected criteria
+  /**
+   * Event filtering logic
+   * Filters past events based on multiple criteria: age group, state, and year
+   */
   const filteredEvents = pastEvents.filter(event => {
     // Filter by age group if not "All Events"
     const ageGroupMatch = 

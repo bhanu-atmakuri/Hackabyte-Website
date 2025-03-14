@@ -1,3 +1,15 @@
+/**
+ * Join Team Component
+ * 
+ * Careers section displaying open positions and company benefits with:
+ * - Job listings with detailed descriptions and requirements
+ * - Organization values and benefits for prospective employees
+ * - Visual appeal through images and styled cards
+ * - Interactive application buttons with hover effects
+ * - Responsive layout that adapts to different screen sizes
+ * - Scroll-triggered animations for visual engagement
+ */
+
 'use client';
 
 import { useRef } from 'react';
@@ -6,9 +18,15 @@ import { motion, useInView } from 'framer-motion';
 import Container from '@/components/shared/Container';
 
 export default function JoinTeam() {
+  // Reference for scroll-triggered animations
   const ref = useRef(null);
+  // Detect when section enters viewport (20% visibility triggers animation)
   const isInView = useInView(ref, { once: true, amount: 0.2 });
 
+  /**
+   * Open positions data structure
+   * Each position includes title, type, location, description, and requirements
+   */
   const openPositions = [
     {
       title: "Event Coordinator",
@@ -51,6 +69,7 @@ export default function JoinTeam() {
   return (
     <section id="careers" className="py-20 bg-[#16161A]" ref={ref}>
       <Container>
+        {/* Section heading with fade-in and slide-up animation */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
@@ -65,7 +84,9 @@ export default function JoinTeam() {
           </p>
         </motion.div>
 
+        {/* Two-column layout for benefits and values */}
         <div className="grid md:grid-cols-2 gap-8 mb-16">
+          {/* Left column - "Why Work With Us" with slide-in animation */}
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -30 }}
@@ -112,6 +133,7 @@ export default function JoinTeam() {
             </div>
           </motion.div>
           
+          {/* Right column - Image and company values with sticky positioning */}
           <motion.div
             initial={{ opacity: 0, x: 30 }}
             animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: 30 }}
@@ -165,6 +187,7 @@ export default function JoinTeam() {
           </motion.div>
         </div>
 
+        {/* Open positions section with staggered card animations */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
@@ -172,6 +195,7 @@ export default function JoinTeam() {
         >
           <h3 className="text-2xl font-bold text-white mb-8 text-center">Open Positions</h3>
           
+          {/* Job listings with individual fade-in animations */}
           <div className="space-y-6">
             {openPositions.map((position, index) => (
               <motion.div
@@ -222,6 +246,7 @@ export default function JoinTeam() {
             ))}
           </div>
           
+          {/* General application section for positions not listed */}
           <div className="mt-12 text-center">
             <h4 className="text-xl font-bold text-white mb-3">Don't see a position that fits your skills?</h4>
             <p className="text-gray-300 max-w-2xl mx-auto mb-8">

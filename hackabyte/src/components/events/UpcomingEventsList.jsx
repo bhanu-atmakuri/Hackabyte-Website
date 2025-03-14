@@ -1,3 +1,16 @@
+/**
+ * Upcoming Events List Component
+ * 
+ * A comprehensive listing of all upcoming hackathon events with advanced filtering capabilities.
+ * Features include:
+ * - Multi-criteria filtering (age group, location, competition level)
+ * - Responsive grid layout that adapts to different screen sizes
+ * - Interactive filter UI with toggle buttons and dropdowns
+ * - Animated event cards with hover effects
+ * - Empty state handling when no events match filter criteria
+ * - Links to event registration and past events
+ */
+
 'use client';
 
 import { useRef, useState } from 'react';
@@ -7,14 +20,21 @@ import { upcomingEvents, availableStates, competitionLevels } from '@/lib/data/u
 import Container from '../shared/Container';
 
 export default function UpcomingEventsList() {
+  // Reference for scroll-triggered animations
   const ref = useRef(null);
+  // Detect when section enters viewport (20% visibility triggers animation)
   const isInView = useInView(ref, { once: true, amount: 0.2 });
-  const [activeFilter, setActiveFilter] = useState('All Events');
-  const [selectedCountry, setSelectedCountry] = useState('United States');
-  const [selectedState, setSelectedState] = useState('All States');
-  const [competitionLevel, setCompetitionLevel] = useState('All Levels');
+  
+  // Filter state variables
+  const [activeFilter, setActiveFilter] = useState('All Events'); // Age group filter
+  const [selectedCountry, setSelectedCountry] = useState('United States'); // Country filter (currently single option)
+  const [selectedState, setSelectedState] = useState('All States'); // State filter
+  const [competitionLevel, setCompetitionLevel] = useState('All Levels'); // Competition level filter
 
-  // Filter events based on selected criteria
+  /**
+   * Event filtering logic
+   * Filters events based on multiple criteria: age group, state, and competition level
+   */
   const filteredEvents = upcomingEvents.filter(event => {
     // Filter by age group if not "All Events"
     const ageGroupMatch = 
@@ -34,6 +54,7 @@ export default function UpcomingEventsList() {
     return ageGroupMatch && stateMatch && levelMatch;
   });
 
+  // Animation variants for event cards
   const cardVariants = {
     hidden: { opacity: 0, y: 50 },
     visible: { opacity: 1, y: 0, transition: { duration: 0.5 } }
@@ -42,6 +63,7 @@ export default function UpcomingEventsList() {
   return (
     <section className="py-16 md:py-20 bg-[#1A1A1E]" id="upcoming" ref={ref}>
       <Container size="wide">
+        {/* Section heading with animation */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
@@ -56,7 +78,7 @@ export default function UpcomingEventsList() {
           </p>
         </motion.div>
 
-        {/* Filter Section */}
+        {/* Interactive Filter Controls Section */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
@@ -67,7 +89,7 @@ export default function UpcomingEventsList() {
             <h3 className="text-xl font-bold text-white mb-4">Filter Events</h3>
             
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 flex items-center">
-              {/* Age Group Filter */}
+              {/* Age Group Filter - Toggle buttons */}
               <div>
                 <label className="block text-gray-300 text-sm font-medium mb-2">Age Group</label>
                 <div className="flex flex-wrap gap-2">
@@ -87,7 +109,7 @@ export default function UpcomingEventsList() {
                 </div>
               </div>
 
-              {/* Competition Level Filter */}
+              {/* Competition Level Filter - Toggle buttons */}
               <div>
                 <label className="block text-gray-300 text-sm font-medium mb-2">Competition Level</label>
                 <div className="flex flex-wrap gap-2">
@@ -107,7 +129,7 @@ export default function UpcomingEventsList() {
                 </div>
               </div>
 
-              {/* Country Dropdown */}
+              {/* Country Dropdown - Currently limited to United States */}
               <div>
                 <label htmlFor="country" className="block text-gray-300 text-sm font-medium mb-2">Country</label>
                 <select
@@ -120,7 +142,7 @@ export default function UpcomingEventsList() {
                 </select>
               </div>
 
-              {/* State Dropdown */}
+              {/* State Dropdown - Dynamic options based on available event locations */}
               <div>
                 <label htmlFor="state" className="block text-gray-300 text-sm font-medium mb-2">State</label>
                 <select
@@ -137,7 +159,7 @@ export default function UpcomingEventsList() {
             </div>
           </div>
 
-          {/* Results Count */}
+          {/* Results Count - Dynamic text showing active filters */}
           <div className="text-gray-300 mb-6">
             Showing {filteredEvents.length} events
             {selectedState !== 'All States' && ` in ${selectedState}`}
@@ -146,8 +168,9 @@ export default function UpcomingEventsList() {
           </div>
         </motion.div>
 
+        {/* Conditional rendering based on filter results */}
         {filteredEvents.length > 0 ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8 px-4 sm:px-0">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8 px-4 sm:px-0">
             {filteredEvents.map((event, index) => (
               <motion.div
                 key={event.title}
@@ -157,8 +180,9 @@ export default function UpcomingEventsList() {
                 transition={{ delay: index * 0.1 }}
                 className="bg-[#16161A] rounded-xl shadow-lg overflow-hidden border border-gray-800 hover:border-[#FF2247]/30 transition-all duration-300 flex flex-col"
               >
+                {/* Event card image with overlay and tags */}
                 <div className="relative h-48 overflow-hidden">
-                  {/* Using div with background image instead of img to avoid hydration issues */}
+                  {/* Using div with background image instead of img to avoid Next.js hydration issues */}
                   <div 
                     className="absolute inset-0 transition-transform duration-500 hover:scale-110"
                     style={{
@@ -193,6 +217,7 @@ export default function UpcomingEventsList() {
                   </div>
                 </div>
                 
+                {/* Event details section */}
                 <div className="p-4 sm:p-6 flex flex-col flex-grow">
                   <div className="flex items-center text-gray-400 mb-3 sm:mb-4">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 mr-2">
@@ -243,6 +268,7 @@ export default function UpcomingEventsList() {
           </div>
         )}
         
+        {/* Link to past events with animation */}
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}

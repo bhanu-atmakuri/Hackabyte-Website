@@ -1,3 +1,15 @@
+/**
+ * Age Groups Component
+ * 
+ * Displays different age categories for Hackabyte events with:
+ * - Custom designed cards for each age group
+ * - Visual distinction through color-coding and icons
+ * - Responsive grid layout that adjusts to screen size
+ * - Scroll-triggered animations for visual engagement
+ * - Hover effects for interactive feedback
+ * - Links to relevant events for each age category
+ */
+
 'use client';
 
 import { useRef } from 'react';
@@ -5,9 +17,16 @@ import { motion, useInView } from 'framer-motion';
 import Container from '@/components/shared/Container';
 
 export default function AgeGroups() {
+  // Reference for triggering animations when section scrolls into view
   const ref = useRef(null);
+  // Detect when section enters viewport (20% visibility triggers animation)
   const isInView = useInView(ref, { once: true, amount: 0.2 });
 
+  /**
+   * Age group data structure
+   * Contains information for each age category including title, description, 
+   * visual elements and styling options
+   */
   const ageGroups = [
     {
       title: "High School",
@@ -50,6 +69,7 @@ export default function AgeGroups() {
   return (
     <section className="py-16 md:py-20 bg-[#1A1A1E]" id="age-groups" ref={ref}>
       <Container>
+        {/* Section heading with fade-in and slide-up animation */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
@@ -65,6 +85,7 @@ export default function AgeGroups() {
           </div>
         </motion.div>
 
+        {/* Age group cards grid - Responsive layout with 1-3 columns depending on screen size */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 md:gap-8">
           {ageGroups.map((group, index) => (
             <motion.div
@@ -74,10 +95,12 @@ export default function AgeGroups() {
               transition={{ duration: 0.5, delay: index * 0.2 }}
               className="group"
             >
+              {/* Card with hover effect and gradient accent */}
               <div className="relative bg-[#16161A] rounded-xl shadow-lg overflow-hidden h-full transform group-hover:-translate-y-2 transition-all duration-300 border border-gray-800 hover:border-[#F93236]/30">
-                {/* Gradient Top Border */}
+                {/* Colored gradient accent strip at top of card */}
                 <div className={`h-2 w-full bg-gradient-to-r ${group.color}`}></div>
                 
+              {/* Card content with icon, title and description */}
               <div className="p-6 md:p-8">
                   <div className={`${group.textColor} mb-6`}>
                     {group.icon}
@@ -87,6 +110,7 @@ export default function AgeGroups() {
                   <p className="text-gray-400 mb-4">{group.ageRange}</p>
                   <p className="text-gray-300">{group.description}</p>
                   
+                  {/* CTA link with hover animation */}
                   <motion.div 
                     className="mt-6 inline-block"
                     whileHover={{ scale: 1.05 }}

@@ -1,9 +1,21 @@
+/**
+ * Contact Form Component
+ * 
+ * Interactive form that allows users to send messages to Hackabyte with:
+ * - Real-time form validation with error messaging
+ * - Visual feedback for form submission states (loading, success, error)
+ * - Animated form elements and status messages
+ * - Responsive design that adapts to screen sizes
+ * - Clean form reset after successful submission
+ */
+
 'use client';
 
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 
 export default function ContactForm() {
+  // Form field state management
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -11,9 +23,18 @@ export default function ContactForm() {
     message: ''
   });
   
+  // Error state for form validation feedback
   const [errors, setErrors] = useState({});
-  const [formStatus, setFormStatus] = useState(null); // 'success', 'error', or null
+  
+  // Form submission status - can be 'loading', 'success', 'error', or null
+  const [formStatus, setFormStatus] = useState(null);
 
+  /**
+   * Form validation function
+   * Checks all form fields for required values and proper formatting
+   * Sets error messages for invalid fields
+   * @returns {boolean} - Returns true if form is valid, false otherwise
+   */
   const validateForm = () => {
     const newErrors = {};
     
@@ -43,6 +64,11 @@ export default function ContactForm() {
     return Object.keys(newErrors).length === 0;
   };
 
+  /**
+   * Input change handler
+   * Updates form state and clears related error messages when user types
+   * @param {Event} e - Input change event
+   */
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -59,14 +85,20 @@ export default function ContactForm() {
     }
   };
 
+  /**
+   * Form submission handler
+   * Validates form, shows loading state, and simulates API submission
+   * In production, this would connect to a real backend endpoint
+   * @param {Event} e - Form submission event
+   */
   const handleSubmit = (e) => {
     e.preventDefault();
     
     if (validateForm()) {
-      // Simulate form submission for now
+      // Show loading state while form processes
       setFormStatus('loading');
       
-      // This timeout simulates an API call
+      // Simulate API delay with timeout (would be a real API call in production)
       setTimeout(() => {
         setFormStatus('success');
         
@@ -84,8 +116,8 @@ export default function ContactForm() {
         }, 5000);
       }, 1000);
       
-      // TODO: Implement actual form submission logic
-      // Example implementation would be:
+      // TODO: Replace simulation with actual backend API integration
+      // Production implementation example:
       /*
         try {
           const response = await fetch('/api/contact', {
@@ -119,6 +151,7 @@ export default function ContactForm() {
     >
       <h2 className="text-3xl font-bold mb-6 text-white">Send Us a Message</h2>
       
+      {/* Success message notification - appears after successful form submission */}
       {formStatus === 'success' && (
         <motion.div
           initial={{ opacity: 0, y: -10 }}
@@ -129,6 +162,7 @@ export default function ContactForm() {
         </motion.div>
       )}
       
+      {/* Error message notification - appears if form submission fails */}
       {formStatus === 'error' && (
         <motion.div
           initial={{ opacity: 0, y: -10 }}
@@ -139,7 +173,9 @@ export default function ContactForm() {
         </motion.div>
       )}
       
+      {/* Contact form with validation and animated feedback */}
       <form onSubmit={handleSubmit} className="space-y-6">
+        {/* Name input field with validation */}
         <div>
           <label 
             htmlFor="name" 
@@ -163,6 +199,7 @@ export default function ContactForm() {
           )}
         </div>
         
+        {/* Email input field with validation */}
         <div>
           <label 
             htmlFor="email" 
@@ -186,6 +223,7 @@ export default function ContactForm() {
           )}
         </div>
         
+        {/* Subject input field with validation */}
         <div>
           <label 
             htmlFor="subject" 
@@ -209,6 +247,7 @@ export default function ContactForm() {
           )}
         </div>
         
+        {/* Message textarea with validation */}
         <div>
           <label 
             htmlFor="message" 
@@ -232,6 +271,7 @@ export default function ContactForm() {
           )}
         </div>
         
+        {/* Submit button with loading state and animations */}
         <motion.button
           type="submit"
           whileHover={{ scale: 1.02 }}

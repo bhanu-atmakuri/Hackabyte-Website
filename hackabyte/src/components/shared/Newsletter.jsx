@@ -1,3 +1,15 @@
+/**
+ * Newsletter Component
+ * 
+ * Newsletter subscription section with features:
+ * - Email submission form with validation
+ * - Success state display after submission
+ * - Social media links for additional connection options
+ * - Scroll-triggered animations for visual engagement
+ * - Responsive layout that adapts to screen sizes
+ * - Decorative background elements for visual appeal
+ */
+
 'use client';
 
 import { useState, useRef } from 'react';
@@ -5,11 +17,21 @@ import { motion, useInView } from 'framer-motion';
 import Container from './Container';
 
 export default function Newsletter() {
+  // State for form input and submission status
   const [email, setEmail] = useState('');
   const [submitted, setSubmitted] = useState(false);
+  
+  // Reference for scroll-triggered animations
   const ref = useRef(null);
+  // Detect when section enters viewport (30% visibility triggers animation)
   const isInView = useInView(ref, { once: true, amount: 0.3 });
 
+  /**
+   * Handle form submission
+   * Sets submission state to true and resets the email field
+   * In a production environment, this would connect to a backend service
+   * @param {Event} e - Form submit event
+   */
   const handleSubmit = (e) => {
     e.preventDefault();
     // This would typically handle the form submission to a backend service
@@ -19,7 +41,7 @@ export default function Newsletter() {
 
   return (
     <section className="py-20 bg-[#16161A] text-white relative overflow-hidden" id="contact" ref={ref}>
-      {/* Background Elements */}
+      {/* Decorative background blur elements */}
       <div className="absolute inset-0 -z-10">
         <div className="absolute top-0 left-1/4 w-64 h-64 bg-[#F93236]/20 rounded-full blur-3xl"></div>
         <div className="absolute bottom-0 right-1/4 w-64 h-64 bg-[#FF2247]/20 rounded-full blur-3xl"></div>
@@ -27,6 +49,7 @@ export default function Newsletter() {
       
       <Container size="half" className="relative z-10">
         <div className="mx-auto text-center px-4 sm:px-6 md:px-0">
+          {/* Section heading with fade-in and slide-up animation */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
@@ -41,12 +64,14 @@ export default function Newsletter() {
             </div>
           </motion.div>
 
+          {/* Form section with conditional rendering based on submission state */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
             transition={{ duration: 0.6, delay: 0.2 }}
           >
             {!submitted ? (
+              /* Email subscription form - shown before submission */
               <form onSubmit={handleSubmit} className="relative">
                 <div className="flex flex-col sm:flex-row gap-4">
                   <input
@@ -57,6 +82,7 @@ export default function Newsletter() {
                     required
                     className="w-full px-6 py-3 rounded-lg bg-white/5 backdrop-blur-sm text-white placeholder-gray-400 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-[#FF2247] focus:border-transparent transition-all"
                   />
+                  {/* Submit button with hover animation */}
                   <motion.button
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
@@ -68,6 +94,7 @@ export default function Newsletter() {
                 </div>
               </form>
             ) : (
+              /* Success message - shown after submission */
               <motion.div
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
@@ -84,6 +111,7 @@ export default function Newsletter() {
             )}
           </motion.div>
 
+          {/* Social media links with fade-in animation */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={isInView ? { opacity: 1 } : { opacity: 0 }}

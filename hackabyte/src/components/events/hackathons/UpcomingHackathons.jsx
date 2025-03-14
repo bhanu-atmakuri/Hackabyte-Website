@@ -1,3 +1,15 @@
+/**
+ * Upcoming Hackathons Component
+ * 
+ * Displays upcoming hackathon events with detailed information and registration options:
+ * - Grid layout showcasing scheduled hackathons in different locations
+ * - Rich detail cards with event date, location, and description
+ * - Visual elements with images and consistent branding
+ * - Direct links to registration and more information
+ * - Interactive hover effects and animations
+ * - Responsive design that adapts to different screen sizes
+ */
+
 'use client';
 
 import { useRef } from 'react';
@@ -6,9 +18,15 @@ import Link from 'next/link';
 import Container from '@/components/shared/Container';
 
 export default function UpcomingHackathons() {
+  // Reference for scroll-triggered animations
   const ref = useRef(null);
+  // Detect when section enters viewport (20% visibility triggers animation)
   const isInView = useInView(ref, { once: true, amount: 0.2 });
 
+  /**
+   * Upcoming hackathons data structure
+   * Contains information about scheduled hackathon events with dates, locations, and details
+   */
   const upcomingHackathons = [
     {
       title: "Winter Hackathon - CA",

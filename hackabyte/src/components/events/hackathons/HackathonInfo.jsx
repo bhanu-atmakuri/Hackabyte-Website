@@ -1,3 +1,17 @@
+/**
+ * Hackathon Info Component
+ * 
+ * Displays comprehensive information about hackathon events, covering:
+ * - Event logistics and duration details
+ * - Team formation rules and options
+ * - Required items and provided resources
+ * - Project themes and submission guidelines
+ * - Workshop information and educational resources
+ * - Presentation formats and judging criteria
+ * 
+ * Features a responsive card grid layout with animated entry and hover effects.
+ */
+
 'use client';
 
 import { useRef } from 'react';
@@ -5,9 +19,15 @@ import { motion, useInView } from 'framer-motion';
 import Container from '@/components/shared/Container';
 
 export default function HackathonInfo() {
+  // Reference for scroll-triggered animations
   const ref = useRef(null);
+  // Detect when section enters viewport (20% visibility triggers animation)
   const isInView = useInView(ref, { once: true, amount: 0.2 });
 
+  /**
+   * Information sections data structure
+   * Each section contains a title, icon, and descriptive content
+   */
   const infoSections = [
     {
       title: "Duration & Logistics",
@@ -65,6 +85,10 @@ export default function HackathonInfo() {
     }
   ];
 
+  /**
+   * Animation variants for information cards
+   * Defines entry animations with fade-in and slide-up effects
+   */
   const cardVariants = {
     hidden: { opacity: 0, y: 20 },
     visible: { 
@@ -77,6 +101,7 @@ export default function HackathonInfo() {
   return (
     <section className="py-20 bg-[#16161A]" ref={ref}>
       <Container>
+        {/* Section heading with fade-in and slide-up animation */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
@@ -91,7 +116,9 @@ export default function HackathonInfo() {
           </p>
         </motion.div>
 
+        {/* Information cards grid - 1 column on mobile, 2 columns on larger screens */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Map through each info section to create cards with staggered animations */}
           {infoSections.map((section, index) => (
             <motion.div
               key={section.title}
@@ -114,6 +141,7 @@ export default function HackathonInfo() {
           ))}
         </div>
 
+        {/* Judging and scoring section - appears with delayed animation */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}

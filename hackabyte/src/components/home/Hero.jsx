@@ -1,3 +1,15 @@
+/**
+ * Hero Component
+ * 
+ * Main landing section for the homepage featuring:
+ * - Dynamic parallax scroll effect for background elements
+ * - Staggered animations for text content
+ * - Interactive CTA buttons with hover effects
+ * - Animated code block with syntax highlighting
+ * - Fully responsive layout for all screen sizes
+ * - Decorative background blur elements
+ */
+
 'use client';
 
 import { useEffect, useRef } from 'react';
@@ -6,9 +18,13 @@ import { motion } from 'framer-motion';
 import Container from '@/components/shared/Container';
 
 export default function Hero() {
+  // Reference for the container element to apply parallax effect
   const containerRef = useRef(null);
 
-  // Parallax effect on scroll
+  /**
+   * Parallax background effect implementation
+   * Moves the background position based on scroll position for depth effect
+   */
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const handleScroll = () => {
@@ -26,16 +42,24 @@ export default function Hero() {
     }
   }, []); // Empty dependency array ensures this only runs once
 
+  /**
+   * Animation variants for staggered content reveal
+   * Parent container that choreographs the timing of child animations
+   */
   const staggerContainer = {
     hidden: { opacity: 0 },
     show: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.3
+        staggerChildren: 0.3 // Delay between each child animation
       }
     }
   };
 
+  /**
+   * Animation variant for individual content items
+   * Slide-up and fade-in effect for text elements
+   */
   const item = {
     hidden: { y: 20, opacity: 0 },
     show: { 
@@ -48,6 +72,10 @@ export default function Hero() {
     }
   };
 
+  /**
+   * Data for the animated code block
+   * Each line appears sequentially with different syntax highlighting
+   */
   const codeBlockItems = [
     { id: 1, element: '<div className="hackathon">' },
     { id: 2, element: '  <h1>Hello World!</h1>' },
@@ -61,7 +89,7 @@ export default function Hero() {
       className="min-h-screen pt-16 md:pt-8 pb-16 relative overflow-hidden bg-[#1A1A1E] flex items-center"
       id="home"
     >
-      {/* Background Elements */}
+      {/* Decorative background blur elements */}
       <div className="absolute inset-0 -z-10 opacity-20">
         <div className="absolute top-20 right-20 w-64 h-64 bg-[#F93236] rounded-full blur-3xl"></div>
         <div className="absolute bottom-20 left-20 w-72 h-72 bg-[#FF2247] rounded-full blur-3xl"></div>
@@ -69,8 +97,9 @@ export default function Hero() {
       </div>
 
       <Container>
+        {/* Two-column layout on medium and larger screens */}
         <div className="grid md:grid-cols-2 gap-8 items-center">
-          {/* Left Column - Text Content */}
+          {/* Left Column - Main content with staggered animations */}
           <motion.div
             variants={staggerContainer}
             initial="hidden"
@@ -118,7 +147,7 @@ export default function Hero() {
             </motion.div>
           </motion.div>
 
-          {/* Right Column - Animated Code Block */}
+          {/* Right Column - Animated code editor visualization */}
           <motion.div 
             className="hidden md:block"
             initial={{ opacity: 0, x: 100 }}
@@ -126,7 +155,7 @@ export default function Hero() {
             transition={{ duration: 0.8, delay: 0.5 }}
           >
             <div className="bg-[#1A1A1E] rounded-lg shadow-2xl overflow-hidden border border-gray-800">
-              {/* Code Editor Header */}
+              {/* Code editor chrome with window controls */}
               <div className="bg-[#16161A] px-4 py-2 flex items-center">
                 <div className="flex space-x-2">
                   <div className="w-3 h-3 rounded-full bg-red-500"></div>
@@ -136,7 +165,7 @@ export default function Hero() {
                 <div className="ml-4 text-gray-400 text-sm">hackathon.jsx</div>
               </div>
               
-              {/* Code Content */}
+              {/* Code content with line numbers and syntax highlighting */}
               <div className="p-6">
                 <pre className="text-gray-300 font-mono">
                   <code>

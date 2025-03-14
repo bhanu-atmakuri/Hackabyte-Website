@@ -1,4 +1,15 @@
-// src/components/luma/LumaHero.jsx
+/**
+ * LUMA Hero Component
+ * 
+ * Hero section for the LUMA educational program page featuring:
+ * - LUMA logo and mission statement
+ * - Call-to-action buttons for joining classes and Discord
+ * - Key program highlights displaying inclusive learning approach
+ * - Custom green color scheme differentiating from main Hackabyte branding
+ * - Responsive layout that adapts to screen sizes
+ * - Interactive animations for visual engagement
+ */
+
 'use client';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
@@ -7,7 +18,7 @@ import Container from '../shared/Container';
 export default function LumaHero() {
   return (
     <section className="min-h-screen relative pt-16 md:pt-10 pb-20 bg-[#1A1A1E] flex items-center">
-      {/* Background Elements */}
+      {/* Decorative background blur elements with LUMA's green color theme */}
       <div className="absolute inset-0 -z-10 opacity-10">
         <div className="absolute top-20 right-20 w-64 h-64 bg-[#BADA55] rounded-full blur-3xl"></div>
         <div className="absolute bottom-20 left-20 w-72 h-72 bg-[#BADA55] rounded-full blur-3xl"></div>
@@ -15,11 +26,13 @@ export default function LumaHero() {
      
       <Container>
         <div className="text-center">
+          {/* Main content with fade-in and slide-up animation */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
+            {/* LUMA logo - uses different branding than main Hackabyte */}
             <img 
               src="/logo-luma.png" 
               alt="LUMA Logo" 
@@ -31,6 +44,7 @@ export default function LumaHero() {
               Empowering every student to learn coding, irrespective of their skill level.
             </p>
            
+            {/* Call-to-action buttons with hover animations */}
             <div className="flex flex-col sm:flex-row flex-wrap justify-center gap-6 mt-8">
 
               <motion.div
@@ -54,6 +68,7 @@ export default function LumaHero() {
               </motion.div>
             </div>
            
+            {/* Program highlight statistics */}
             <div className="flex flex-wrap justify-center gap-4 md:gap-0 md:space-x-4 mt-12">
               <div className="flex flex-col items-center p-2 md:p-4 w-full sm:w-auto">
                 <span className="text-3xl md:text-4xl font-bold text-[#BADA55] mb-2">All Ages</span>

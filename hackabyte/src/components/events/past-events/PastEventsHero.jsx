@@ -1,3 +1,14 @@
+/**
+ * Past Events Hero Component
+ * 
+ * Hero section for the Past Events page featuring:
+ * - Main headline and descriptive text about previous hackathons
+ * - Fade-in animations for visual engagement
+ * - Responsive layout that adapts to screen size
+ * - Serves as an introduction to the past events listings below
+ * - Consistent styling with other hero sections across the site
+ */
+
 'use client';
 
 import { motion } from 'framer-motion';
@@ -6,7 +17,7 @@ import Container from '../../shared/Container';
 export default function PastEventsHero() {
   return (
     <section className="relative pt-16 md:pt-32 pb-20 bg-[#1A1A1E] flex items-center">
-      {/* Background Elements */}
+      {/* Decorative background blur elements */}
       <div className="absolute inset-0 -z-10 opacity-10">
         <div className="absolute top-20 right-20 w-64 h-64 bg-[#F93236] rounded-full blur-3xl"></div>
         <div className="absolute bottom-20 left-20 w-72 h-72 bg-[#FF2247] rounded-full blur-3xl"></div>
@@ -14,6 +25,7 @@ export default function PastEventsHero() {
       
       <Container>
         <div className="text-center">
+          {/* Main content with fade-in and slide-up animation */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}

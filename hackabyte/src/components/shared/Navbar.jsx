@@ -1,20 +1,39 @@
 'use client';
 
+/**
+ * Navbar Component
+ * 
+ * Displays the main navigation bar for the Hackabyte website with responsive design
+ * supporting both desktop and mobile views. Features include:
+ * - Responsive layout that adapts to different screen sizes
+ * - Background changes on scroll for better visibility
+ * - Dropdown menu for nested navigation items
+ * - Mobile menu with animations and accessibility support
+ * - Framer Motion animations for interactive elements
+ */
+
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import Container from '@/components/shared/Container';
 
 export default function Navbar() {
+  // State to track if the user has scrolled down the page
   const [isScrolled, setIsScrolled] = useState(false);
+  // State to control mobile menu visibility
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  // State to track which dropdown menu is currently active
   const [activeDropdown, setActiveDropdown] = useState(null);
+  // Reference to the dropdown menu for detecting outside clicks
   const dropdownRef = useRef(null);
 
-  // Works on mobile!
-  // Handle scroll effect
+  /**
+   * Scroll effect handler
+   * Applies background styling to navbar when user scrolls past threshold
+   */
   useEffect(() => {
     const handleScroll = () => {
+      // Apply scrolled styling when page is scrolled more than 10px
       if (window.scrollY > 10) {
         setIsScrolled(true);
       } else {
@@ -25,16 +44,21 @@ export default function Navbar() {
     // Add the event listener
     window.addEventListener('scroll', handleScroll);
     
-    // Initial check
+    // Initial check to set correct state on component mount
     handleScroll();
     
-    // Clean up
+    // Clean up event listener on component unmount
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []); // Empty dependency array so it only runs once on mount
+  }, []); // Empty dependency array ensures this only runs once on mount
 
-  // Handle dropdown outside clicks
+  /**
+   * Outside click handler for dropdown menus
+   * Closes dropdowns when clicking outside or pressing Escape/Tab keys
+   * Improves accessibility and user experience
+   */
   useEffect(() => {
     const handleClickOutside = (event) => {
+      // Close dropdown menu when clicking outside its container
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
         setActiveDropdown(null);
       }
@@ -42,22 +66,27 @@ export default function Navbar() {
 
     // Handle keyboard events for accessibility
     const handleKeyDown = (e) => {
+      // Close dropdown when Tab or Escape key is pressed
       if (e.key === 'Tab' || e.key === 'Escape') {
         setActiveDropdown(null);
       }
     };
 
-    // Add event listeners
+    // Add event listeners for mouse and keyboard interactions
     document.addEventListener('mousedown', handleClickOutside);
     document.addEventListener('keydown', handleKeyDown);
     
-    // Clean up
+    // Clean up event listeners on component unmount
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
       document.removeEventListener('keydown', handleKeyDown);
     };
   }, []); // Empty dependency array ensures this only runs once
 
+  /**
+   * Navigation items data structure
+   * Defines all navigation links, their URLs, and dropdown subitems where applicable
+   */
   const navItems = [
     { name: 'Home', href: '/', hasDropdown: false },
     { name: 'LUMA', href: '/luma', hasDropdown: false },
@@ -75,23 +104,31 @@ export default function Navbar() {
     { name: 'Contact Us', href: '/contact', hasDropdown: false },
   ];
 
+  /**
+   * Toggles dropdown menu visibility in mobile view
+   * @param {number} index - Index of the dropdown menu to toggle
+   */
   const handleDropdownToggle = (index) => {
     if (activeDropdown === index) {
+      // Close the dropdown if it's already open
       setActiveDropdown(null);
     } else {
+      // Open the clicked dropdown and close any others
       setActiveDropdown(index);
     }
   };
 
   return (
     <motion.nav
+      // Animation for navbar entrance from top of screen
       initial={{ y: -100 }}
       animate={{ y: 0 }}
       transition={{ duration: 0.5 }}
       className={`fixed w-full z-50 transition-all duration-300 ${
+        // Apply different styling based on scroll position
         isScrolled 
-          ? 'bg-[#1A1A1E]/90 backdrop-blur-md shadow-md py-3' 
-          : 'bg-transparent py-5'
+          ? 'bg-[#1A1A1E]/90 backdrop-blur-md shadow-md py-3' // Scrolled state
+          : 'bg-transparent py-5' // Default state at top of page
       }`}
       style={{
         WebkitTransform: 'translate3d(0,0,0)',
@@ -100,7 +137,7 @@ export default function Navbar() {
     >
       <Container>
         <div className="flex items-center justify-between w-full px-1 sm:px-0">
-          {/* Logo */}
+          {/* Site Logo and Branding */}
           <Link 
             href="/" 
             className="flex items-center space-x-1 sm:space-x-2 justify-start mr-auto safari-fix" 
@@ -145,7 +182,7 @@ export default function Navbar() {
             </span>
           </Link>
 
-          {/* Desktop Navigation */}
+          {/* Desktop Navigation - Hidden on mobile screens */}
           <div className="hidden md:flex items-center space-x-6">
             {navItems.map((item, index) => (
               <div key={item.name} 
@@ -171,10 +208,10 @@ export default function Navbar() {
                       </svg>
                     </Link>
                     
-                    {/* Invisible spacer to maintain hover area */}
+                    {/* Invisible spacer to maintain hover area for better UX */}
                     <div className="absolute h-2 w-full left-0 bottom-0 z-10"></div>
                     
-                    {/* Dropdown Menu */}
+                    {/* Dropdown Menu - Appears on hover */}
                     <div className="absolute invisible group-hover:visible opacity-0 group-hover:opacity-100 left-0 top-full w-48 rounded-md shadow-lg bg-[#16161A] border border-gray-800 ring-1 ring-black ring-opacity-5 z-50 transition-all duration-200" style={{backdropFilter: 'blur(8px)'}}>
                       <div className="py-1">
                         {item.dropdownItems.map((dropdownItem) => (
@@ -214,7 +251,7 @@ export default function Navbar() {
             </motion.div>
           </div>
 
-          {/* Mobile Menu Button */}
+          {/* Mobile Menu Toggle Button - Only visible on smaller screens */}
           <button 
             className="md:hidden text-gray-300 p-2"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -240,7 +277,7 @@ export default function Navbar() {
           </button>
         </div>
 
-        {/* Mobile Menu */}
+        {/* Mobile Menu - Animated dropdown with nested navigation items */}
         <AnimatePresence>
           {isMobileMenuOpen && (
             <motion.div

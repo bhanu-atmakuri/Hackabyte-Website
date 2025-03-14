@@ -1,3 +1,15 @@
+/**
+ * Features Component
+ * 
+ * Displays Hackabyte's key value propositions with:
+ * - Grid layout of feature cards with icons and descriptions
+ * - Staggered animation effects for visual engagement
+ * - Responsive design that adapts to different screen sizes
+ * - Interactive card hover effects
+ * - Scroll-triggered animations that reveal content as user scrolls
+ * - Consistent branding with the site's color scheme
+ */
+
 'use client';
 
 import { useRef } from 'react';
@@ -5,9 +17,15 @@ import { motion, useInView } from 'framer-motion';
 import Container from '@/components/shared/Container';
 
 export default function Features() {
+  // Reference for scroll-triggered animations
   const ref = useRef(null);
+  // Detect when section enters viewport (30% visibility triggers animation)
   const isInView = useInView(ref, { once: true, amount: 0.3 });
 
+  /**
+   * Feature card data structure
+   * Each feature contains an icon SVG, title, and descriptive text
+   */
   const features = [
     {
       icon: (
@@ -65,16 +83,24 @@ export default function Features() {
     }
   ];
 
+  /**
+   * Animation variants for staggered card reveal
+   * Parent container controls the timing sequence of child animations
+   */
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.1
+        staggerChildren: 0.1 // Delay between each child animation
       }
     }
   };
 
+  /**
+   * Animation variant for individual feature cards
+   * Slide-up and fade-in effect with smooth transition
+   */
   const itemVariants = {
     hidden: { y: 20, opacity: 0 },
     visible: {
@@ -87,6 +113,7 @@ export default function Features() {
   return (
     <section id="about" className="bg-[#16161A] py-16 md:py-20 w-screen max-w-[100vw]" ref={ref}>
       <Container>
+        {/* Section heading with fade-in and slide-up animation */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
@@ -102,12 +129,14 @@ export default function Features() {
           </div>
         </motion.div>
 
+        {/* Feature cards grid with staggered animation */}
         <motion.div
           variants={containerVariants}
           initial="hidden"
           animate={isInView ? "visible" : "hidden"}
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
         >
+          {/* Map through features array to create individual cards */}
           {features.map((feature, index) => (
             <motion.div
               key={index}

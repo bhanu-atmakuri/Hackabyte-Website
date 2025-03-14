@@ -1,3 +1,14 @@
+/**
+ * Hackathons Hero Component
+ * 
+ * Hero section for the Hackathons page featuring:
+ * - Main headline and explanatory content about what a hackathon is
+ * - Visual explanation cards highlighting key aspects (team building, learning, rewards)
+ * - Call-to-action button for registration
+ * - Responsive layout that adapts to screen size
+ * - Consistent styling with other hero sections across the site
+ */
+
 'use client';
 
 import Container from '@/components/shared/Container';
@@ -6,7 +17,7 @@ import { motion } from 'framer-motion';
 export default function HackathonsHero() {
   return (
     <section className="relative pt-16 md:pt-8 pb-16 bg-[#1A1A1E] flex items-center">
-      {/* Background Elements */}
+      {/* Decorative background blur elements */}
       <div className="absolute inset-0 -z-10 opacity-10">
         <div className="absolute top-20 right-20 w-64 h-64 bg-[#F93236] rounded-full blur-3xl"></div>
         <div className="absolute bottom-20 left-20 w-72 h-72 bg-[#FF2247] rounded-full blur-3xl"></div>
@@ -14,6 +25,7 @@ export default function HackathonsHero() {
       
       <Container>
         <div className="text-center">
+          {/* Main content with fade-in and slide-up animation */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -23,6 +35,7 @@ export default function HackathonsHero() {
               Hackathons
             </h1>
             
+            {/* Information card explaining hackathons */}
             <Container size = "wide" className="bg-[#16161A] p-6 rounded-xl border border-gray-800 mx-auto">
               <h2 className="text-2xl font-bold text-white mb-3">What is a Hackathon?</h2>
               
@@ -31,7 +44,9 @@ export default function HackathonsHero() {
                 learn new skills from various workshops, and network with peers in a weekend full of coding and collaboration.
               </p>
               
+              {/* Feature cards - Key aspects of hackathons */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
+                {/* Team Building feature card */}
                 <div className="bg-[#1A1A1E] p-4 rounded-lg border border-gray-800">
                   <div className="text-[#FF2247] mb-2">
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -42,6 +57,7 @@ export default function HackathonsHero() {
                   <p className="text-gray-400 text-sm">Form teams of 1-4 people to tackle challenges together and build innovative solutions.</p>
                 </div>
                 
+                {/* Learning feature card */}
                 <div className="bg-[#1A1A1E] p-4 rounded-lg border border-gray-800">
                   <div className="text-[#FF2247] mb-2">
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -52,6 +68,7 @@ export default function HackathonsHero() {
                   <p className="text-gray-400 text-sm">Attend workshops and talks from industry experts to expand your skills and knowledge.</p>
                 </div>
                 
+                {/* Rewards feature card */}
                 <div className="bg-[#1A1A1E] p-4 rounded-lg border border-gray-800">
                   <div className="text-[#FF2247] mb-2">
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -64,7 +81,7 @@ export default function HackathonsHero() {
               </div>
             </Container>
             
-            {/* Quick link */}
+            {/* Registration CTA button with hover animation */}
             <div className="mt-6 flex flex-col sm:flex-row flex-wrap justify-center gap-6">
               <motion.a 
                 href="/events#registration"

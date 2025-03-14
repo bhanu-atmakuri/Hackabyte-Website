@@ -1,3 +1,16 @@
+/**
+ * Volunteer Leads Section Component
+ * 
+ * Displays information about Hackabyte's volunteer leadership team with:
+ * - Grid layout of profile cards for each volunteer lead
+ * - Member photos with gradient overlay for visual appeal
+ * - Personal information including name, role and biography
+ * - Social media links for each volunteer lead
+ * - Hover effects for interactive engagement
+ * - CTA section encouraging visitors to apply as volunteers
+ * - Staggered animations for visual interest when scrolling
+ */
+
 'use client';
 
 import { useRef } from 'react';
@@ -5,9 +18,15 @@ import { motion, useInView } from 'framer-motion';
 import Container from '../shared/Container';
 
 export default function VolunteerLeadsSection() {
+  // Reference for scroll-triggered animations
   const ref = useRef(null);
+  // Detect when section enters viewport (20% visibility triggers animation)
   const isInView = useInView(ref, { once: true, amount: 0.2 });
 
+  /**
+   * Volunteer leads data structure
+   * Contains profile information for each volunteer coordinator
+   */
   const volunteerLeads = [
     {
       name: "Navneeth Sastri",

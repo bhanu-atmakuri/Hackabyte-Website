@@ -1,3 +1,29 @@
+/**
+ * Past Events Data Module
+ * 
+ * This module exports data structures related to the previous Hackabyte events,
+ * including complete event details, filtering options, and metadata for the past events interface.
+ */
+
+/**
+ * Array of past events with their complete details
+ * @type {Array<{
+ *   id: string,               - Unique identifier used in URLs and references
+ *   title: string,            - Event title
+ *   date: string,             - Formatted date string (e.g., "April 15-16, 2024")
+ *   location: string,         - Venue name
+ *   state: string,            - State where event was held
+ *   country: string,          - Country where event was held
+ *   year: number,             - Year the event took place
+ *   ageGroups: Array<string>, - Target age groups that participated
+ *   competitionLevel: string, - Level of competition (e.g., "State", "National")
+ *   image: string,            - Path to event image
+ *   description: string,      - Detailed event description
+ *   highlights: Array<string>,- Key points about the event
+ *   winners: Array<Object>,   - Information about winning teams and projects
+ *   eventRecapLink: string    - Link to detailed event recap page
+ * }>}
+ */
 export const pastEvents = [
   {
     id: "spring-hackathon-2024-wa",
@@ -70,5 +96,14 @@ export const pastEvents = [
   }
 ];
 
+/**
+ * List of years with past events, used for filtering in the UI
+ * @type {Array<number>}
+ */
 export const pastEventYears = [2024];
+
+/**
+ * List of states where events were held, including an "All States" option for filtering
+ * @type {Array<string>}
+ */
 export const availableStates = ['All States', 'Washington'];

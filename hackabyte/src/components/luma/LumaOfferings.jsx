@@ -1,4 +1,15 @@
-// src/components/luma/LumaOfferings.jsx
+/**
+ * LUMA Offerings Component
+ * 
+ * Displays the coding courses and educational programs offered by LUMA:
+ * - Grid layout of course cards with distinctive icons and descriptions
+ * - Visual differentiation with LUMA's green branding (different from main Hackabyte red)
+ * - Content organized by skill level (beginner, intermediate, advanced)
+ * - Interactive hover effects for visual engagement
+ * - Responsive layout that adapts to different screen sizes
+ * - Scroll-triggered animations for visual interest when browsing
+ */
+
 'use client';
 
 import { useRef } from 'react';
@@ -6,9 +17,15 @@ import { motion, useInView } from 'framer-motion';
 import Container from '../shared/Container';
 
 export default function LumaOfferings() {
+  // Reference for scroll-triggered animations
   const ref = useRef(null);
+  // Detect when section enters viewport (20% visibility triggers animation)
   const isInView = useInView(ref, { once: true, amount: 0.2 });
 
+  /**
+   * Course offerings data structure
+   * Contains course information organized by topics and skill levels
+   */
   const offerings = [
     {
       title: "HTML & CSS Basics",

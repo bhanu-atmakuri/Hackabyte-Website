@@ -1,4 +1,15 @@
-// hackabyte/src/components/shared/Footer.jsx
+/**
+ * Footer Component
+ * 
+ * Displays the main footer for the Hackabyte website with multiple sections:
+ * - Organization info and description
+ * - Social media links
+ * - Navigational sections with categorized links
+ * - Copyright and legal information
+ * 
+ * Features responsive design that adapts to different screen sizes.
+ */
+
 'use client';
 
 import Link from 'next/link';
@@ -7,8 +18,13 @@ import Container from './Container';
 
 export default function Footer() {
   // Use a stable value for the year to avoid hydration mismatch
+  // This prevents React hydration errors from server/client time differences
   const currentYear = new Date().getFullYear();
   
+  /**
+   * Footer navigation sections data structure
+   * Organizes links into categorical sections for better user navigation
+   */
   const footerSections = [
     {
       title: "About",
@@ -56,7 +72,7 @@ export default function Footer() {
     <footer className="bg-[#16161A] text-white">
       <Container className="py-8 md:py-12">
         <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-5 gap-6 md:gap-8">
-          {/* Logo and info */}
+          {/* Logo, organization description and social media links */}
           <div className="col-span-2 sm:col-span-2 md:col-span-1 mb-6 md:mb-0">
             <Link href="/" className="flex items-center space-x-2 mb-6">
               <motion.div whileHover={{ rotate: 10 }} transition={{ duration: 0.2 }}>
@@ -71,11 +87,13 @@ export default function Footer() {
               <span className="text-xl font-bold">Hackabyte</span>
             </Link>
             
+            {/* Organization mission statement */}
             <div className="text-gray-400 mb-6">
               Empowering young minds through coding challenges, teamwork, and innovation.
               Hackabyte provides hands-on hackathons for students of all ages.
             </div>
             
+            {/* Social media link icons */}
             <div className="flex space-x-4">
               <a href="https://facebook.com/hackabyte" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-[#FF2247] transition-colors">
                 <svg fill="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" className="w-5 h-5" viewBox="0 0 24 24">
@@ -100,7 +118,7 @@ export default function Footer() {
             </div>
           </div>
           
-          {/* Navigation Links - now 4 columns in a row */}
+          {/* Navigation Links - organized in 4 columns in larger viewports */}
           {footerSections.map((section, index) => (
             <div key={index} className="md:col-span-1">
               <h3 className="text-lg font-semibold mb-4 text-gray-200">{section.title}</h3>
@@ -120,13 +138,16 @@ export default function Footer() {
           ))}
         </div>
         
+        {/* Divider between main footer content and legal footer */}
         <hr className="border-[#131435] my-6 md:my-8" />
         
         <div className="flex flex-col md:flex-row justify-between items-center">
+          {/* Copyright information with dynamically updated year */}
           <div className="text-gray-400 text-sm mb-6 md:mb-0 text-center md:text-left">
             © {currentYear} Hackabyte. All rights reserved.
           </div>
           
+          {/* Legal links and additional navigation */}
           <div className="flex flex-wrap justify-center md:justify-end gap-4 md:space-x-6">
             <Link href="/contact" className="text-gray-400 text-sm hover:text-[#FF2247] transition-colors">
               Privacy Policy

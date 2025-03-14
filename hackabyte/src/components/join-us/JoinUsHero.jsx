@@ -1,3 +1,15 @@
+/**
+ * Join Us Hero Component
+ * 
+ * Hero section for the Join Us page featuring:
+ * - Main headline and mission statement
+ * - Interactive cards for different involvement opportunities
+ *   (mentoring, volunteering, sponsorship)
+ * - Staggered animations for visual engagement
+ * - Responsive layout that adapts to screen size
+ * - Anchor links to specific sections further down the page
+ */
+
 'use client';
 
 import { motion } from 'framer-motion';
@@ -6,7 +18,7 @@ import Container from '@/components/shared/Container';
 export default function JoinUsHero() {
   return (
     <section className="relative pt-16 md:pt-32 pb-20 bg-[#1A1A1E] flex items-center">
-      {/* Background Elements */}
+      {/* Decorative background blur elements */}
       <div className="absolute inset-0 -z-10 opacity-10">
         <div className="absolute top-20 right-20 w-64 h-64 bg-[#F93236] rounded-full blur-3xl"></div>
         <div className="absolute bottom-20 left-20 w-72 h-72 bg-[#FF2247] rounded-full blur-3xl"></div>
@@ -14,6 +26,7 @@ export default function JoinUsHero() {
       
       <Container>
         <div className="text-center">
+          {/* Main content with fade-in and slide-up animation */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -27,8 +40,10 @@ export default function JoinUsHero() {
               Become part of our mission to inspire the next generation of innovators and empower young minds through coding challenges and collaboration.
             </p>
             
+            {/* Involvement options cards - 3-column grid on larger screens */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
               
+              {/* Mentor option card with icon and description */}
               <motion.a 
                 href="#mentor"
                 initial={{ opacity: 0, y: 20 }}
@@ -45,6 +60,7 @@ export default function JoinUsHero() {
                 <p className="text-gray-400 text-sm text-center">Share your knowledge and guide students</p>
               </motion.a>
               
+              {/* Volunteer option card with icon and description */}
               <motion.a 
                 href="#volunteer"
                 initial={{ opacity: 0, y: 20 }}
@@ -62,7 +78,7 @@ export default function JoinUsHero() {
               </motion.a>
 
               {
-              /*
+              /* Commented out "Join Team" option - preserved for future implementation
               <motion.a 
                 href="#join-team"
                 initial={{ opacity: 0, y: 20 }}
@@ -81,6 +97,7 @@ export default function JoinUsHero() {
               */
               }
 
+              {/* Sponsor option card with icon and description */}
               <motion.a 
                 href="#sponsor"
                 initial={{ opacity: 0, y: 20 }}
@@ -98,6 +115,7 @@ export default function JoinUsHero() {
               </motion.a>
             </div>
             
+            {/* Closing statement with delayed animation */}
             <motion.div 
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}

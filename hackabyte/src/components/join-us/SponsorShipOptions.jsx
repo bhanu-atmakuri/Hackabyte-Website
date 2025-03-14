@@ -1,3 +1,15 @@
+/**
+ * Sponsorship Options Component
+ * 
+ * Displays sponsorship opportunities for Hackabyte events featuring:
+ * - Tiered sponsorship packages with pricing and benefits
+ * - In-kind sponsorship options for non-financial contributions
+ * - Value proposition for potential partners
+ * - Contact information and inquiry form link
+ * - Animated sections with scroll-triggered reveals
+ * - Responsive layouts that adapt to different screen sizes
+ */
+
 'use client';
 
 import { useRef } from 'react';
@@ -6,9 +18,15 @@ import { motion, useInView } from 'framer-motion';
 import Container from '@/components/shared/Container';
 
 export default function SponsorshipOptions() {
+  // Reference for scroll-triggered animations
   const ref = useRef(null);
+  // Detect when section enters viewport (5% visibility triggers animation)
   const isInView = useInView(ref, { once: true, amount: 0.05 });
 
+  /**
+   * Sponsorship tiers data structure
+   * Each tier includes level name, price range, benefits list, and color theme
+   */
   const sponsorshipTiers = [
     {
       tier: "Platinum",
@@ -65,6 +83,10 @@ export default function SponsorshipOptions() {
     }
   ];
 
+  /**
+   * In-kind sponsorship options data structure
+   * Non-financial contribution options with descriptions and icons
+   */
   const inKindOptions = [
     {
       title: "Food & Beverages",
@@ -107,6 +129,7 @@ export default function SponsorshipOptions() {
   return (
     <section id="sponsor" className="py-20 bg-[#16161A]" ref={ref}>
       <Container>
+        {/* Section heading with fade-in and slide-up animation */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
@@ -121,6 +144,7 @@ export default function SponsorshipOptions() {
           </p>
         </motion.div>
 
+        {/* Sponsorship tiers section with grid layout */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
@@ -129,6 +153,7 @@ export default function SponsorshipOptions() {
         >
           <h3 className="text-2xl font-bold text-white mb-6 text-center">Sponsorship Tiers</h3>
           
+          {/* Sponsorship tier cards in responsive grid layout */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {sponsorshipTiers.map((tier, index) => (
               <motion.div
@@ -138,13 +163,13 @@ export default function SponsorshipOptions() {
                 transition={{ duration: 0.5, delay: 0.3 + (index * 0.1) }}
                 className="bg-[#1A1A1E] rounded-xl overflow-hidden border border-gray-800 hover:border-[#FF2247]/30 transition-all duration-300 h-full"
               >
-                {/* Tier Header */}
+                {/* Tier header with colored gradient background */}
                 <div className={`p-6 bg-gradient-to-r ${tier.color} text-center`}>
                   <h4 className="text-2xl font-bold text-white mb-1">{tier.tier}</h4>
                   <p className="text-white text-lg font-medium">{tier.price}</p>
                 </div>
                 
-                {/* Features */}
+                {/* Tier benefits list with checkmark icons */}
                 <div className="p-6">
                   <ul className="space-y-3">
                     {tier.features.map((feature, idx) => (
@@ -162,6 +187,7 @@ export default function SponsorshipOptions() {
           </div>
         </motion.div>
 
+        {/* In-kind sponsorship options section */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
@@ -170,6 +196,7 @@ export default function SponsorshipOptions() {
         >
           <h3 className="text-2xl font-bold text-white mb-6 text-center">In-Kind Sponsorship Options</h3>
           
+          {/* In-kind options cards in 2-column grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {inKindOptions.map((option, index) => (
               <motion.div
@@ -191,16 +218,20 @@ export default function SponsorshipOptions() {
           </div>
         </motion.div>
 
+        {/* "Why Partner With Us" section with contact information */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
           transition={{ duration: 0.5, delay: 0.7 }}
           className="bg-[#1A1A1E] p-8 rounded-xl border border-gray-800"
         >
+          {/* Two-column layout with benefits and contact info */}
           <div className="grid md:grid-cols-2 gap-8 items-center">
+            {/* Left column - Benefits of sponsorship */}
             <div>
               <h3 className="text-2xl font-bold text-[#FF2247] mb-4">Why Partner With Us?</h3>
               
+              {/* Partnership benefits with checkmark icons */}
               <div className="space-y-4">
                 <div className="flex items-start">
                   <div className="flex-shrink-0 mt-1">
@@ -248,12 +279,14 @@ export default function SponsorshipOptions() {
               </div>
             </div>
             
+            {/* Right column - Contact information card */}
             <div className="bg-[#16161A] p-6 rounded-xl border border-gray-800">
               <h3 className="text-xl font-bold text-white mb-4">Get In Touch</h3>
               <p className="text-gray-300 mb-6">
                 Interested in becoming a sponsor? We'd love to discuss how we can create a partnership that aligns with your organization's goals and budget.
               </p>
               
+              {/* Contact methods with icons */}
               <div className="space-y-4">
                 <div className="flex items-center">
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-[#FF2247] mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -270,6 +303,7 @@ export default function SponsorshipOptions() {
                 </div>
               </div>
               
+              {/* CTA button with hover animation */}
               <motion.div
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}

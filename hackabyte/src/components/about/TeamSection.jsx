@@ -1,3 +1,16 @@
+/**
+ * Team Section Component
+ * 
+ * Displays information about Hackabyte's board members with:
+ * - Grid layout of profile cards for each board member
+ * - Member photos with gradient overlay for visual appeal
+ * - Personal information including name, role and biography
+ * - Social media links for each team member
+ * - Hover effects for interactive engagement
+ * - Responsive layout that adapts to different screen sizes
+ * - Staggered animations for visual interest when scrolling
+ */
+
 'use client';
 
 import { useRef } from 'react';
@@ -5,9 +18,15 @@ import { motion, useInView } from 'framer-motion';
 import Container from '../shared/Container';
 
 export default function TeamSection() {
+  // Reference for scroll-triggered animations
   const ref = useRef(null);
+  // Detect when section enters viewport (20% visibility triggers animation)
   const isInView = useInView(ref, { once: true, amount: 0.2 });
 
+  /**
+   * Board members data structure
+   * Contains profile information for each team member
+   */
   const boardMembers = [
     {
       name: "Bhanu Atmakuri",
@@ -50,6 +69,7 @@ export default function TeamSection() {
   return (
     <section className="py-20 bg-[#16161A]" ref={ref}>
       <Container>
+        {/* Section heading with fade-in and slide-up animation */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
@@ -64,6 +84,7 @@ export default function TeamSection() {
           </p>
         </motion.div>
 
+        {/* Board members grid - Responsive layout with 1-3 columns based on screen size */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
           {boardMembers.map((member, index) => (
             <motion.div
@@ -73,6 +94,7 @@ export default function TeamSection() {
               transition={{ duration: 0.5, delay: 0.1 * (index % 3) }}
               className="bg-[#1A1A1E] rounded-xl overflow-hidden border border-gray-800 hover:border-[#FF2247]/30 transition-all duration-300"
             >
+              {/* Member photo with gradient overlay */}
               <div className="relative h-48 overflow-hidden">
                 <div 
                   className="w-full h-full bg-gray-800"
@@ -85,11 +107,13 @@ export default function TeamSection() {
                 <div className="absolute inset-0 bg-gradient-to-t from-[#1A1A1E] to-transparent opacity-60"></div>
               </div>
               
+              {/* Member information with name, role, bio and social links */}
               <div className="p-6">
                 <h3 className="text-xl font-bold text-white mb-1">{member.name}</h3>
                 <p className="text-[#FF2247] font-medium mb-3">{member.role}</p>
                 <p className="text-gray-400 text-sm">{member.bio}</p>
                 
+                {/* Social media icons with hover effects */}
                 <div className="flex mt-4 space-x-3">
                   <a href="#" className="text-gray-400 hover:text-[#FF2247] transition-colors">
                     <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">

@@ -1,3 +1,15 @@
+/**
+ * Volunteer Opportunities Component
+ * 
+ * Displays available volunteer positions for Hackabyte events with:
+ * - Detailed role descriptions with requirements and time commitments
+ * - Benefits of volunteering highlighted in a visually distinct section
+ * - Interactive application button with hover animation
+ * - Responsive grid layout that adapts to different screen sizes
+ * - Visually appealing cards with hover effects for each role
+ * - Scroll-triggered animations for visual engagement
+ */
+
 'use client';
 
 import { useRef } from 'react';
@@ -6,9 +18,15 @@ import { motion, useInView } from 'framer-motion';
 import Container from '@/components/shared/Container';
 
 export default function VolunteerOpportunities() {
+  // Reference for scroll-triggered animations
   const ref = useRef(null);
+  // Detect when section enters viewport (20% visibility triggers animation)
   const isInView = useInView(ref, { once: true, amount: 0.2 });
 
+  /**
+   * Volunteer roles data structure
+   * Each role includes title, description, time commitment, and requirements
+   */
   const volunteerRoles = [
     {
       title: "Event Staff",
@@ -39,6 +57,7 @@ export default function VolunteerOpportunities() {
   return (
     <section id="volunteer" className="py-20 bg-[#16161A]" ref={ref}>
       <Container>
+        {/* Section heading with fade-in and slide-up animation */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
@@ -53,6 +72,7 @@ export default function VolunteerOpportunities() {
           </p>
         </motion.div>
 
+        {/* Volunteer roles grid with card for each position */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
           {volunteerRoles.map((role, index) => (
             <motion.div
@@ -94,6 +114,7 @@ export default function VolunteerOpportunities() {
           ))}
         </div>
 
+        {/* Benefits of volunteering section with animated entrance */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
@@ -102,6 +123,7 @@ export default function VolunteerOpportunities() {
         >
           <h3 className="text-2xl font-bold text-white mb-4 text-center">Benefits of Volunteering</h3>
           
+          {/* Benefits grid with checkmark icons */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
             <div className="flex items-start">
               <div className="flex-shrink-0 mt-1">
@@ -148,6 +170,7 @@ export default function VolunteerOpportunities() {
             </div>
           </div>
           
+          {/* CTA button with hover animation */}
           <div className="text-center mt-8">
             <motion.div
               whileHover={{ scale: 1.05 }}

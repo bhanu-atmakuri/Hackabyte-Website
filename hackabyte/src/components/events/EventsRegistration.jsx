@@ -1,3 +1,14 @@
+/**
+ * Events Registration Component
+ * 
+ * Displays a section for event registration information featuring:
+ * - A split layout with image and registration information
+ * - Key benefits of participating in Hackabyte events
+ * - Call-to-action buttons to view events or contact organizers
+ * - Additional information cards with event details
+ * - Scroll-triggered animations for visual engagement
+ */
+
 'use client';
 
 import { useRef } from 'react';
@@ -6,21 +17,24 @@ import Link from 'next/link';
 import Container from '../shared/Container';
 
 export default function EventsRegistration() {
+  // Reference for scroll-triggered animations
   const ref = useRef(null);
+  // Detect when section enters viewport (30% visibility triggers animation)
   const isInView = useInView(ref, { once: true, amount: 0.3 });
 
   return (
     <section className="py-20 relative overflow-hidden bg-[#1A1A1E]" ref={ref}>
-      {/* Background Elements */}
+      {/* Decorative background blur elements */}
       <div className="absolute inset-0 -z-10 opacity-10">
         <div className="absolute top-0 right-1/4 w-64 h-64 bg-[#F93236] rounded-full blur-3xl"></div>
         <div className="absolute bottom-0 left-1/4 w-64 h-64 bg-[#FF2247] rounded-full blur-3xl"></div>
       </div>
       
       <Container>
+        {/* Main registration card with split layout */}
         <div className="bg-[#16161A] rounded-xl border border-gray-800 overflow-hidden">
           <div className="grid md:grid-cols-2 gap-0">
-            {/* Left Column - Image */}
+            {/* Left Column - Event Image with gradient overlay */}
             <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
               animate={isInView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.9 }}
@@ -38,7 +52,7 @@ export default function EventsRegistration() {
               <div className="absolute inset-0 bg-gradient-to-l from-[#16161A] to-transparent md:bg-gradient-to-r"></div>
             </motion.div>
             
-            {/* Right Column - Content */}
+            {/* Right Column - Registration information and benefits */}
             <motion.div
               initial={{ opacity: 0, x: 30 }}
               animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: 30 }}
@@ -53,6 +67,7 @@ export default function EventsRegistration() {
                 Our hackathons are designed for students of all experience levels. Whether you're just starting out or you're an experienced coder, we have challenges that will inspire and engage you.
               </p>
               
+              {/* Benefits list with checkmark icons */}
               <div className="space-y-4 mb-8">
                 <div className="flex items-start">
                   <div className="flex-shrink-0 mt-1">
@@ -88,6 +103,7 @@ export default function EventsRegistration() {
                 </div>
               </div>
               
+              {/* Call-to-action buttons */}
               <div className="flex flex-col sm:flex-row gap-4">
                 <motion.div
                   whileHover={{ scale: 1.05 }}
@@ -111,9 +127,9 @@ export default function EventsRegistration() {
           </div>
         </div>
         
-        {/* Additional Info Cards */}
+        {/* Additional Information Cards - 3 column layout on desktop */}
         <div className="grid md:grid-cols-3 gap-6 mt-12">
-          {/* Card 1 */}
+          {/* Card 1 - Time Commitment Information */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
@@ -129,7 +145,7 @@ export default function EventsRegistration() {
             <p className="text-gray-400">Our events range from single-day workshops to multi-day hackathons, with options for every schedule.</p>
           </motion.div>
           
-          {/* Card 2 */}
+          {/* Card 2 - Team Formation Information */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
@@ -145,7 +161,7 @@ export default function EventsRegistration() {
             <p className="text-gray-400">Register individually or with friends. We'll help you find the perfect team if you're coming solo.</p>
           </motion.div>
           
-          {/* Card 3 */}
+          {/* Card 3 - FAQ Link and Information */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}

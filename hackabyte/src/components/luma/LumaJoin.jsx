@@ -1,4 +1,15 @@
-// src/components/luma/LumaJoin.jsx
+/**
+ * LUMA Join Component
+ * 
+ * Application form for joining the LUMA education team with:
+ * - Interactive form with validation for collecting applicant information
+ * - Success state display after submission
+ * - Benefits of joining displayed as visual cards
+ * - Custom LUMA branding with distinct color scheme
+ * - Responsive layout that adapts to different screen sizes
+ * - Scroll-triggered animations for visual engagement
+ */
+
 'use client';
 
 import { useRef, useState } from 'react';
@@ -6,16 +17,30 @@ import { motion, useInView } from 'framer-motion';
 import Container from '../shared/Container';
 
 export default function LumaJoin() {
+ // Reference for scroll-triggered animations
  const ref = useRef(null);
+ // Detect when section enters viewport (20% visibility triggers animation)
  const isInView = useInView(ref, { once: true, amount: 0.2 });
+ 
+ /**
+  * Form state management
+  * Tracks user input across multiple form fields
+  */
  const [formData, setFormData] = useState({
    name: '',
    email: '',
    experience: '',
    motivation: ''
  });
+ 
+ // Track whether the form has been successfully submitted
  const [submitted, setSubmitted] = useState(false);
 
+ /**
+  * Handle form field changes
+  * Updates the appropriate property in form state based on input name
+  * @param {Event} e - Input change event
+  */
  const handleChange = (e) => {
    const { name, value } = e.target;
    setFormData(prev => ({
@@ -24,6 +49,12 @@ export default function LumaJoin() {
    }));
  };
 
+ /**
+  * Handle form submission
+  * Processes form data and transitions to success state
+  * Would typically send data to a backend API in production
+  * @param {Event} e - Form submission event
+  */
  const handleSubmit = (e) => {
    e.preventDefault();
    // Here you would typically send the data to your backend
@@ -34,6 +65,7 @@ export default function LumaJoin() {
  return (
    <section className="py-20 bg-[#16161A]" id="join" ref={ref}>
      <Container size = "half">
+       {/* Section heading with fade-in and slide-up animation */}
        <motion.div
          initial={{ opacity: 0, y: 20 }}
          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
@@ -48,13 +80,16 @@ export default function LumaJoin() {
          </p>
        </motion.div>
 
+       {/* Conditional rendering based on form submission state */}
        {!submitted ? (
+         // Application form with animated entrance
          <motion.div
            initial={{ opacity: 0, y: 30 }}
            animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
            transition={{ duration: 0.6, delay: 0.2 }}
            className="bg-[#1A1A1E] rounded-xl p-8 border border-gray-800"
          >
+           {/* Form with validation and styled inputs */}
            <form onSubmit={handleSubmit} className="space-y-6">
              <div>
                <label htmlFor="name" className="block text-white font-medium mb-2">Full Name</label>
@@ -125,6 +160,7 @@ export default function LumaJoin() {
                </label>
              </div>
              
+             {/* Submit button with hover animation */}
              <motion.button
                whileHover={{ scale: 1.05 }}
                whileTap={{ scale: 0.95 }}
@@ -136,6 +172,7 @@ export default function LumaJoin() {
            </form>
          </motion.div>
        ) : (
+         // Success message displayed after submission
          <motion.div
            initial={{ opacity: 0, scale: 0.9 }}
            animate={{ opacity: 1, scale: 1 }}
@@ -155,6 +192,7 @@ export default function LumaJoin() {
          </motion.div>
        )}
        
+       {/* Benefits of joining LUMA section with three-column grid */}
        <motion.div
          initial={{ opacity: 0, y: 30 }}
          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}

@@ -1,3 +1,14 @@
+/**
+ * Mission Component
+ * 
+ * Displays the organization's mission statement and core values featuring:
+ * - Main mission statement with animated entrance
+ * - "What We Do" section describing organizational activities
+ * - Core values displayed in a responsive grid layout
+ * - Scroll-triggered animations for visual engagement
+ * - Consistent branding with Hackabyte's color scheme
+ */
+
 'use client';
 
 import { useRef } from 'react';
@@ -5,9 +16,15 @@ import { motion, useInView } from 'framer-motion';
 import Container from '../shared/Container';
 
 export default function Mission() {
+  // Reference for scroll-triggered animations
   const ref = useRef(null);
+  // Detect when section enters viewport (30% visibility triggers animation)
   const isInView = useInView(ref, { once: true, amount: 0.3 });
 
+  /**
+   * Core values data structure
+   * Each value contains a title, description, and SVG icon
+   */
   const values = [
     {
       title: "Accessibility",
@@ -50,6 +67,7 @@ export default function Mission() {
   return (
     <section className="py-20 bg-[#16161A]" ref={ref}>
       <Container>
+        {/* Mission statement with fade-in and slide-up animation */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
@@ -65,7 +83,9 @@ export default function Mission() {
           </p>
         </motion.div>
 
+        {/* Two-column layout with "What We Do" and core values grid */}
         <div className="grid md:grid-cols-2 gap-10 mt-16">
+          {/* Left column - "What We Do" card with slide-in animation */}
           <motion.div
             initial={{ opacity: 0, x: -50 }}
             animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -50 }}
@@ -88,7 +108,9 @@ export default function Mission() {
             </p>
           </motion.div>
 
+          {/* Right column - Core values grid with 2x2 layout on tablet+ screens */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            {/* Core value cards with staggered fade-in animations */}
             {values.map((value, index) => (
               <motion.div
                 key={value.title}

@@ -1,3 +1,15 @@
+/**
+ * Testimonials Component
+ * 
+ * Displays success stories from past participants with:
+ * - Interactive carousel/slider to navigate between testimonials
+ * - Animated transitions when switching between stories
+ * - Navigation controls (dots and arrow buttons)
+ * - Responsive layout that adapts to mobile and desktop screens
+ * - Visual separation between quote content and controls
+ * - Scroll-triggered animations for initial reveal
+ */
+
 'use client';
 
 import { useState, useRef } from 'react';
@@ -5,10 +17,17 @@ import { motion, useInView } from 'framer-motion';
 import Container from '@/components/shared/Container';
 
 export default function Testimonials() {
+  // State to track which testimonial is currently displayed
   const [activeIndex, setActiveIndex] = useState(0);
+  // Reference for scroll-triggered animations
   const ref = useRef(null);
+  // Detect when section enters viewport (30% visibility triggers animation)
   const isInView = useInView(ref, { once: true, amount: 0.3 });
 
+  /**
+   * Testimonial data structure
+   * Collection of student and educator experiences with profile information
+   */
   const testimonials = [
     {
       name: "Alex Chen",
@@ -40,10 +59,18 @@ export default function Testimonials() {
     }
   ];
 
+  /**
+   * Navigate to previous testimonial
+   * Handles circular navigation (going to the last item when at the first)
+   */
   const handlePrev = () => {
     setActiveIndex((prevIndex) => (prevIndex === 0 ? testimonials.length - 1 : prevIndex - 1));
   };
 
+  /**
+   * Navigate to next testimonial
+   * Handles circular navigation (going to the first item when at the last)
+   */
   const handleNext = () => {
     setActiveIndex((prevIndex) => (prevIndex === testimonials.length - 1 ? 0 : prevIndex + 1));
   };
@@ -51,6 +78,7 @@ export default function Testimonials() {
   return (
     <section className="py-20 bg-[#16161A]" id="testimonials" ref={ref}>
       <Container>
+        {/* Section heading with fade-in and slide-up animation */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
@@ -66,6 +94,7 @@ export default function Testimonials() {
           </div>
         </motion.div>
 
+        {/* Testimonial card with scale-up animation on scroll */}
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={isInView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.95 }}
@@ -74,12 +103,13 @@ export default function Testimonials() {
         >
           <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
             <div className="flex flex-col md:flex-row">
-              {/* Testimonial Content */}
+              {/* Left side - Testimonial quote content with animated transitions */}
               <div className="p-8 md:p-12 md:w-3/5 bg-[#131435]">
                 <svg className="text-[#FF2247] w-12 h-12 mb-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M4.583 17.321C3.553 16.227 3 15 3 13.011c0-3.5 2.457-6.637 6.03-8.188l.893 1.378c-3.335 1.804-3.987 4.145-4.247 5.621.537-.278 1.24-.375 1.929-.311 1.804.167 3.226 1.648 3.226 3.489a3.5 3.5 0 01-3.5 3.5c-1.073 0-2.099-.49-2.748-1.179zm10 0C13.553 16.227 13 15 13 13.011c0-3.5 2.457-6.637 6.03-8.188l.893 1.378c-3.335 1.804-3.987 4.145-4.247 5.621.537-.278 1.24-.375 1.929-.311 1.804.167 3.226 1.648 3.226 3.489a3.5 3.5 0 01-3.5 3.5c-1.073 0-2.099-.49-2.748-1.179z"></path>
                 </svg>
                 
+                {/* Animated testimonial content that changes when activeIndex changes */}
                 <motion.div
                   key={activeIndex}
                   initial={{ opacity: 0, y: 20 }}
@@ -118,7 +148,7 @@ export default function Testimonials() {
                 </motion.div>
               </div>
 
-              {/* Image Side */}
+              {/* Right side - Navigation controls with decorative background */}
               <div className="bg-gradient-to-br from-[#F93236] to-[#FF2247] md:w-2/5 relative overflow-hidden">
                 <div className="absolute inset-0 opacity-20">
                   <svg className="w-full h-full" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
@@ -131,7 +161,8 @@ export default function Testimonials() {
                 
                 <div className="relative h-full flex items-center justify-center p-8">
                   <div className="text-white text-center">
-                    <div className="flex space-x-1 mb-6 justify-center">
+                  {/* Dot indicators for direct navigation between testimonials */}
+                  <div className="flex space-x-1 mb-6 justify-center">
                       {testimonials.map((_, index) => (
                         <button
                           key={index}
@@ -144,6 +175,7 @@ export default function Testimonials() {
                       ))}
                     </div>
                     
+                    {/* Previous/Next arrow buttons for sequential navigation */}
                     <div className="flex justify-center space-x-4">
                       <button
                         onClick={handlePrev}

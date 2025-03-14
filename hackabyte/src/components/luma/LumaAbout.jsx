@@ -1,4 +1,14 @@
-// src/components/luma/LumaAbout.jsx
+/**
+ * LUMA About Component
+ * 
+ * About section for the LUMA educational program featuring:
+ * - Organization origin story and mission statement
+ * - Core values presented in a responsive card layout
+ * - Custom LUMA green branding that differs from main Hackabyte styling
+ * - Animated content with scroll-triggered reveals
+ * - Responsive two-column layout that adapts to different screen sizes
+ */
+
 'use client';
 
 import { useRef } from 'react';
@@ -6,12 +16,15 @@ import { motion, useInView } from 'framer-motion';
 import Container from '../shared/Container';
 
 export default function LumaAbout() {
+  // Reference for scroll-triggered animations
   const ref = useRef(null);
+  // Detect when section enters viewport (30% visibility triggers animation)
   const isInView = useInView(ref, { once: true, amount: 0.3 });
 
   return (
     <section className="py-20 bg-[#16161A]" id="about" ref={ref}>
       <Container>
+        {/* Section heading with fade-in and slide-up animation */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
@@ -23,7 +36,9 @@ export default function LumaAbout() {
           </h2>
         </motion.div>
 
+        {/* Two-column layout for story and core values */}
         <div className="grid md:grid-cols-2 gap-10 mt-16">
+          {/* Left column - "Our Story" with slide-in animation */}
           <motion.div
             initial={{ opacity: 0, x: -50 }}
             animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -50 }}
@@ -45,7 +60,9 @@ export default function LumaAbout() {
             </p>
           </motion.div>
 
+          {/* Right column - Core values cards with staggered animations */}
           <div className="grid grid-cols-1 gap-6">
+            {/* Inclusive Education value card */}
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
@@ -61,6 +78,7 @@ export default function LumaAbout() {
               <p className="text-gray-400">Creating learning opportunities for students regardless of background or prior experience.</p>
             </motion.div>
             
+            {/* Creative Learning value card */}
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
@@ -76,6 +94,7 @@ export default function LumaAbout() {
               <p className="text-gray-400">Fostering innovation and creative problem-solving through engaging, interactive classes.</p>
             </motion.div>
             
+            {/* Community Support value card */}
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}

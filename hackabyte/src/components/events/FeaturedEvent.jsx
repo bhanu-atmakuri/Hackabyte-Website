@@ -1,3 +1,16 @@
+/**
+ * Featured Event Component
+ * 
+ * Displays a prominent showcase of the most significant upcoming Hackabyte event
+ * with rich visual presentation and detailed information. Features include:
+ * - Eye-catching section heading
+ * - Large feature image with gradient overlay
+ * - Detailed event information with date, location, and description
+ * - Animated highlights list with custom icons
+ * - Call-to-action button for registration
+ * - Scroll-triggered animations for visual engagement
+ */
+
 'use client';
 
 import { useRef } from 'react';
@@ -6,9 +19,15 @@ import Link from 'next/link';
 import Container from '../shared/Container';
 
 export default function FeaturedEvent() {
+  // Reference for scroll-triggered animations
   const ref = useRef(null);
+  // Detect when section enters viewport (20% visibility triggers animation)
   const isInView = useInView(ref, { once: true, amount: 0.2 });
 
+  /**
+   * Featured event data structure
+   * Contains all information about the showcase event
+   */
   const featuredEvent = {
     title: "National Coding Championship 2025",
     date: "May 15-17, 2025",
@@ -25,6 +44,7 @@ export default function FeaturedEvent() {
     registrationLink: "/events#registration"
   };
 
+  // Animation variants for the featured event card
   const featureAnimation = {
     hidden: { opacity: 0, y: 20 },
     visible: { opacity: 1, y: 0, transition: { duration: 0.6 } }
@@ -33,6 +53,7 @@ export default function FeaturedEvent() {
   return (
     <section className="py-20 bg-[#16161A]" ref={ref}>
       <Container>
+        {/* Section heading with fade-in and slide-up animation */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
@@ -47,9 +68,10 @@ export default function FeaturedEvent() {
           </p>
         </motion.div>
 
+        {/* Main featured event card with responsive grid layout */}
         <div className="bg-[#1A1A1E] rounded-xl overflow-hidden border border-gray-800">
           <div className="grid md:grid-cols-5 gap-0">
-            {/* Event Image - Takes up 2/5 of the space on medium+ screens */}
+            {/* Event Image - Takes up 2/5 of the grid on medium+ screens */}
             <motion.div
               className="md:col-span-2 relative h-64 md:h-full min-h-[300px]"
               variants={featureAnimation}
@@ -67,7 +89,7 @@ export default function FeaturedEvent() {
               <div className="absolute inset-0 bg-gradient-to-r from-[#1A1A1E]/80 via-transparent to-transparent md:bg-gradient-to-l"></div>
             </motion.div>
 
-            {/* Event Details - Takes up 3/5 of the space on medium+ screens */}
+            {/* Event Details - Takes up 3/5 of the grid on medium+ screens */}
             <motion.div 
               className="md:col-span-3 p-8 md:p-12"
               variants={featureAnimation}
@@ -77,6 +99,7 @@ export default function FeaturedEvent() {
             >
               <h3 className="text-3xl font-bold text-white mb-3">{featuredEvent.title}</h3>
               
+              {/* Event date and location with icons */}
               <div className="flex flex-wrap gap-4 mb-6">
                 <div className="flex items-center text-gray-300">
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 text-[#FF2247]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -97,6 +120,7 @@ export default function FeaturedEvent() {
                 {featuredEvent.description}
               </p>
 
+              {/* Event highlights with animated list items */}
               <div className="mb-8">
                 <h4 className="text-xl font-semibold text-white mb-4">Highlights:</h4>
                 <ul className="space-y-2">
@@ -117,6 +141,7 @@ export default function FeaturedEvent() {
                 </ul>
               </div>
 
+              {/* CTA button with hover animation */}
               <motion.div
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}

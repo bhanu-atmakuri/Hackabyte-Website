@@ -1,9 +1,25 @@
+/**
+ * Contact Info Component
+ * 
+ * Displays contact information and social media links with:
+ * - Categorized contact methods (email, phone, location)
+ * - Social media profiles with icon links
+ * - Staggered animation effects for visual engagement
+ * - Interactive hover effects for all clickable elements
+ * - Responsive layout that works on all device sizes
+ * - Consistent branding with the site's color scheme
+ */
+
 'use client';
 
 import { motion } from 'framer-motion';
 
 export default function ContactInfo() {
-  // Animation variants for list items
+  /**
+   * Animation variants for staggered list items
+   * Creates a cascading reveal effect for contact methods
+   * @param {number} i - Index for controlling delay of each item
+   */
   const listItemVariants = {
     hidden: { opacity: 0, y: 10 },
     visible: (i) => ({
@@ -16,6 +32,10 @@ export default function ContactInfo() {
     })
   };
 
+  /**
+   * Contact methods data structure
+   * Each method contains an icon, title, content, action URL, and description
+   */
   const contactMethods = [
     {
       icon: (
@@ -53,6 +73,10 @@ export default function ContactInfo() {
     }
   ];
 
+  /**
+   * Social media links data structure
+   * Each network contains name, icon SVG, and profile URL
+   */
   const socialLinks = [
     {
       name: 'Twitter',
@@ -101,7 +125,7 @@ export default function ContactInfo() {
     >
       <h2 className="text-3xl font-bold mb-8 text-white">Get In Touch</h2>
       
-      {/* Contact Methods */}
+      {/* Contact Methods Section - Animated list with staggered reveal */}
       <div className="mb-8">
         <ul className="space-y-6">
           {contactMethods.map((method, i) => (
@@ -135,7 +159,7 @@ export default function ContactInfo() {
         </ul>
       </div>
       
-      {/* Social Media Links */}
+      {/* Social Media Links Section - Grid of icon buttons with hover effects */}
       <div>
         <h3 className="text-xl font-medium text-white mb-4">Connect With Us</h3>
         <div className="flex flex-wrap gap-4">
@@ -159,7 +183,7 @@ export default function ContactInfo() {
         </div>
       </div>
       
-      {/* Note about response time */}
+      {/* Response Time Note - Informative message with subtle styling */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}

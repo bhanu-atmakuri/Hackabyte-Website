@@ -1,3 +1,18 @@
+/**
+ * Authentication Form Component
+ * 
+ * A dual-purpose form that handles both user login and registration with:
+ * - Tab-based toggle between login and registration views
+ * - Form validation for required fields
+ * - Responsive design that works across screen sizes
+ * - Smooth transitions between form states
+ * - Password confirmation for registration
+ * - "Remember me" option for login
+ * 
+ * In a production environment, this would connect to actual authentication services
+ * but currently implements demo functionality with console logs and alerts.
+ */
+
 'use client';
 
 import { useState } from 'react';
@@ -5,12 +20,22 @@ import { motion } from 'framer-motion';
 import Container from '../shared/Container';
 
 export default function AuthForm() {
+  // State for toggling between login and registration modes
   const [isLogin, setIsLogin] = useState(true);
+  
+  // Form field states
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
+  /**
+   * Form submission handler
+   * Currently implements demo functionality with console logs and alerts
+   * Would be connected to actual auth services in production
+   * 
+   * @param {Event} e - Form submission event
+   */
   const handleSubmit = (e) => {
     e.preventDefault();
     // Handle login/register logic here
@@ -31,7 +56,7 @@ export default function AuthForm() {
     <Container size = 'half'>
       <div className="bg-[#16161A] rounded-xl shadow-xl overflow-hidden border border-gray-800">
         <div className="p-8">
-          {/* Tabs */}
+          {/* Authentication mode toggle tabs */}
           <div className="flex mb-8 border-b border-gray-800">
             <button
               className={`pb-4 px-4 text-lg font-medium border-b-2 ${
@@ -55,6 +80,7 @@ export default function AuthForm() {
             </button>
           </div>
 
+          {/* Form with fade-in animation */}
           <motion.form
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -65,6 +91,7 @@ export default function AuthForm() {
               {isLogin ? 'Sign in to your account' : 'Create a new account'}
             </h2>
 
+            {/* Conditional name field - only shown in registration mode */}
             {!isLogin && (
               <div className="mb-6">
                 <label htmlFor="name" className="block text-gray-300 text-sm font-medium mb-2">
@@ -82,6 +109,7 @@ export default function AuthForm() {
               </div>
             )}
 
+            {/* Email field - required in both modes */}
             <div className="mb-6">
               <label htmlFor="email" className="block text-gray-300 text-sm font-medium mb-2">
                 Email Address
@@ -97,6 +125,7 @@ export default function AuthForm() {
               />
             </div>
 
+            {/* Password field - required in both modes */}
             <div className="mb-6">
               <label htmlFor="password" className="block text-gray-300 text-sm font-medium mb-2">
                 Password
@@ -112,6 +141,7 @@ export default function AuthForm() {
               />
             </div>
 
+            {/* Conditional password confirmation - only shown in registration mode */}
             {!isLogin && (
               <div className="mb-6">
                 <label htmlFor="confirmPassword" className="block text-gray-300 text-sm font-medium mb-2">
@@ -129,6 +159,7 @@ export default function AuthForm() {
               </div>
             )}
 
+            {/* Conditional "Remember me" and "Forgot password" - only shown in login mode */}
             {isLogin && (
               <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center">
@@ -147,6 +178,7 @@ export default function AuthForm() {
               </div>
             )}
 
+            {/* Submit button with hover/tap animations */}
             <motion.button
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
@@ -156,6 +188,7 @@ export default function AuthForm() {
               {isLogin ? 'Sign In' : 'Create Account'}
             </motion.button>
 
+            {/* Mode toggle link - changes text based on current mode */}
             <div className="text-center text-gray-400 text-sm">
               {isLogin ? "Don't have an account? " : "Already have an account? "}
               <button

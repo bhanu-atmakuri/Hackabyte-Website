@@ -1,3 +1,15 @@
+/**
+ * Hackathon Rules Component
+ * 
+ * Displays the competition guidelines and code of conduct for Hackabyte events:
+ * - Numbered rule cards with clear titles and descriptions
+ * - Visual emphasis through color and layout to highlight importance
+ * - Sequential animation for each rule to improve readability
+ * - Background decorative elements to maintain visual consistency
+ * - Responsive design that adapts to different screen sizes
+ * - Scroll-triggered animations for gradual content reveal
+ */
+
 'use client';
 
 import { useRef } from 'react';
@@ -5,9 +17,15 @@ import { motion, useInView } from 'framer-motion';
 import Container from '@/components/shared/Container';
 
 export default function HackathonRules() {
+  // Reference for scroll-triggered animations
   const ref = useRef(null);
+  // Detect when section enters viewport (20% visibility triggers animation)
   const isInView = useInView(ref, { once: true, amount: 0.2 });
 
+  /**
+   * Rules data structure
+   * Contains all hackathon competition guidelines with titles and descriptions
+   */
   const rules = [
     {
       title: "No Cheating or Plagiarism",

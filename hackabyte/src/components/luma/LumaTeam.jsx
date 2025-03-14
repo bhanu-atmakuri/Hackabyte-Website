@@ -1,4 +1,15 @@
-// src/components/luma/LumaTeam.jsx
+/**
+ * LUMA Team Component
+ * 
+ * Displays information about the LUMA educational program team members:
+ * - Grid layout of team member cards with photos and roles
+ * - Social media links for each team member
+ * - LUMA's green color scheme to differentiate from main Hackabyte branding
+ * - Interactive hover effects for visual engagement
+ * - Responsive layout that adapts to different screen sizes
+ * - Staggered animations for visual interest when scrolling
+ */
+
 'use client';
 
 import { useRef } from 'react';
@@ -6,9 +17,15 @@ import { motion, useInView } from 'framer-motion';
 import Container from '../shared/Container';
 
 export default function LumaTeam() {
+  // Reference for scroll-triggered animations
   const ref = useRef(null);
+  // Detect when section enters viewport (20% visibility triggers animation)
   const isInView = useInView(ref, { once: true, amount: 0.2 });
 
+  /**
+   * Team members data structure
+   * Contains profile information for each LUMA team member
+   */
   const teamMembers = [
     {
       name: "Ekansh Jain",

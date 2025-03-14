@@ -1,3 +1,15 @@
+/**
+ * Hackathon Prizes Component
+ * 
+ * Displays the prize structure for Hackabyte hackathon events featuring:
+ * - Visually distinct cards for first, second, and third place prizes
+ * - Animated prize amounts with emphasizing design elements
+ * - Gradient backgrounds and hover effects for visual appeal
+ * - Additional information about runner-up and honorable mention prizes
+ * - Responsive layout that adapts to different screen sizes
+ * - Scroll-triggered animations for visual engagement
+ */
+
 'use client';
 
 import { useRef } from 'react';
@@ -5,7 +17,9 @@ import { motion, useInView } from 'framer-motion';
 import Container from '@/components/shared/Container';
 
 export default function HackathonPrizes() {
+  // Reference for scroll-triggered animations
   const ref = useRef(null);
+  // Detect when section enters viewport (20% visibility triggers animation)
   const isInView = useInView(ref, { once: true, amount: 0.2 });
 
   return (

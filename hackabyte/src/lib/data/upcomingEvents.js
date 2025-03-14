@@ -1,3 +1,25 @@
+/**
+ * Upcoming Events Data Module
+ * 
+ * This module exports data structures related to the upcoming Hackabyte events,
+ * including the events themselves and filtering options for the events interface.
+ */
+
+/**
+ * Array of upcoming events with their complete details
+ * @type {Array<{
+ *   title: string,             - Event title
+ *   date: string,              - Formatted date string (e.g., "March 8-9, 2025")
+ *   location: string,          - Venue and city
+ *   state: string,             - State where event is held
+ *   ageGroups: Array<string>,  - Target age groups (e.g., "High School", "Middle School")
+ *   image: string,             - Path to event image
+ *   description: string,       - Detailed event description
+ *   registrationLink: string,  - Link to registration page
+ *   eventType: string,         - Type of event (e.g., "Hackathon", "Workshop")
+ *   competitionLevel: string   - Level of competition (e.g., "State", "National")
+ * }>}
+ */
 export const upcomingEvents = [
   {
     title: "Winter Hackathon - CA",
@@ -25,6 +47,14 @@ export const upcomingEvents = [
   }
 ];
 
+/**
+ * List of states where events are held, including an "All States" option for filtering
+ * @type {Array<string>}
+ */
 export const availableStates = ['All States', 'California', 'Washington'];
 
+/**
+ * List of competition levels for filtering events
+ * @type {Array<string>}
+ */
 export const competitionLevels = ['All Levels', 'National', 'State', 'Regional'];

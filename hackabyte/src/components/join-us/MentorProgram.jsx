@@ -1,3 +1,15 @@
+/**
+ * Mentor Program Component
+ * 
+ * Displays information about Hackabyte's mentorship opportunities featuring:
+ * - Detailed explanation of mentor responsibilities and time commitment
+ * - Various technical areas where mentors can contribute expertise
+ * - Application call-to-action and contact options
+ * - Testimonial from an existing mentor
+ * - Scroll-triggered animations for visual engagement
+ * - Responsive grid layouts that adapt to different screen sizes
+ */
+
 'use client';
 
 import { useRef } from 'react';
@@ -6,9 +18,15 @@ import { motion, useInView } from 'framer-motion';
 import Container from '@/components/shared/Container';
 
 export default function MentorProgram() {
+  // Reference for scroll-triggered animations
   const ref = useRef(null);
+  // Detect when section enters viewport (5% visibility triggers animation)
   const isInView = useInView(ref, { once: true, amount: 0.05 });
 
+  /**
+   * Mentorship areas data structure
+   * Defines technical domains where mentors can contribute expertise
+   */
   const mentorAreas = [
     {
       area: "Web Development",
@@ -39,6 +57,7 @@ export default function MentorProgram() {
   return (
     <section id="mentor" className="py-20 bg-[#1A1A1E]" ref={ref}>
       <Container>
+        {/* Section heading with fade-in and slide-up animation */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
@@ -53,7 +72,9 @@ export default function MentorProgram() {
           </p>
         </motion.div>
 
+        {/* Two-column layout with mentor responsibilities and areas of expertise */}
         <div className="grid md:grid-cols-2 gap-10 mb-16">
+          {/* Left column - "What Mentors Do" card with slide-in animation */}
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -30 }}
@@ -62,6 +83,7 @@ export default function MentorProgram() {
           >
             <h3 className="text-2xl font-bold text-[#FF2247] mb-4">What Mentors Do</h3>
             
+            {/* Checklist of mentor responsibilities */}
             <div className="space-y-4">
               <div className="flex items-start">
                 <div className="flex-shrink-0 mt-1">
@@ -119,6 +141,7 @@ export default function MentorProgram() {
               </div>
             </div>
             
+            {/* Mentor time commitment and requirements section */}
             <div className="mt-8">
               <h4 className="text-lg font-bold text-white mb-2">Time Commitment:</h4>
               <p className="text-gray-300 mb-6">Mentors typically commit to 4-8 hours during a hackathon, either in person or virtually. You can choose shifts that work with your schedule.</p>
@@ -128,6 +151,7 @@ export default function MentorProgram() {
             </div>
           </motion.div>
           
+          {/* Right column - "Mentorship Areas" with grid of expertise cards */}
           <motion.div
             initial={{ opacity: 0, x: 30 }}
             animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: 30 }}
@@ -135,6 +159,7 @@ export default function MentorProgram() {
           >
             <h3 className="text-2xl font-bold text-white mb-6">Mentorship Areas</h3>
             
+            {/* Expertise areas grid - 2 columns on tablet and larger screens */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               {mentorAreas.map((item, index) => (
                 <div 
@@ -147,6 +172,7 @@ export default function MentorProgram() {
               ))}
             </div>
             
+            {/* Additional expertise info card */}
             <div className="mt-8 bg-[#16161A] p-6 rounded-xl border border-gray-800">
               <h4 className="text-lg font-bold text-white mb-2">Don't see your area of expertise?</h4>
               <p className="text-gray-300">We welcome mentors from all technical backgrounds. If your skills aren't listed here, please still apply - diverse perspectives and knowledge areas are valuable to our students!</p>
@@ -154,6 +180,7 @@ export default function MentorProgram() {
           </motion.div>
         </div>
 
+        {/* Call-to-action section with fade-in and slide-up animation */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
@@ -166,6 +193,7 @@ export default function MentorProgram() {
             Many of our mentors find the experience rewarding and continue to participate in multiple events.
           </p>
           
+          {/* CTA buttons with hover animations */}
           <div className="flex flex-wrap justify-center gap-6">
             <motion.div
               whileHover={{ scale: 1.05 }}
@@ -186,6 +214,7 @@ export default function MentorProgram() {
             </motion.div>
           </div>
           
+          {/* Mentor testimonial quote card */}
           <div className="mt-10 max-w-4xl mx-auto px-6 py-8 bg-[#16161A] rounded-xl border border-gray-800">
             <div className="flex flex-col md:flex-row items-center gap-6">
               <div className="w-24 h-24 rounded-full bg-gray-800 flex-shrink-0 overflow-hidden">
