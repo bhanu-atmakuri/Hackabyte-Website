@@ -17,39 +17,13 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { signIn, useSession } from '../../lib/auth/AuthContext';
-import { useRouter } from 'next/navigation';
-import { Suspense } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Container from '../shared/Container';
 
-// Loading fallback component
-const LoadingFallback = () => (
-  <Container size="half">
-    <div className="bg-[#16161A] rounded-xl shadow-xl overflow-hidden border border-gray-800">
-      <div className="p-8 text-center">
-        <div className="inline-block animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-[#FF2247]"></div>
-        <p className="mt-4 text-gray-300">Loading form...</p>
-      </div>
-    </div>
-  </Container>
-);
-
-// Component that uses searchParams
-// Export default component with Suspense boundary
 export default function AuthForm() {
-  return (
-    <Suspense fallback={<LoadingFallback />}>
-      <AuthFormContent />
-    </Suspense>
-  );
-}
-
-function AuthFormContent() {
   const router = useRouter();
-  const { status } = useSession();
-  
-  // Import useSearchParams inside the component
-  const { useSearchParams } = require('next/navigation');
   const searchParams = useSearchParams();
+  const { status } = useSession();
   
   // If already logged in, redirect to dashboard
   if (status === 'authenticated') {
