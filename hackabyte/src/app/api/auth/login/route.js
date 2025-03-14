@@ -5,8 +5,6 @@
  * Replaces NextAuth.js with custom JWT-based authentication.
  */
 
-export const dynamic = 'force-dynamic';
-
 import { NextResponse } from 'next/server';
 import bcrypt from 'bcryptjs';
 import connectDB from '../../../../lib/db/mongoose';
