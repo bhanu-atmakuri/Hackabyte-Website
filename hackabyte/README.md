@@ -155,11 +155,10 @@ If you encounter build errors:
      ```
 
 2. **Runtime Errors**: If you see errors like `TypeError: s is not a function`:
-   - Make sure to use the standard NextAuth.js pattern for App Router:
+   - Use the App Router specific pattern in your route handler:
      ```javascript
-     import NextAuth from 'next-auth';
-     const handler = NextAuth(authOptions);
-     export { handler as GET, handler as POST };
+     import { handlers } from 'next-auth/next';
+     export const { GET, POST } = handlers(authOptions);
      ```
    - Simplify the `authorize` function in credentials provider to return `null` instead of throwing errors
    - Ensure all environment variables are correctly set in your Vercel project
