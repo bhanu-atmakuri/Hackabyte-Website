@@ -1,8 +1,4 @@
 {
-  "version": 2,
-  "buildCommand": "cd hackabyte && npm run build",
-  "outputDirectory": "hackabyte/.next",
-  "framework": "nextjs",
   "build": {
     "env": {
       "NPM_FLAGS": "--legacy-peer-deps"
@@ -31,9 +27,7 @@
       ]
     }
   ],
-  "routes": [
-    { "handle": "filesystem" },
-    { "src": "/_next/static/(.*)", "dest": "/_next/static/$1", "headers": { "cache-control": "public,max-age=31536000,immutable" } },
-    { "src": "/(.*)", "dest": "/_app.html" }
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/" }
   ]
 }
