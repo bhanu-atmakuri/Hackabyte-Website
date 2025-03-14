@@ -30,7 +30,7 @@ A comprehensive registration system for Hackabyte events, featuring user authent
 - **Frontend**: Next.js, React, Tailwind CSS, Framer Motion
 - **Backend**: Next.js API Routes (serverless)
 - **Database**: MongoDB
-- **Authentication**: Custom JWT-based system
+- **Authentication**: NextAuth.js
 - **Email**: Nodemailer with Google SMTP
 
 ## Setup Instructions
