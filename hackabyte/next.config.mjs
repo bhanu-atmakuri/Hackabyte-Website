@@ -10,36 +10,33 @@ const nextConfig = {
     unoptimized: false,
   },
   
-  // Clean URLs without extensions (only in production)
-  ...(process.env.NODE_ENV === 'production' ? { cleanUrls: true } : {}),
+  // Ensure consistent URL handling with Vercel config
+  trailingSlash: false,
+  
+  // Clean URLs without extensions
+  cleanUrls: true,
   
   // Disables the x-powered-by header
   poweredByHeader: false,
   
-  // Environment-specific rewrites
+  // Add fallback for 404 pages
   async rewrites() {
-    if (process.env.NODE_ENV === 'production') {
-      // Production rewrites for Vercel deployment
-      return [
-        {
-          source: '/:path*',
-          destination: '/',
-          has: [
-            {
-              type: 'header',
-              key: 'x-matched-path',
-              value: '(?!/_next|/api).*',
-            },
-          ],
-        },
-      ];
-    } else {
-      // Development - no special rewrites
-      return [];
-    }
+    return [
+      {
+        source: '/:path*',
+        destination: '/',
+        has: [
+          {
+            type: 'header',
+            key: 'x-matched-path',
+            value: '(?!/_next|/api).*',
+          },
+        ],
+      },
+    ];
   },
 
-  // Development settings
+  // Help with development environment
   reactStrictMode: true,
 };
 
