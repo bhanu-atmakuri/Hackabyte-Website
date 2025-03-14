@@ -137,6 +137,19 @@ If you encounter issues with NextAuth.js:
 2. Ensure the imports in `src/lib/auth/auth.js` and `src/app/api/auth/[...nextauth]/route.js` are correct
 3. Verify the `NEXTAUTH_URL` matches your deployment URL
 
+#### NextAuth.js Build Errors
+
+If you encounter build errors like `TypeError: s is not a function`:
+
+1. Check that you're using NextAuth.js v4.22.1 (pinned for compatibility with Next.js 15)
+2. Use the App Router specific pattern in your route handler:
+   ```javascript
+   import { handlers } from 'next-auth/next';
+   export const { GET, POST } = handlers(authOptions);
+   ```
+3. Simplify the `authorize` function in credentials provider to return `null` instead of throwing errors
+4. Ensure all environment variables are correctly set in your Vercel project
+
 ### MongoDB Connection Issues
 
 If MongoDB connection fails:

@@ -23,35 +23,39 @@ export const authOptions = {
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) {
-          throw new Error('Please provide email and password');
+          return null;
         }
 
-        await connectDB();
-        
-        const user = await User.findOne({ email: credentials.email });
-        
-        if (!user) {
-          throw new Error('No user found with this email');
+        try {
+          await connectDB();
+          
+          const user = await User.findOne({ email: credentials.email });
+          
+          if (!user) {
+            return null;
+          }
+          
+          const isPasswordMatch = await bcrypt.compare(credentials.password, user.password);
+          
+          if (!isPasswordMatch) {
+            return null;
+          }
+          
+          return {
+            id: user._id.toString(),
+            name: user.fullName,
+            email: user.email,
+            role: user.role || 'user',
+          };
+        } catch (error) {
+          console.error('Auth error:', error);
+          return null;
         }
-        
-        const isPasswordMatch = await user.comparePassword(credentials.password);
-        
-        if (!isPasswordMatch) {
-          throw new Error('Invalid password');
-        }
-        
-        return {
-          id: user._id.toString(),
-          name: user.fullName,
-          email: user.email,
-          role: user.role,
-        };
       }
     })
   ],
   session: {
     strategy: 'jwt',
-    maxAge: 30 * 24 * 60 * 60, // 30 days
   },
   callbacks: {
     async jwt({ token, user }) {
@@ -62,7 +66,7 @@ export const authOptions = {
       return token;
     },
     async session({ session, token }) {
-      if (token) {
+      if (token && session.user) {
         session.user.id = token.id;
         session.user.role = token.role;
       }
