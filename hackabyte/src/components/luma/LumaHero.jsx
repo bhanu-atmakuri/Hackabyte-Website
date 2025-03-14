@@ -52,19 +52,19 @@ export default function LumaHero() {
               </motion.div>
             </div>
            
-            <div className="flex justify-center space-x-4 mt-12">
-              <div className="flex flex-col items-center p-4">
-                <span className="text-4xl font-bold text-[#BADA55] mb-2">All Ages</span>
+            <div className="flex flex-wrap justify-center gap-4 md:gap-0 md:space-x-4 mt-12">
+              <div className="flex flex-col items-center p-2 md:p-4 w-full sm:w-auto">
+                <span className="text-3xl md:text-4xl font-bold text-[#BADA55] mb-2">All Ages</span>
                 <span className="text-gray-300">Inclusive Learning</span>
               </div>
              
-              <div className="flex flex-col items-center p-4">
-                <span className="text-4xl font-bold text-[#BADA55] mb-2">Any Level</span>
+              <div className="flex flex-col items-center p-2 md:p-4 w-full sm:w-auto">
+                <span className="text-3xl md:text-4xl font-bold text-[#BADA55] mb-2">Any Level</span>
                 <span className="text-gray-300">Beginner to Advanced</span>
               </div>
              
-              <div className="flex flex-col items-center p-4">
-                <span className="text-4xl font-bold text-[#BADA55] mb-2">Community</span>
+              <div className="flex flex-col items-center p-2 md:p-4 w-full sm:w-auto">
+                <span className="text-3xl md:text-4xl font-bold text-[#BADA55] mb-2">Community</span>
                 <span className="text-gray-300">Supportive Environment</span>
               </div>
             </div>

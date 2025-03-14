@@ -7,7 +7,7 @@ import Container from '@/components/shared/Container';
 
 export default function MentorProgram() {
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, amount: 0.2 });
+  const isInView = useInView(ref, { once: true, amount: 0.05 });
 
   const mentorAreas = [
     {

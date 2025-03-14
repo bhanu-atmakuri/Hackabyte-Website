@@ -48,19 +48,19 @@ export default function EventsHero() {
               </motion.div>
             </div>
             
-            <div className="flex justify-center space-x-4 mt-12">
-              <div className="flex flex-col items-center p-4">
-                <span className="text-4xl font-bold text-[#FF2247] mb-2">15+</span>
+            <div className="flex flex-wrap justify-center gap-4 md:gap-0 md:space-x-4 mt-12">
+              <div className="flex flex-col items-center p-2 md:p-4 w-full sm:w-auto">
+                <span className="text-3xl md:text-4xl font-bold text-[#FF2247] mb-2">15+</span>
                 <span className="text-gray-300">Events Per Year</span>
               </div>
               
-              <div className="flex flex-col items-center p-4">
-                <span className="text-4xl font-bold text-[#FF2247] mb-2">12</span>
+              <div className="flex flex-col items-center p-2 md:p-4 w-full sm:w-auto">
+                <span className="text-3xl md:text-4xl font-bold text-[#FF2247] mb-2">12</span>
                 <span className="text-gray-300">Cities</span>
               </div>
               
-              <div className="flex flex-col items-center p-4">
-                <span className="text-4xl font-bold text-[#FF2247] mb-2">3</span>
+              <div className="flex flex-col items-center p-2 md:p-4 w-full sm:w-auto">
+                <span className="text-3xl md:text-4xl font-bold text-[#FF2247] mb-2">3</span>
                 <span className="text-gray-300">Age Groups</span>
               </div>
             </div>
