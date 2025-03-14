@@ -3,7 +3,6 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="refresh" content="0;url=/" />
   <title>Hackabyte - Page Not Found</title>
   <style>
     body {
@@ -53,17 +52,25 @@
   <div>
     <h1>404</h1>
     <h2>Page Not Found</h2>
-    <p>We're redirecting you to the homepage</p>
+    <p>The page you're looking for doesn't exist or has been moved.</p>
     <div>
-      <a href="/" class="btn">Go to Homepage</a>
-      <a href="/events" class="btn btn-secondary">Browse Events</a>
+      <button onclick="goToHome()" class="btn">Go to Homepage</button>
+      <button onclick="goToEvents()" class="btn btn-secondary">Browse Events</button>
     </div>
   </div>
   <script>
-    // Redirect to home after a short delay
-    setTimeout(function() {
-      window.location.href = '/';
-    }, 3000);
+    // Functions to handle navigation with full URLs
+    function goToHome() {
+      // Get the base URL from the current location
+      var baseUrl = window.location.protocol + '//' + window.location.host;
+      window.location.href = baseUrl + '/';
+    }
+    
+    function goToEvents() {
+      // Get the base URL from the current location
+      var baseUrl = window.location.protocol + '//' + window.location.host;
+      window.location.href = baseUrl + '/events';
+    }
   </script>
 </body>
 </html>

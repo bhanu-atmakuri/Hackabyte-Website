@@ -20,9 +20,25 @@ const AUTH_ROUTES = [
   '/auth',
 ];
 
-// API routes that should be excluded from middleware processing
-const API_ROUTES = [
+// Routes that should be excluded from middleware processing
+const EXCLUDED_ROUTES = [
   '/api/',
+  '/_next/',
+  '/static/',
+  '/favicon.ico',
+  '.json',
+  '.js',
+  '.css',
+  '.svg',
+  '.png',
+  '.jpg',
+  '.jpeg',
+  '.gif',
+  '.ico',
+  '.woff',
+  '.woff2',
+  '.ttf',
+  '.otf',
 ];
 
 /**
@@ -34,10 +50,13 @@ const API_ROUTES = [
 export function middleware(request) {
   const pathname = request.nextUrl.pathname;
   
-  // Skip middleware for API routes and static assets
-  if (API_ROUTES.some(route => pathname.startsWith(route)) || 
-      pathname.includes('/_next/') || 
-      pathname.includes('/static/')) {
+  // Skip middleware for excluded routes and static assets
+  if (EXCLUDED_ROUTES.some(route => pathname.startsWith(route) || pathname.includes(route))) {
+    return NextResponse.next();
+  }
+
+  // Skip for public files 
+  if (pathname.startsWith('/public/') || pathname.includes('.html')) {
     return NextResponse.next();
   }
 
@@ -57,7 +76,7 @@ export function middleware(request) {
   try {
     // Verify the token if it exists
     const isLoggedIn = authToken ? 
-      !!verify(authToken, process.env.NEXTAUTH_SECRET) : 
+      !!verify(authToken, process.env.NEXTAUTH_SECRET || 'development_secret') : 
       false;
 
     // Redirect to login if trying to access protected route without auth
@@ -75,7 +94,7 @@ export function middleware(request) {
     // Admin route protection - additional role check
     if (pathname.startsWith('/admin')) {
       try {
-        const decoded = verify(authToken, process.env.NEXTAUTH_SECRET);
+        const decoded = verify(authToken, process.env.NEXTAUTH_SECRET || 'development_secret');
         if (decoded.role !== 'admin') {
           return NextResponse.redirect(new URL('/', request.url));
         }
@@ -107,6 +126,7 @@ export function middleware(request) {
 // Configure matcher for which routes should be processed by middleware
 export const config = {
   matcher: [
+    // Process all routes except for static assets and API routes
     '/((?!_next/static|_next/image|favicon.ico).*)',
   ],
 };

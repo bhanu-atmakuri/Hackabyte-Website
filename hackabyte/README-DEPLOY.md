@@ -1,24 +1,30 @@
-# Hackabyte Website Deployment Guide
+# Hackabyte Website Deployment Guide - 404 Error Fix
 
 This document provides detailed instructions for deploying the Hackabyte website to Vercel, addressing the 404 error issues that may occur during deployment.
 
-## Pre-Deployment Fixes Applied
+## Latest Fixes for 404 Errors in Development and Production
 
-We've made several changes to fix the 404 issues:
+We've made comprehensive changes to fix navigation issues in both environments:
 
-1. **Added Vercel Configuration**:
-   - Added rewrite rules in `vercel.json` to ensure proper routing
-   - Set environment variables for authentication
-   - Configured clean URLs and trailing slash behavior
+1. **Environment-Specific Configuration**:
+   - Modified Next.js config to use different settings in development vs. production
+   - Updated middleware to bypass static files and properly handle HTML files
+   - Changed 404 page to use client-side navigation for better reliability
 
-2. **Updated Next.js Configuration**:
-   - Added fallback routing
-   - Aligned Next.js and Vercel URL handling settings
-   - Added rewrites for 404 handling
+2. **Enhanced Vercel Configuration**:
+   - Added proper security headers for production
+   - Configured filesystem handling in routes with a fallback 404 handler
+   - Set up explicit rewrites that work with Vercel's architecture
+   - Made clean URL and trailing slash settings consistent
 
-3. **Added Fallback Files**:
-   - Created `public/404.html` for static fallback
-   - Added `src/app/index.html` for root path redirects
+3. **Improved Error Handling**:
+   - Updated client-side error boundaries to catch and handle runtime errors
+   - Made 404 pages compatible with both environments using dynamic base URL calculation
+
+## Development vs. Production Behavior
+
+- **Development**: Regular Next.js routing with no special rewrites or fallbacks
+- **Production**: Special rewrites and fallbacks that ensure users never see a raw 404 error
 
 ## Deployment Checklist
 
@@ -26,7 +32,7 @@ Before deploying to Vercel, ensure:
 
 1. **Environment Variables**: Set these in your Vercel project settings:
    - `MONGODB_URI`: Your MongoDB connection string 
-   - `NEXTAUTH_SECRET`: Your JWT secret (can be generated with `node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"`)
+   - `NEXTAUTH_SECRET`: Your JWT secret (generate with `node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"`)
    - `NEXTAUTH_URL`: Your production URL (e.g., https://hackabyte-website.vercel.app)
    - `NEXT_PUBLIC_APP_URL`: Same as NEXTAUTH_URL
    - `EMAIL_USER`: Your email service username
@@ -44,7 +50,7 @@ Before deploying to Vercel, ensure:
 1. **Push your code to GitHub**:
    ```
    git add .
-   git commit -m "Fixed 404 errors and prepared for deployment"
+   git commit -m "Fixed 404 errors with environment-specific solutions"
    git push
    ```
 
@@ -56,25 +62,24 @@ Before deploying to Vercel, ensure:
    - Add the Environment Variables listed above
    - Deploy
 
-3. **Troubleshooting Post-Deployment**:
-   - If still encountering 404s:
-     1. Check "Functions" tab in Vercel dashboard for errors
-     2. Verify that all environment variables are set correctly
-     3. Try using the "Redeploy" feature with "Clear cache and redeploy" option
-   
-## Additional Resources
+3. **After Deployment**:
+   - Verify that the site works correctly by navigating to different pages
+   - Check that authentication flows are working properly
+   - Try intentionally navigating to a non-existent page to test the 404 handling
 
-- [Next.js Deployment Documentation](https://nextjs.org/docs/deployment)
-- [Vercel Next.js Documentation](https://vercel.com/docs/frameworks/nextjs)
-- [Troubleshooting Next.js on Vercel](https://vercel.com/support/articles/nextjs-api-routes-not-working)
+## Troubleshooting
 
-## Testing Locally
+If issues persist:
 
-To verify the build locally before deploying:
+1. **For development environment issues**:
+   - Run `npm run dev` and check the terminal for any error messages
+   - Use browser dev tools console to check for client-side errors
+   - Try clearing your browser cache or using incognito mode
 
-```bash
-npm run build
-npm run start
-```
+2. **For production/Vercel issues**:
+   - Check "Functions" and "Deployments" tabs in Vercel dashboard
+   - Review build logs for any errors
+   - Use "Redeploy" with "Clear cache and redeploy" option
+   - Check that environment variables are set correctly
 
-Visit http://localhost:3000 to ensure everything works correctly.
+Visit http://localhost:3000 during development to test changes locally before deploying.
