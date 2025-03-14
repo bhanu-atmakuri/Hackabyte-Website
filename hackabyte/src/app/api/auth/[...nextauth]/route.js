@@ -7,7 +7,7 @@
  * - JWT operations
  */
 
-import NextAuth from 'next-auth/next';
+import NextAuth from 'next-auth';
 import { authOptions } from '../../../../lib/auth/auth';
 
 /**
