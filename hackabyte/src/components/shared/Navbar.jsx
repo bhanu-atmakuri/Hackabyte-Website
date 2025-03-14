@@ -213,24 +213,21 @@ export default function Navbar() {
             </motion.div>
           </div>
 
-          {/* Mobile Menu Button - Increased size for better touch target */}
+          {/* Mobile Menu Button */}
           <button 
-            className="md:hidden text-gray-300 p-2 rounded-md hover:bg-[#16161A]/50 transition-colors"
+            className="md:hidden text-gray-300"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
-            style={{ minWidth: '44px', minHeight: '44px' }} /* Minimum touch target size */
           >
             <svg 
               xmlns="http://www.w3.org/2000/svg" 
-              width="28" 
-              height="28" 
+              width="24" 
+              height="24" 
               viewBox="0 0 24 24" 
               fill="none" 
               stroke="currentColor" 
               strokeWidth="2" 
               strokeLinecap="round" 
               strokeLinejoin="round"
-              className="mx-auto"
             >
               {isMobileMenuOpen ? (
                 <path d="M18 6L6 18M6 6l12 12" />
@@ -241,7 +238,7 @@ export default function Navbar() {
           </button>
         </div>
 
-        {/* Mobile Menu - Improved spacing and touch targets */}
+        {/* Mobile Menu */}
         <AnimatePresence>
           {isMobileMenuOpen && (
             <motion.div
@@ -251,28 +248,30 @@ export default function Navbar() {
               transition={{ duration: 0.3 }}
               className="md:hidden mt-4 bg-[#1A1A1E] shadow-lg rounded-b-md"
             >
-              <div className="flex flex-col py-4">
+              <div className="flex flex-col space-y-0 py-4">
                 {navItems.map((item, index) => (
-                  <div key={item.name} className="mb-1">
+                  <div key={item.name}>
                     {item.hasDropdown ? (
                       <>
-                        <button
-                          className="text-base text-white hover:text-[#FF2247] font-medium transition-colors px-4 py-4 w-full text-left flex items-center justify-between whitespace-nowrap"
-                          onClick={() => handleDropdownToggle(index)}
-                          aria-expanded={activeDropdown === index}
-                          style={{ minHeight: '44px' }} /* Minimum touch target size */
+                        <Link
+                          href={item.href}
+                          className="text-sm sm:text-base md:text-lg lg:text-xl text-white hover:text-[#FF2247] font-medium transition-colors px-4 py-3 w-full text-left flex items-center justify-between whitespace-nowrap"
+                          onClick={() => {
+                            handleDropdownToggle(index);
+                            setIsMobileMenuOpen(false);
+                          }}
                         >
                           {item.name}
                           <svg 
                             xmlns="http://www.w3.org/2000/svg" 
-                            className={`w-5 h-5 transition-transform ${activeDropdown === index ? 'rotate-180' : ''}`} 
+                            className={`w-4 h-4 transition-transform ${activeDropdown === index ? 'rotate-180' : ''}`} 
                             fill="none" 
                             viewBox="0 0 24 24" 
                             stroke="currentColor"
                           >
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                           </svg>
-                        </button>
+                        </Link>
                         
                         <AnimatePresence>
                           {activeDropdown === index && (
@@ -287,12 +286,11 @@ export default function Navbar() {
                                 <Link 
                                   key={dropdownItem.name}
                                   href={dropdownItem.href}
-                                  className="block py-3 px-4 text-base text-gray-300 hover:text-[#FF2247] whitespace-nowrap"
+                                  className="block py-2 px-4 text-sm sm:text-base md:text-lg lg:text-xl text-gray-300 hover:text-[#FF2247] whitespace-nowrap"
                                   onClick={() => {
                                     setActiveDropdown(null);
                                     setIsMobileMenuOpen(false);
                                   }}
-                                  style={{ minHeight: '44px' }} /* Minimum touch target size */
                                 >
                                   {dropdownItem.name}
                                 </Link>
@@ -304,25 +302,21 @@ export default function Navbar() {
                     ) : (
                       <Link 
                         href={item.href}
-                        className="text-base text-white hover:text-[#FF2247] font-medium transition-colors px-4 py-4 block whitespace-nowrap"
+                        className="text-sm sm:text-base md:text-lg lg:text-xl text-white hover:text-[#FF2247] font-medium transition-colors px-4 py-3 block whitespace-nowrap"
                         onClick={() => setIsMobileMenuOpen(false)}
-                        style={{ minHeight: '44px' }} /* Minimum touch target size */
                       >
                         {item.name}
                       </Link>
                     )}
                   </div>
                 ))}
-                <div className="px-4 pt-4">
-                  <Link 
-                    href="/auth" 
-                    className="text-base btn-primary w-full py-3 text-center block"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                    style={{ minHeight: '44px' }} /* Minimum touch target size */
-                  >
-                    Sign In
-                  </Link>
-                </div>
+                <Link 
+                  href="/auth" 
+                  className="text-sm sm:text-base md:text-lg lg:text-xl btn-primary mx-4 mt-4 text-center"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  Sign In
+                </Link>
               </div>
             </motion.div>
           )}

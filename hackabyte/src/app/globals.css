@@ -67,11 +67,11 @@ body {
 
 @layer components {
   .btn-primary {
-    @apply bg-[#F93236] text-white font-semibold py-2 px-4 xs:py-3 xs:px-6 rounded-lg shadow-md hover:bg-[#FF003C] transition-all duration-300 transform hover:scale-100 text-sm xs:text-base;
+    @apply bg-[#F93236] text-white font-semibold py-3 px-6 rounded-lg shadow-md hover:bg-[#FF003C] transition-all duration-300 transform hover:scale-100;
   }
   
   .btn-secondary {
-    @apply bg-[#333333] text-white font-semibold py-2 px-4 xs:py-3 xs:px-6 rounded-lg shadow-md hover:bg-[#444444] transition-all duration-300 transform hover:scale-100 text-sm xs:text-base;
+    @apply bg-[#333333] text-white font-semibold py-3 px-6 rounded-lg shadow-md hover:bg-[#444444] transition-all duration-300 transform hover:scale-100;
   }
   
   .heading-gradient {
@@ -79,39 +79,37 @@ body {
   }
 
   .container-normal {
-    @apply mx-auto w-full px-4 sm:px-6;
-    max-width: min(95%, 1200px);
+    @apply mx-auto w-full;
+    max-width: 95%;
   }
 
   .container-half {
-    @apply mx-auto w-full px-4 sm:px-6;
-    max-width: min(95%, 700px);
-    @apply md:max-w-[45%];
+    @apply mx-auto w-full;
+    max-width: 45%;
   }
 
   .container-wide {
-    @apply mx-auto w-full px-4 sm:px-6;
-    max-width: min(95%, 1400px);
-    @apply md:max-w-[70%];
+    @apply mx-auto w-full;
+    max-width: 70%;
   }
 }
 
 /* Responsive section padding that scales with screen size */
 .section-padding {
-  @apply py-10 xs:py-12 sm:py-14 md:py-16 lg:py-20 xl:py-24;
+  @apply py-16 md:py-20 lg:py-24;
 }
 
 /* Adjustable vertical spacing that adapts to screen size */
 .py-responsive {
-  @apply py-3 xs:py-4 sm:py-6 md:py-8 lg:py-10;
+  @apply py-4 sm:py-6 md:py-8 lg:py-10;
 }
 
 .pt-responsive {
-  @apply pt-3 xs:pt-4 sm:pt-6 md:pt-8 lg:pt-10;
+  @apply pt-4 sm:pt-6 md:pt-8 lg:pt-10;
 }
 
 .pb-responsive {
-  @apply pb-3 xs:pb-4 sm:pb-6 md:pb-8 lg:pb-10; /* Fixed lg:pt-10 to lg:pb-10 */
+  @apply pb-4 sm:pb-6 md:pb-8 lg:pt-10;
 }
 
 /* Top spacing for pages to account for fixed navbar */
@@ -156,32 +154,14 @@ section + section {
 }
 
 /* Ensure proper text scaling for all screen sizes */
+@media screen and (max-width: 1200px) {
+  html {
+    font-size: 20px;
+  }
+}
+
 html {
-  font-size: 16px; /* Smaller base font size for mobile */
-}
-
-@media screen and (min-width: 375px) {
-  html {
-    font-size: 17px; /* Slightly larger for small phones */
-  }
-}
-
-@media screen and (min-width: 640px) {
-  html {
-    font-size: 18px; /* Larger for tablets */
-  }
-}
-
-@media screen and (min-width: 768px) {
-  html {
-    font-size: 19px; /* Larger for small laptops */
-  }
-}
-
-@media screen and (min-width: 1024px) {
-  html {
-    font-size: 20px; /* Base font size for desktops */
-  }
+  font-size: 20px; /* Base font size */
 }
 
 @media (min-width: 1536px) {
@@ -197,7 +177,8 @@ html {
 }
 
 section {
-  width: 100%;
+  width: 100vw;
+  max-width: 100%;
   margin-left: 0;
   margin-right: 0;
   overflow-x: hidden;
@@ -206,5 +187,5 @@ section {
 body {
   overflow-x: hidden;
   width: 100%;
-  max-width: 100%;
+  max-width: 100vw;
 }
