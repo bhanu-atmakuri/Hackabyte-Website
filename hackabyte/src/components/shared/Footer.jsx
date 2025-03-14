@@ -54,10 +54,10 @@ export default function Footer() {
 
   return (
     <footer className="bg-[#16161A] text-white">
-      <Container className="py-12">
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-8">
+      <Container className="py-8 md:py-12">
+        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-5 gap-6 md:gap-8">
           {/* Logo and info */}
-          <div className="md:col-span-1">
+          <div className="col-span-2 sm:col-span-2 md:col-span-1 mb-6 md:mb-0">
             <Link href="/" className="flex items-center space-x-2 mb-6">
               <motion.div whileHover={{ rotate: 10 }} transition={{ duration: 0.2 }}>
                 <div className="w-10 h-10 relative">
@@ -120,14 +120,14 @@ export default function Footer() {
           ))}
         </div>
         
-        <hr className="border-[#131435] my-8" />
+        <hr className="border-[#131435] my-6 md:my-8" />
         
         <div className="flex flex-col md:flex-row justify-between items-center">
-          <div className="text-gray-400 text-sm mb-4 md:mb-0">
+          <div className="text-gray-400 text-sm mb-6 md:mb-0 text-center md:text-left">
             © {currentYear} Hackabyte. All rights reserved.
           </div>
           
-          <div className="flex space-x-6">
+          <div className="flex flex-wrap justify-center md:justify-end gap-4 md:space-x-6">
             <Link href="/contact" className="text-gray-400 text-sm hover:text-[#FF2247] transition-colors">
               Privacy Policy
             </Link>

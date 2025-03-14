@@ -25,8 +25,8 @@ export default function Newsletter() {
         <div className="absolute bottom-0 right-1/4 w-64 h-64 bg-[#FF2247]/20 rounded-full blur-3xl"></div>
       </div>
       
-      <Container size = "half" className="relative z-10">
-        <div className="mx-auto text-center">
+      <Container size="half" className="relative z-10">
+        <div className="mx-auto text-center px-4 sm:px-6 md:px-0">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
@@ -88,7 +88,7 @@ export default function Newsletter() {
             initial={{ opacity: 0 }}
             animate={isInView ? { opacity: 1 } : { opacity: 0 }}
             transition={{ duration: 0.6, delay: 0.4 }}
-            className="mt-12 flex flex-wrap justify-center gap-6"
+            className="mt-10 md:mt-12 flex flex-wrap justify-center gap-4 md:gap-6"
           >
             <a href="https://facebook.com/hackabyte" target="_blank" rel="noopener noreferrer" className="flex items-center text-gray-300 hover:text-white transition-colors">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 mr-2" fill="currentColor" viewBox="0 0 24 24">

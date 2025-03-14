@@ -98,11 +98,11 @@ export default function Navbar() {
       }}
     >
       <Container>
-        <div className="flex items-center justify-between w-full">
+        <div className="flex items-center justify-between w-full px-1 sm:px-0">
           {/* Logo */}
           <Link 
             href="/" 
-            className="flex items-center space-x-2 justify-start mr-auto safari-fix" 
+            className="flex items-center space-x-1 sm:space-x-2 justify-start mr-auto safari-fix" 
             style={{
               display: '-webkit-box',
               display: 'flex',
@@ -113,7 +113,7 @@ export default function Navbar() {
             }}
           >
             <div 
-              className="h-8 sm:h-9 md:h-10 lg:h-11 relative safari-logo-container" 
+              className="h-7 sm:h-9 md:h-10 lg:h-11 relative safari-logo-container" 
               style={{
                 minWidth: '40px',
                 width: '40px',
@@ -215,8 +215,9 @@ export default function Navbar() {
 
           {/* Mobile Menu Button */}
           <button 
-            className="md:hidden text-gray-300"
+            className="md:hidden text-gray-300 p-2"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            aria-label="Toggle mobile menu"
           >
             <svg 
               xmlns="http://www.w3.org/2000/svg" 
@@ -248,14 +249,14 @@ export default function Navbar() {
               transition={{ duration: 0.3 }}
               className="md:hidden mt-4 bg-[#1A1A1E] shadow-lg rounded-b-md"
             >
-              <div className="flex flex-col space-y-0 py-4">
+              <div className="flex flex-col space-y-0 py-2 sm:py-4">
                 {navItems.map((item, index) => (
                   <div key={item.name}>
                     {item.hasDropdown ? (
                       <>
                         <Link
                           href={item.href}
-                          className="text-sm sm:text-base md:text-lg lg:text-xl text-white hover:text-[#FF2247] font-medium transition-colors px-4 py-3 w-full text-left flex items-center justify-between whitespace-nowrap"
+                          className="text-sm sm:text-base md:text-lg lg:text-xl text-white hover:text-[#FF2247] font-medium transition-colors px-4 py-2 sm:py-3 w-full text-left flex items-center justify-between whitespace-nowrap"
                           onClick={() => {
                             handleDropdownToggle(index);
                             setIsMobileMenuOpen(false);
@@ -286,7 +287,7 @@ export default function Navbar() {
                                 <Link 
                                   key={dropdownItem.name}
                                   href={dropdownItem.href}
-                                  className="block py-2 px-4 text-sm sm:text-base md:text-lg lg:text-xl text-gray-300 hover:text-[#FF2247] whitespace-nowrap"
+                                  className="block py-1 sm:py-2 px-4 text-sm sm:text-base md:text-lg lg:text-xl text-gray-300 hover:text-[#FF2247] whitespace-nowrap"
                                   onClick={() => {
                                     setActiveDropdown(null);
                                     setIsMobileMenuOpen(false);
@@ -302,7 +303,7 @@ export default function Navbar() {
                     ) : (
                       <Link 
                         href={item.href}
-                        className="text-sm sm:text-base md:text-lg lg:text-xl text-white hover:text-[#FF2247] font-medium transition-colors px-4 py-3 block whitespace-nowrap"
+                        className="text-sm sm:text-base md:text-lg lg:text-xl text-white hover:text-[#FF2247] font-medium transition-colors px-4 py-2 sm:py-3 block whitespace-nowrap"
                         onClick={() => setIsMobileMenuOpen(false)}
                       >
                         {item.name}

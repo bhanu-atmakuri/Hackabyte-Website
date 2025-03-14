@@ -85,12 +85,24 @@ body {
 
   .container-half {
     @apply mx-auto w-full;
-    max-width: 45%;
+    max-width: 95%; /* Full width on mobile */
+    @media (min-width: 768px) {
+      max-width: 85%; /* Wider on tablets */
+    }
+    @media (min-width: 1024px) {
+      max-width: 45%; /* Original half width on desktop */
+    }
   }
 
   .container-wide {
     @apply mx-auto w-full;
-    max-width: 70%;
+    max-width: 95%; /* Full width on mobile */
+    @media (min-width: 768px) {
+      max-width: 90%; /* Slightly narrower on tablets */
+    }
+    @media (min-width: 1024px) {
+      max-width: 70%; /* Original wide width on desktop */
+    }
   }
 }
 

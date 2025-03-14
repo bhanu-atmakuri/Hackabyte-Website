@@ -48,13 +48,13 @@ export default function AgeGroups() {
   ];
 
   return (
-    <section className="py-20 bg-[#1A1A1E]" id="age-groups" ref={ref}>
+    <section className="py-16 md:py-20 bg-[#1A1A1E]" id="age-groups" ref={ref}>
       <Container>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
           transition={{ duration: 0.6 }}
-          className="text-center mb-16"
+          className="text-center mb-10 md:mb-16 px-4 sm:px-0"
         >
           <h2 className="text-3xl md:text-4xl font-bold mb-4 text-[#FF2247]">
             Challenges for All Ages
@@ -65,7 +65,7 @@ export default function AgeGroups() {
           </div>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 md:gap-8">
           {ageGroups.map((group, index) => (
             <motion.div
               key={index}
@@ -78,7 +78,7 @@ export default function AgeGroups() {
                 {/* Gradient Top Border */}
                 <div className={`h-2 w-full bg-gradient-to-r ${group.color}`}></div>
                 
-                <div className="p-8">
+              <div className="p-6 md:p-8">
                   <div className={`${group.textColor} mb-6`}>
                     {group.icon}
                   </div>
