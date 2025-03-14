@@ -5,16 +5,11 @@
  * but uses our custom JWT implementation instead.
  */
 
-<<<<<<< HEAD
 export const dynamic = 'force-dynamic';
 
 import { NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 import { getServerSession } from '../../../../lib/auth/server';
-=======
-import NextAuth from 'next-auth';
-import { authOptions } from '../../../../lib/auth/auth';
->>>>>>> parent of a4cce8d (WIP)
 
 /**
  * GET handler - Returns the current session (similar to NextAuth)

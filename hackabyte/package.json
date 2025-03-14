@@ -10,7 +10,9 @@
     "lint": "next lint",
     "test:auth": "node scripts/test-auth.js",
     "test:build": "node scripts/build-test.js",
-    "deploy:check": "node scripts/deploy.js"
+    "deploy:check": "node scripts/deploy.js",
+    "vercel:deploy": "node scripts/vercel-deploy.js",
+    "clean": "rimraf .next"
   },
   "dependencies": {
     "@sendgrid/mail": "^8.1.0",
@@ -34,6 +36,7 @@
     "eslint": "^8.56.0",
     "eslint-config-next": "15.2.1",
     "postcss": "^8.5.3",
+    "rimraf": "^5.0.5",
     "tailwindcss": "^3.4.17"
   }
 }
