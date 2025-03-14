@@ -1,13 +1,14 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Server-side rendering with API routes support
-  // Remove static export to enable API routes
+  // Force static HTML export for Vercel deployment
+  output: 'export',
   
-  // Required for image optimization
+  // Specify output directory
+  distDir: 'out',
+  
+  // Required for static export with images
   images: {
-    domains: ['hackabyte.org'],
-    // Use image optimization instead of unoptimized
-    unoptimized: false,
+    unoptimized: true
   },
   
   // Ensure consistent URL handling
