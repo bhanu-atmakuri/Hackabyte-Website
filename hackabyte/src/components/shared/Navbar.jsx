@@ -243,59 +243,83 @@ export default function Navbar() {
         <AnimatePresence>
           {isMobileMenuOpen && (
             <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: 'auto' }}
-              exit={{ opacity: 0, height: 0 }}
+              initial={{ height: 0, opacity: 1 }}
+              animate={{ height: 'auto', opacity: 1 }}
+              exit={{ height: 0, opacity: 1 }}
               transition={{ duration: 0.3 }}
-              className="md:hidden mt-4 bg-[#1A1A1E] shadow-lg rounded-b-md"
+              className="md:hidden mt-4 bg-[#1A1A1E] shadow-lg rounded-b-md overflow-hidden"
             >
-              <div className="flex flex-col space-y-0 py-2 sm:py-4">
+              <motion.div 
+                initial={{ y: -20 }}
+                animate={{ y: 0 }}
+                exit={{ y: -20 }}
+                transition={{ duration: 0.3 }}
+                className="flex flex-col space-y-0 py-2 sm:py-4"
+              >
                 {navItems.map((item, index) => (
                   <div key={item.name}>
                     {item.hasDropdown ? (
                       <>
-                        <Link
-                          href={item.href}
-                          className="text-sm sm:text-base md:text-lg lg:text-xl text-white hover:text-[#FF2247] font-medium transition-colors px-4 py-2 sm:py-3 w-full text-left flex items-center justify-between whitespace-nowrap"
-                          onClick={() => {
-                            handleDropdownToggle(index);
-                            setIsMobileMenuOpen(false);
-                          }}
-                        >
-                          {item.name}
-                          <svg 
-                            xmlns="http://www.w3.org/2000/svg" 
-                            className={`w-4 h-4 transition-transform ${activeDropdown === index ? 'rotate-180' : ''}`} 
-                            fill="none" 
-                            viewBox="0 0 24 24" 
-                            stroke="currentColor"
+                        <div className="flex items-center justify-between">
+                          <Link
+                            href={item.href}
+                            className="text-sm sm:text-base md:text-lg lg:text-xl text-white hover:text-[#FF2247] font-medium transition-colors px-4 py-2 sm:py-3 flex-grow text-left whitespace-nowrap"
+                            onClick={() => {
+                              setIsMobileMenuOpen(false);
+                            }}
                           >
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                          </svg>
-                        </Link>
+                            {item.name}
+                          </Link>
+                          <button
+                            onClick={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              handleDropdownToggle(index);
+                            }}
+                            className="px-4 py-2 sm:py-3"
+                            aria-label={`Toggle ${item.name} dropdown`}
+                          >
+                            <svg 
+                              xmlns="http://www.w3.org/2000/svg" 
+                              className={`w-4 h-4 transition-transform ${activeDropdown === index ? 'rotate-180' : ''} text-white`} 
+                              fill="none" 
+                              viewBox="0 0 24 24" 
+                              stroke="currentColor"
+                            >
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                            </svg>
+                          </button>
+                        </div>
                         
                         <AnimatePresence>
                           {activeDropdown === index && (
                             <motion.div
-                              initial={{ opacity: 0, height: 0 }}
-                              animate={{ opacity: 1, height: 'auto' }}
-                              exit={{ opacity: 0, height: 0 }}
+                              initial={{ height: 0, opacity: 1 }}
+                              animate={{ height: 'auto', opacity: 1 }}
+                              exit={{ height: 0, opacity: 1 }}
                               transition={{ duration: 0.2 }}
-                              className="pl-6 bg-[#1A1A1E] border-l-2 border-[#F93236]/30 ml-4 shadow-lg rounded-b-md"
+                              className="pl-6 bg-[#1A1A1E] border-l-2 border-[#F93236]/30 ml-4 shadow-lg rounded-b-md overflow-hidden"
                             >
-                              {item.dropdownItems.map((dropdownItem) => (
-                                <Link 
-                                  key={dropdownItem.name}
-                                  href={dropdownItem.href}
-                                  className="block py-1 sm:py-2 px-4 text-sm sm:text-base md:text-lg lg:text-xl text-gray-300 hover:text-[#FF2247] whitespace-nowrap"
-                                  onClick={() => {
-                                    setActiveDropdown(null);
-                                    setIsMobileMenuOpen(false);
-                                  }}
-                                >
-                                  {dropdownItem.name}
-                                </Link>
-                              ))}
+                              <motion.div
+                                initial={{ y: -10 }}
+                                animate={{ y: 0 }}
+                                exit={{ y: -10 }}
+                                transition={{ duration: 0.2 }}
+                              >
+                                {item.dropdownItems.map((dropdownItem) => (
+                                  <Link 
+                                    key={dropdownItem.name}
+                                    href={dropdownItem.href}
+                                    className="block py-1 sm:py-2 px-4 text-sm sm:text-base md:text-lg lg:text-xl text-gray-300 hover:text-[#FF2247] whitespace-nowrap"
+                                    onClick={() => {
+                                      setActiveDropdown(null);
+                                      setIsMobileMenuOpen(false);
+                                    }}
+                                  >
+                                    {dropdownItem.name}
+                                  </Link>
+                                ))}
+                              </motion.div>
                             </motion.div>
                           )}
                         </AnimatePresence>
@@ -318,7 +342,7 @@ export default function Navbar() {
                 >
                   Sign In
                 </Link>
-              </div>
+              </motion.div>
             </motion.div>
           )}
         </AnimatePresence>
