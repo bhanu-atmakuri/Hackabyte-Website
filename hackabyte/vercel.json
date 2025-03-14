@@ -3,9 +3,5 @@
     "env": {
       "NPM_FLAGS": "--legacy-peer-deps"
     }
-  },
-  "env": {
-    "NEXTAUTH_URL": "https://hackabyte-website.vercel.app",
-    "NEXT_PUBLIC_APP_URL": "https://hackabyte-website.vercel.app"
   }
 }
