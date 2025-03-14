@@ -1,16 +1,26 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+import { useEffect } from 'react';
 import Container from '../components/shared/Container';
 
 /**
  * Custom 404 Not Found Page
  * 
  * This page is shown when a user navigates to a route that doesn't exist within the Next.js app.
- * It uses client-side navigation to avoid the issues we're seeing with regular links.
+ * It now uses standard links with automatic redirect after a delay.
  */
 export default function NotFound() {
-  const router = useRouter();
+  // Auto-redirect after 5 seconds
+  useEffect(() => {
+    const redirectTimer = setTimeout(() => {
+      window.location.href = '/';
+    }, 5000);
+    
+    return () => {
+      clearTimeout(redirectTimer);
+    };
+  }, []);
   
   return (
     <Container>
@@ -24,20 +34,24 @@ export default function NotFound() {
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button 
-              onClick={() => router.push('/')}
-              className="px-6 py-3 bg-[#FF2247] hover:bg-[#FF3557] text-white font-semibold rounded-lg transition-colors"
+            <Link 
+              href="/"
+              className="px-6 py-3 bg-[#FF2247] hover:bg-[#FF3557] text-white font-semibold rounded-lg transition-colors inline-block"
             >
               Go to Homepage
-            </button>
+            </Link>
             
-            <button 
-              onClick={() => router.push('/events')}
-              className="px-6 py-3 bg-gray-800 hover:bg-gray-700 text-white font-semibold rounded-lg transition-colors"
+            <Link 
+              href="/events"
+              className="px-6 py-3 bg-gray-800 hover:bg-gray-700 text-white font-semibold rounded-lg transition-colors inline-block"
             >
               Browse Events
-            </button>
+            </Link>
           </div>
+          
+          <p className="mt-6 text-gray-400 text-sm">
+            Redirecting to homepage in 5 seconds...
+          </p>
         </div>
       </div>
     </Container>
