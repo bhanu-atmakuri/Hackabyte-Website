@@ -65,12 +65,12 @@ export default function HackathonsHero() {
             </Container>
             
             {/* Quick link */}
-            <div className="mt-6 flex flex-wrap justify-center gap-4">
+            <div className="mt-6 flex flex-col sm:flex-row flex-wrap justify-center gap-6">
               <motion.a 
                 href="/events#registration"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="px-5 py-2 bg-[#FF2247] rounded-lg text-white hover:bg-[#F93236] transition-colors"
+                className="w-full sm:w-auto block text-center px-5 py-2 bg-[#FF2247] rounded-lg text-white hover:bg-[#F93236] transition-colors"
               >
                 Register Now
               </motion.a>

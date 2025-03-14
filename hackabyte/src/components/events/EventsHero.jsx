@@ -28,12 +28,13 @@ export default function EventsHero() {
               designed to inspire and empower the next generation of innovators.
             </p>
             
-            <div className="flex flex-wrap justify-center gap-4 mt-8">
+            <div className="flex flex-col sm:flex-row flex-wrap justify-center gap-6 mt-8">
               <motion.div
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
+                className="w-full sm:w-auto"
               >
-                <a href="#upcoming" className="btn-primary">
+                <a href="#upcoming" className="btn-primary block w-full text-center">
                   Upcoming Events
                 </a>
               </motion.div>
@@ -41,8 +42,9 @@ export default function EventsHero() {
               <motion.div
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
+                className="w-full sm:w-auto"
               >
-                <a href="/events/past-events" className="btn-secondary">
+                <a href="/events/past-events" className="btn-secondary block w-full text-center">
                   Past Events
                 </a>
               </motion.div>

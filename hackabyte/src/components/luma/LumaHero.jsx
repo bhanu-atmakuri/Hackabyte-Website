@@ -31,13 +31,14 @@ export default function LumaHero() {
               Empowering every student to learn coding, irrespective of their skill level.
             </p>
            
-            <div className="flex flex-wrap justify-center gap-4 mt-8">
+            <div className="flex flex-col sm:flex-row flex-wrap justify-center gap-6 mt-8">
 
               <motion.div
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
+                className="w-full sm:w-auto"
               >
-                <Link href="#join" className="bg-[#BADA55] text-black font-semibold py-3 px-6 rounded-lg shadow-md hover:bg-[#A0C142] transition-all duration-300 transform hover:scale-105">
+                <Link href="#join" className="block w-full text-center bg-[#BADA55] text-black font-semibold py-3 px-6 rounded-lg shadow-md hover:bg-[#A0C142] transition-all duration-300 transform hover:scale-105">
                   JOIN OUR CLASSES!
                 </Link>
               </motion.div>
@@ -45,8 +46,9 @@ export default function LumaHero() {
               <motion.div
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
+                className="w-full sm:w-auto"
               >
-                <Link href="/contact?subject=Discord%20Inquiry" className="bg-[#1A1A1E] text-white border border-[#BADA55] font-semibold py-3 px-6 rounded-lg shadow-md hover:bg-[#BADA55]/10 transition-all duration-300 transform hover:scale-105">
+                <Link href="/contact?subject=Discord%20Inquiry" className="block w-full text-center bg-[#1A1A1E] text-white border border-[#BADA55] font-semibold py-3 px-6 rounded-lg shadow-md hover:bg-[#BADA55]/10 transition-all duration-300 transform hover:scale-105">
                   Join Discord
                 </Link>
               </motion.div>
