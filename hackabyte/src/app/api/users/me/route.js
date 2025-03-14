@@ -8,8 +8,7 @@
  */
 
 import { NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth/next';
-import { authOptions } from '../../../../lib/auth/auth';
+import { getServerSession } from '../../../../lib/auth/server';
 import connectDB from '../../../../lib/db/mongoose';
 import User from '../../../../lib/models/User';
 
@@ -21,7 +20,7 @@ import User from '../../../../lib/models/User';
 export async function GET(request) {
   try {
     // Check authentication
-    const session = await getServerSession(authOptions);
+    const session = await getServerSession();
     
     if (!session) {
       return NextResponse.json(

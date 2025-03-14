@@ -9,8 +9,7 @@
  */
 
 import { NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth/next';
-import { authOptions } from '../../../../lib/auth/auth';
+import { getServerSession } from '../../../../lib/auth/server';
 import connectDB from '../../../../lib/db/mongoose';
 import User from '../../../../lib/models/User';
 import EventRegistration from '../../../../lib/models/EventRegistration';
@@ -25,7 +24,7 @@ import { sendEventRegistrationEmail } from '../../../../lib/email/emailService';
 export async function POST(request) {
   try {
     // Check authentication
-    const session = await getServerSession(authOptions);
+    const session = await getServerSession();
     
     if (!session) {
       return NextResponse.json(
