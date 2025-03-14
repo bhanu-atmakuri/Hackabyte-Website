@@ -10,34 +10,11 @@ const nextConfig = {
     unoptimized: false,
   },
   
-  // Ensure consistent URL handling with Vercel config
-  trailingSlash: false,
+  // Ensure consistent URL handling
+  trailingSlash: true,
   
-  // Clean URLs without extensions
-  cleanUrls: true,
-  
-  // Disables the x-powered-by header
+  // Ensures proper handling of rewrites and redirects for Vercel
   poweredByHeader: false,
-  
-  // Add fallback for 404 pages
-  async rewrites() {
-    return [
-      {
-        source: '/:path*',
-        destination: '/',
-        has: [
-          {
-            type: 'header',
-            key: 'x-matched-path',
-            value: '(?!/_next|/api).*',
-          },
-        ],
-      },
-    ];
-  },
-
-  // Help with development environment
-  reactStrictMode: true,
 };
 
 export default nextConfig;

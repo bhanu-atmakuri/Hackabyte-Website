@@ -7,17 +7,5 @@
   "env": {
     "NEXTAUTH_URL": "https://hackabyte-website.vercel.app",
     "NEXT_PUBLIC_APP_URL": "https://hackabyte-website.vercel.app"
-  },
-  "rewrites": [
-    {
-      "source": "/((?!api|_next/static|_next/image|favicon.ico).*)",
-      "destination": "/"
-    },
-    {
-      "source": "/api/(.*)",
-      "destination": "/api/$1"
-    }
-  ],
-  "cleanUrls": true,
-  "trailingSlash": false
+  }
 }
