@@ -12,7 +12,7 @@
 
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { signOut } from '../../lib/auth/AuthContext';
+import { signOut } from 'next-auth/react';
 import Link from 'next/link';
 import Container from '../shared/Container';
 import { upcomingEvents } from '../../lib/data/upcomingEvents';

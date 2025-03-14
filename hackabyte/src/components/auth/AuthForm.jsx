@@ -16,7 +16,7 @@
 
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { signIn, useSession } from '../../lib/auth/AuthContext';
+import { signIn, useSession } from 'next-auth/react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Container from '../shared/Container';
 

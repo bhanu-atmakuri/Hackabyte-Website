@@ -1,22 +1,25 @@
+// hackabyte/src/app/layout.js
+import { Inter } from 'next/font/google';
 import './globals.css';
-import { AuthProvider } from '../lib/auth/AuthContext';
-import Navbar from '../components/shared/Navbar';
-import Footer from '../components/shared/Footer';
+
+// Load Inter font once and use it throughout the app
+const inter = Inter({ 
+  subsets: ['latin'],
+  display: 'swap', // Ensures text remains visible during font loading
+});
 
 export const metadata = {
-  title: 'Hackabyte - Tech Education for Youth',
-  description: 'Hackabyte is a nonprofit organization dedicated to providing tech education and opportunities for youth ages 13-19 through hackathons, workshops, and mentorship programs.',
+  title: 'Hackabyte - Hackathons for Students',
+  description: 'Hackabyte hosts in-person hackathons for high school, middle school, and elementary students, building coding experience, problem-solving skills, and mentor connections.',
+  viewport: 'width=device-width, initial-scale=1, viewport-fit=cover'
 };
 
+// Using a function component instead of just returning JSX to handle hydration more carefully
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
-      <body className="bg-black text-white min-h-screen flex flex-col">
-        <AuthProvider>
-          <Navbar />
-          <main className="flex-grow">{children}</main>
-          <Footer />
-        </AuthProvider>
+    <html lang="en" suppressHydrationWarning className="scroll-smooth">
+      <body className={`${inter.className} antialiased text-white bg-[#1A1A1E]`} suppressHydrationWarning>
+        {children}
       </body>
     </html>
   );
