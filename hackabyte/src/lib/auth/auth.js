@@ -5,13 +5,13 @@
  */
 
 import bcrypt from 'bcryptjs';
+import { AuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import connectDB from '../db/mongoose';
 import User from '../models/User';
 
 /**
  * NextAuth configuration options
- * @type {import('next-auth').NextAuthOptions}
  */
 export const authOptions = {
   providers: [
