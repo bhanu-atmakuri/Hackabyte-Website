@@ -1,10 +1,10 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Comment out static export to support API routes with NextAuth
-  // output: 'export',
+  // Force static HTML export for Vercel deployment
+  output: 'export',
   
-  // API routes require server-side rendering
-  // distDir: 'out',
+  // Specify output directory
+  distDir: 'out',
   
   // Required for static export with images
   images: {
@@ -16,11 +16,6 @@ const nextConfig = {
   
   // Ensures proper handling of rewrites and redirects for Vercel
   poweredByHeader: false,
-  
-  // Experimental features for Next.js 15
-  experimental: {
-    serverComponentsExternalPackages: ['next-auth']
-  }
 };
 
 export default nextConfig;

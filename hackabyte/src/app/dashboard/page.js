@@ -8,8 +8,8 @@
  */
 
 import { redirect } from 'next/navigation';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '../../lib/auth/auth.js';
+import { getServerSession } from 'next-auth/next';
+import { authOptions } from '../../lib/auth/auth';
 
 // Import UI components
 import UserDashboard from '../../components/dashboard/UserDashboard';
