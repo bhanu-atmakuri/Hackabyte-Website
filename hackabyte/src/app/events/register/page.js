@@ -10,7 +10,7 @@
 'use client';
 
 import { useSearchParams } from 'next/navigation';
-import { useSession } from '../../../lib/auth/AuthContext';
+import { useSession } from 'next-auth/react';
 import { redirect } from 'next/navigation';
 import EventRegistrationForm from '../../../components/events/EventRegistrationForm';
 import Container from '../../../components/shared/Container';

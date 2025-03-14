@@ -10,7 +10,8 @@
  */
 
 import { redirect } from 'next/navigation';
-import { getServerSession } from '../../lib/auth/server';
+import { getServerSession } from 'next-auth/next';
+import { authOptions } from '../../lib/auth/auth';
 
 // Import UI components
 import AdminDashboard from '../../components/admin/AdminDashboard';
@@ -26,7 +27,7 @@ export const metadata = {
  */
 export default async function AdminPage() {
   // Check if user is authenticated and has admin role
-  const session = await getServerSession();
+  const session = await getServerSession(authOptions);
   
   // If not authenticated, redirect to login page
   if (!session) {
