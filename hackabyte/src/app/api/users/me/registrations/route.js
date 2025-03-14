@@ -7,6 +7,8 @@
  * - Returns formatted registration data with event details
  */
 
+export const dynamic = 'force-dynamic';
+
 import { NextResponse } from 'next/server';
 import { getServerSession } from '../../../../../lib/auth/server';
 import connectDB from '../../../../../lib/db/mongoose';

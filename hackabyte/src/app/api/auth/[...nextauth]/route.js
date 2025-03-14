@@ -5,6 +5,8 @@
  * but uses our custom JWT implementation instead.
  */
 
+export const dynamic = 'force-dynamic';
+
 import { NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 import { getServerSession } from '../../../../lib/auth/server';

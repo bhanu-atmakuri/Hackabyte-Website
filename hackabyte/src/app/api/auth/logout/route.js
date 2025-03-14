@@ -4,6 +4,8 @@
  * Handles user logout by clearing authentication cookies
  */
 
+export const dynamic = 'force-dynamic';
+
 import { NextResponse } from 'next/server';
 
 /**
