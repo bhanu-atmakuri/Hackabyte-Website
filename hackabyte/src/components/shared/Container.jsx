@@ -5,12 +5,11 @@
  * 
  * @param {Object} props
  * @param {React.ReactNode} props.children - The content to be wrapped by the container
- * @param {'default'|'half'|'wide'} props.size - Container width variant (default, half, wide)
+ * @param {'default'|'narrow'|'wide'} props.size - Container width variant (default, narrow, wide)
  * @param {string} props.className - Additional CSS classes to apply
  * @returns {JSX.Element}
  */
 export default function Container({ children, size = 'default', className = '' }) {
-  // All containers are full width on mobile and only take their specific widths on larger screens
   const containerClass = 
     size === 'half' ? 'container-half' :
     size === 'wide' ? 'container-wide' :
