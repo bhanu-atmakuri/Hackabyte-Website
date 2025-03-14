@@ -1,11 +1,13 @@
 /**
  * Email Verification API Route
  * 
- * Handles email verification process:
+ * Handles user email verification:
  * - Validates verification token
  * - Updates user verification status
- * - Returns appropriate response
+ * - Redirects to login page
  */
+
+export const dynamic = 'force-dynamic';
 
 import { NextResponse } from 'next/server';
 import connectDB from '../../../../lib/db/mongoose';

@@ -1,11 +1,13 @@
 /**
  * Reset Password API Route
  * 
- * Handles password reset process:
+ * Handles password reset:
  * - Validates reset token
  * - Updates user password
  * - Returns appropriate response
  */
+
+export const dynamic = 'force-dynamic';
 
 import { NextResponse } from 'next/server';
 import connectDB from '../../../../lib/db/mongoose';
@@ -27,7 +29,7 @@ export async function POST(request) {
       );
     }
     
-    // Password validation
+    // Validate password length
     if (password.length < 8) {
       return NextResponse.json(
         { message: 'Password must be at least 8 characters long' },
@@ -38,7 +40,7 @@ export async function POST(request) {
     // Connect to database
     await connectDB();
     
-    // Find user by reset token and check expiration
+    // Find user by reset token and check if it's still valid
     const user = await User.findOne({
       resetPasswordToken: token,
       resetPasswordExpires: { $gt: Date.now() }
@@ -51,8 +53,8 @@ export async function POST(request) {
       );
     }
     
-    // Update user password and clear reset token
-    user.password = password;
+    // Update user's password and clear reset token fields
+    user.password = password; // Will be hashed by pre-save hook in model
     user.resetPasswordToken = undefined;
     user.resetPasswordExpires = undefined;
     await user.save();
