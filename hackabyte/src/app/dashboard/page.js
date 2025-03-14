@@ -8,7 +8,8 @@
  */
 
 import { redirect } from 'next/navigation';
-import { getServerSession } from '../../lib/auth/server';
+import { getServerSession } from 'next-auth/next';
+import { authOptions } from '../../lib/auth/auth';
 
 // Import UI components
 import UserDashboard from '../../components/dashboard/UserDashboard';
@@ -24,7 +25,7 @@ export const metadata = {
  */
 export default async function DashboardPage() {
   // Check if user is authenticated
-  const session = await getServerSession();
+  const session = await getServerSession(authOptions);
   
   // If not authenticated, redirect to login page
   if (!session) {
