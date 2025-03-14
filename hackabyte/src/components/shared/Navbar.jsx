@@ -11,6 +11,7 @@ export default function Navbar() {
   const [activeDropdown, setActiveDropdown] = useState(null);
   const dropdownRef = useRef(null);
 
+  // Works on mobile!
   // Handle scroll effect
   useEffect(() => {
     const handleScroll = () => {
