@@ -20,19 +20,14 @@ const AUTH_ROUTES = [
   '/auth',
 ];
 
-// Routes that should be excluded from middleware processing
+// Routes that should be completely excluded from middleware processing
 const EXCLUDED_ROUTES = [
   '/api/',
   '/_next/',
   '/static/',
-  '/public/',
   '/favicon.ico',
   '/404.html',
-  '/index.html'
-];
-
-// File extensions to exclude from middleware processing
-const EXCLUDED_EXTENSIONS = [
+  '/index.html',
   '.json',
   '.js',
   '.css',
@@ -46,7 +41,13 @@ const EXCLUDED_EXTENSIONS = [
   '.woff2',
   '.ttf',
   '.otf',
-  '.html'
+];
+
+// Special routes that should never be blocked
+const CRITICAL_ROUTES = [
+  '/',                 // Home page
+  '/events',           // Events page
+  '/not-found',        // 404 page
 ];
 
 /**
@@ -56,20 +57,25 @@ const EXCLUDED_EXTENSIONS = [
  * @returns {NextResponse} - The response or a redirect
  */
 export function middleware(request) {
-  const { pathname } = request.nextUrl;
+  const pathname = request.nextUrl.pathname;
   
-  // Skip processing for root path to ensure homepage works
-  if (pathname === '/' || pathname === '') {
-    return NextResponse.next();
+  // Debug logging for development
+  if (process.env.NODE_ENV !== 'production') {
+    console.log(`Middleware processing: ${pathname}`);
   }
   
   // Skip middleware for excluded routes and static assets
-  if (EXCLUDED_ROUTES.some(route => pathname.startsWith(route))) {
+  if (EXCLUDED_ROUTES.some(route => pathname.startsWith(route) || pathname.includes(route))) {
     return NextResponse.next();
   }
 
-  // Skip middleware for files with excluded extensions
-  if (EXCLUDED_EXTENSIONS.some(ext => pathname.endsWith(ext))) {
+  // Never block critical routes
+  if (CRITICAL_ROUTES.includes(pathname)) {
+    return NextResponse.next();
+  }
+
+  // Skip for public files and static HTML
+  if (pathname.startsWith('/public/') || pathname.endsWith('.html')) {
     return NextResponse.next();
   }
 

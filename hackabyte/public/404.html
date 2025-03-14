@@ -3,6 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Auto-redirect after 5 seconds -->
+  <meta http-equiv="refresh" content="5;url=/">
   <title>Hackabyte - Page Not Found</title>
   <style>
     body {
@@ -36,6 +38,7 @@
       border-radius: 4px;
       font-weight: bold;
       transition: background-color 0.3s;
+      cursor: pointer;
     }
     .btn:hover {
       background-color: #FF3557;
@@ -46,6 +49,11 @@
     .btn-secondary:hover {
       background-color: #444;
     }
+    #countdown {
+      margin-top: 20px;
+      font-size: 0.9rem;
+      color: #aaa;
+    }
   </style>
 </head>
 <body>
@@ -54,23 +62,32 @@
     <h2>Page Not Found</h2>
     <p>The page you're looking for doesn't exist or has been moved.</p>
     <div>
-      <button onclick="goToHome()" class="btn">Go to Homepage</button>
-      <button onclick="goToEvents()" class="btn btn-secondary">Browse Events</button>
+      <a href="/" class="btn">Go to Homepage</a>
+      <a href="/events" class="btn btn-secondary">Browse Events</a>
     </div>
+    <div id="countdown">Redirecting to homepage in 5 seconds...</div>
   </div>
   <script>
-    // Functions to handle navigation with full URLs
-    function goToHome() {
-      // Get the base URL from the current location
-      var baseUrl = window.location.protocol + '//' + window.location.host;
-      window.location.href = baseUrl + '/';
-    }
+    // Countdown timer
+    let seconds = 5;
+    const countdownEl = document.getElementById('countdown');
     
-    function goToEvents() {
-      // Get the base URL from the current location
-      var baseUrl = window.location.protocol + '//' + window.location.host;
-      window.location.href = baseUrl + '/events';
-    }
+    const interval = setInterval(() => {
+      seconds--;
+      countdownEl.textContent = `Redirecting to homepage in ${seconds} second${seconds !== 1 ? 's' : ''}...`;
+      
+      if (seconds <= 0) {
+        clearInterval(interval);
+      }
+    }, 1000);
+    
+    // Ensure links work with direct assignment
+    document.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', function(e) {
+        e.preventDefault();
+        window.location.href = this.getAttribute('href');
+      });
+    });
   </script>
 </body>
 </html>
