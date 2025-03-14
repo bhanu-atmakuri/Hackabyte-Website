@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 
 export default function HackathonsHero() {
   return (
-    <section className="relative pt-8 pb-16 bg-[#1A1A1E]">
+    <section className="relative pt-16 md:pt-8 pb-16 bg-[#1A1A1E] flex items-center">
       {/* Background Elements */}
       <div className="absolute inset-0 -z-10 opacity-10">
         <div className="absolute top-20 right-20 w-64 h-64 bg-[#F93236] rounded-full blur-3xl"></div>

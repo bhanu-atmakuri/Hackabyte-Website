@@ -6,7 +6,7 @@ import Container from '../shared/Container';
 
 export default function LumaHero() {
   return (
-    <section className="min-h-screen relative pt-10 pb-20 bg-[#1A1A1E] flex items-center">
+    <section className="min-h-screen relative pt-16 md:pt-10 pb-20 bg-[#1A1A1E] flex items-center">
       {/* Background Elements */}
       <div className="absolute inset-0 -z-10 opacity-10">
         <div className="absolute top-20 right-20 w-64 h-64 bg-[#BADA55] rounded-full blur-3xl"></div>
