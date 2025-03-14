@@ -1,7 +1,8 @@
-# Hackabyte Registration System
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-A comprehensive registration system for Hackabyte events, featuring user authentication, event registration, and administrative controls.
+## Getting Started
 
+<<<<<<< HEAD
 ## Features
 
 - **User Authentication**
@@ -100,39 +101,40 @@ This will test:
 - Password verification
 
 ### 7. Run the Development Server
+=======
+First, run the development server:
+>>>>>>> parent of a4cce8d (WIP)
 
 ```bash
 npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
 ```
 
-Visit [http://localhost:3000](http://localhost:3000) to see the application.
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-## Deployment
+You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
 
-This project is configured for deployment on Vercel:
+This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-1. Push your code to a GitHub repository
-2. Import the repository in Vercel
-3. Configure the environment variables in Vercel project settings
-4. Deploy
+## Learn More
 
-For the production deployment, set environment variables to:
+To learn more about Next.js, take a look at the following resources:
 
-```
-MONGODB_URI=your_mongodb_connection_string
-NEXTAUTH_SECRET=a_random_string_for_encryption
-NEXTAUTH_URL=https://your-domain.com
-EMAIL_USER=your_google_email@gmail.com
-EMAIL_PASSWORD=your_app_password
-NEXT_PUBLIC_APP_URL=https://your-domain.com
-```
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-## Troubleshooting
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-### NextAuth.js Issues
+## Deploy on Vercel
 
-If you encounter issues with NextAuth.js:
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
+<<<<<<< HEAD
 1. Make sure `NEXTAUTH_SECRET` is properly set
 2. Ensure the imports in `src/lib/auth/auth.js` and `src/app/api/auth/[...nextauth]/route.js` are correct
 3. Verify the `NEXTAUTH_URL` matches your deployment URL
@@ -183,3 +185,6 @@ If emails aren't being sent:
 ## License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
+=======
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+>>>>>>> parent of a4cce8d (WIP)
