@@ -139,29 +139,16 @@ If you encounter issues with NextAuth.js:
 
 #### NextAuth.js Build Errors
 
-If you encounter build errors:
+If you encounter build errors like `TypeError: s is not a function`:
 
-1. **Dependency Conflicts**: This project uses NextAuth.js with Next.js 15, which requires:
-   - Using `next-auth@latest` in package.json
-   - Adding `--legacy-peer-deps` flag to npm installation in vercel.json:
-     ```json
-     {
-       "build": {
-         "env": {
-           "NPM_FLAGS": "--legacy-peer-deps"
-         }
-       }
-     }
-     ```
-
-2. **Runtime Errors**: If you see errors like `TypeError: s is not a function`:
-   - Use the App Router specific pattern in your route handler:
-     ```javascript
-     import { handlers } from 'next-auth/next';
-     export const { GET, POST } = handlers(authOptions);
-     ```
-   - Simplify the `authorize` function in credentials provider to return `null` instead of throwing errors
-   - Ensure all environment variables are correctly set in your Vercel project
+1. Check that you're using NextAuth.js v4.22.1 (pinned for compatibility with Next.js 15)
+2. Use the App Router specific pattern in your route handler:
+   ```javascript
+   import { handlers } from 'next-auth/next';
+   export const { GET, POST } = handlers(authOptions);
+   ```
+3. Simplify the `authorize` function in credentials provider to return `null` instead of throwing errors
+4. Ensure all environment variables are correctly set in your Vercel project
 
 ### MongoDB Connection Issues
 
