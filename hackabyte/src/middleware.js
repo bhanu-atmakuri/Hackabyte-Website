@@ -20,14 +20,12 @@ const AUTH_ROUTES = [
   '/auth',
 ];
 
-// Routes that should be completely excluded from middleware processing
+// Routes that should be excluded from middleware processing
 const EXCLUDED_ROUTES = [
   '/api/',
   '/_next/',
   '/static/',
   '/favicon.ico',
-  '/404.html',
-  '/index.html',
   '.json',
   '.js',
   '.css',
@@ -43,13 +41,6 @@ const EXCLUDED_ROUTES = [
   '.otf',
 ];
 
-// Special routes that should never be blocked
-const CRITICAL_ROUTES = [
-  '/',                 // Home page
-  '/events',           // Events page
-  '/not-found',        // 404 page
-];
-
 /**
  * Middleware function to check authentication status and control access to routes
  * 
@@ -59,23 +50,13 @@ const CRITICAL_ROUTES = [
 export function middleware(request) {
   const pathname = request.nextUrl.pathname;
   
-  // Debug logging for development
-  if (process.env.NODE_ENV !== 'production') {
-    console.log(`Middleware processing: ${pathname}`);
-  }
-  
   // Skip middleware for excluded routes and static assets
   if (EXCLUDED_ROUTES.some(route => pathname.startsWith(route) || pathname.includes(route))) {
     return NextResponse.next();
   }
 
-  // Never block critical routes
-  if (CRITICAL_ROUTES.includes(pathname)) {
-    return NextResponse.next();
-  }
-
-  // Skip for public files and static HTML
-  if (pathname.startsWith('/public/') || pathname.endsWith('.html')) {
+  // Skip for public files 
+  if (pathname.startsWith('/public/') || pathname.includes('.html')) {
     return NextResponse.next();
   }
 
