@@ -7,8 +7,8 @@
 import bcrypt from 'bcryptjs';
 import { AuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
-import connectDB from '../db/mongoose';
-import User from '../models/User';
+import connectDB from '../db/mongoose.js';
+import User from '../models/User.js';
 
 /**
  * NextAuth configuration options

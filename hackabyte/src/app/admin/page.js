@@ -10,8 +10,8 @@
  */
 
 import { redirect } from 'next/navigation';
-import { getServerSession } from 'next-auth/next';
-import { authOptions } from '../../lib/auth/auth';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '../../lib/auth/auth.js';
 
 // Import UI components
 import AdminDashboard from '../../components/admin/AdminDashboard';

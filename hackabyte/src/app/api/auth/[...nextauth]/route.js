@@ -1,18 +1,21 @@
 /**
- * NextAuth API Route
+ * NextAuth API Route for App Router
  * 
- * This route handles all authentication operations via NextAuth.js including:
- * - Login
- * - Session handling
- * - JWT operations
+ * This implements the NextAuth.js authentication for Next.js App Router.
+ * Using the recommended pattern for Next.js 15 and ESM modules.
  */
 
-import NextAuth from 'next-auth/next';
-import { authOptions } from '../../../../lib/auth/auth';
+import NextAuth from 'next-auth';
+import { authOptions } from '../../../../lib/auth/auth.js';
 
 /**
- * NextAuth handler for all auth operations
+ * Configure the NextAuth handler with our options
  */
 const handler = NextAuth(authOptions);
 
-export { handler as GET, handler as POST };
+/**
+ * Export the handler functions directly as named exports
+ * This is the recommended pattern for App Router in Next.js 15+
+ */
+export const GET = handler;
+export const POST = handler;
