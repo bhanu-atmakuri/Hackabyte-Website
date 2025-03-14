@@ -6,11 +6,17 @@
  */
 
 import bcrypt from 'bcryptjs';
+<<<<<<< HEAD
+=======
+import { AuthOptions } from 'next-auth';
+import CredentialsProvider from 'next-auth/providers/credentials';
+>>>>>>> parent of a4cce8d (WIP)
 import connectDB from '../db/mongoose';
 import User from '../models/User';
 import { createToken, verifyToken } from './jwt';
 
 /**
+<<<<<<< HEAD
  * Validates user credentials against the database
  * 
  * @param {Object} credentials - User login credentials
@@ -70,6 +76,9 @@ export function createSession(user) {
 /**
  * Authentication configuration options
  * Provided for compatibility with existing code
+=======
+ * NextAuth configuration options
+>>>>>>> parent of a4cce8d (WIP)
  */
 export const authOptions = {
   secret: process.env.NEXTAUTH_SECRET,
