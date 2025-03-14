@@ -13,7 +13,7 @@
 
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { useSession } from 'next-auth/react';
+import { useSession } from '../../lib/auth/AuthContext';
 import { useRouter } from 'next/navigation';
 import Container from '../shared/Container';
 
