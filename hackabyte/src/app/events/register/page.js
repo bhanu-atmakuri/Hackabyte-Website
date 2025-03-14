@@ -9,13 +9,25 @@
 
 'use client';
 
+import React, { Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { useSession } from '../../../lib/auth/AuthContext';
 import { redirect } from 'next/navigation';
 import EventRegistrationForm from '../../../components/events/EventRegistrationForm';
 import Container from '../../../components/shared/Container';
 
-export default function EventRegistrationPage() {
+// Loading fallback component
+const LoadingFallback = () => (
+  <Container>
+    <div className="py-20 text-center">
+      <div className="inline-block animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-[#FF2247]"></div>
+      <p className="mt-4 text-gray-300">Loading page...</p>
+    </div>
+  </Container>
+);
+
+// Client component that uses searchParams
+function EventRegistrationContent() {
   const searchParams = useSearchParams();
   const { status } = useSession();
   
@@ -38,7 +50,7 @@ export default function EventRegistrationPage() {
       <Container>
         <div className="py-20 text-center">
           <div className="inline-block animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-[#FF2247]"></div>
-          <p className="mt-4 text-gray-300">Loading...</p>
+          <p className="mt-4 text-gray-300">Loading authentication...</p>
         </div>
       </Container>
     );
@@ -46,4 +58,13 @@ export default function EventRegistrationPage() {
   
   // Render event registration form once authenticated
   return <EventRegistrationForm eventId={eventId} />;
+}
+
+// Main page component with Suspense boundary
+export default function EventRegistrationPage() {
+  return (
+    <Suspense fallback={<LoadingFallback />}>
+      <EventRegistrationContent />
+    </Suspense>
+  );
 }
