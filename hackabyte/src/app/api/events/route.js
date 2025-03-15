@@ -1,8 +1,8 @@
 import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth/next';
-import dbConnect from '@/lib/mongodb';
-import Event from '@/models/Event';
-import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import dbConnect from '../../../../lib/mongodb';
+import Event from '../../../../models/Event';
+import { authOptions } from '../auth/[...nextauth]/route';
 
 // Get all events
 export async function GET(req) {

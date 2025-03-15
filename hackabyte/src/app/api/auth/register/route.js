@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
-import dbConnect from '@/lib/mongodb';
-import User from '@/models/User';
-import { sendWelcomeEmail } from '@/lib/email';
+import dbConnect from '../../../../../lib/mongodb';
+import User from '../../../../../models/User';
+import { sendWelcomeEmail } from '../../../../../lib/email';
 
 export async function POST(req) {
   try {
