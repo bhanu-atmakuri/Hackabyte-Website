@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth/next';
-import dbConnect from 'lib/mongodb';
-import User from 'models/User';
+import { getServerSession } from 'next-auth';
+import dbConnect from '@/lib/mongodb';
+import User from '@/models/User';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 
 // Get all users (admin only)

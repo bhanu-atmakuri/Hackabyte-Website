@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth/next';
+import { getServerSession } from 'next-auth';
 import { hash, compare } from 'bcryptjs';
 import dbConnect from '@/lib/mongodb';
 import User from '@/models/User';
