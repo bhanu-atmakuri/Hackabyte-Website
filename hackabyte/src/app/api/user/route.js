@@ -3,6 +3,7 @@ import { getServerSession } from 'next-auth/next';
 import dbConnect from '../../../../lib/mongodb';
 import User from '../../../../models/User';
 import { authOptions } from '../auth/[...nextauth]/route';
+import { toPlainObject } from '../../../../lib/utils';
 
 // Get current user profile
 export async function GET(req) {
@@ -18,7 +19,10 @@ export async function GET(req) {
     
     await dbConnect();
     
-    const user = await User.findById(session.user.id).select('-password');
+    let user = await User.findById(session.user.id).select('-password');
+    
+    // Convert to plain object using our utility function
+    user = toPlainObject(user);
     
     if (!user) {
       return NextResponse.json(
@@ -74,7 +78,7 @@ export async function PUT(req) {
     // Remove fields that shouldn't be updated directly
     const { password, email, role, resetPasswordToken, resetPasswordExpire, ...updateData } = body;
     
-    const user = await User.findByIdAndUpdate(
+    let user = await User.findByIdAndUpdate(
       userId,
       updateData,
       { new: true, runValidators: true }
@@ -86,6 +90,9 @@ export async function PUT(req) {
         { status: 404 }
       );
     }
+    
+    // Convert to plain object using our utility function
+    user = toPlainObject(user);
     
     return NextResponse.json({
       success: true,
