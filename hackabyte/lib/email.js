@@ -1,22 +1,29 @@
-import sgMail from '@sendgrid/mail';
+import nodemailer from 'nodemailer';
 
-// Set SendGrid API Key
-sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+// Create reusable transporter object using Gmail SMTP with app password
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_APP_PASSWORD,
+  },
+});
 
 export const sendEmail = async ({ to, subject, html }) => {
-  const msg = {
-    to,
+  const mailOptions = {
     from: {
-      email: process.env.EMAIL_FROM,
       name: 'Hackabyte',
+      address: process.env.EMAIL_USER,
     },
+    to,
     subject,
     html,
   };
 
   try {
-    await sgMail.send(msg);
-    return { success: true };
+    const info = await transporter.sendMail(mailOptions);
+    console.log('Email sent:', info.messageId);
+    return { success: true, messageId: info.messageId };
   } catch (error) {
     console.error('Email sending failed:', error);
     return { success: false, error };
