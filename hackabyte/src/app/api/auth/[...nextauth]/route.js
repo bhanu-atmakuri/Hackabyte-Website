@@ -3,7 +3,6 @@ import CredentialsProvider from 'next-auth/providers/credentials';
 import dbConnect from '../../../../../lib/mongodb';
 import User from '../../../../../models/User';
 import bcrypt from 'bcryptjs';
-import { toPlainObject } from '../../../../../lib/utils';
 
 export const authOptions = {
   providers: [
@@ -17,15 +16,12 @@ export const authOptions = {
         await dbConnect();
         
         // Find user by email
-        let user = await User.findOne({ email: credentials.email }).select('+password');
+        const user = await User.findOne({ email: credentials.email }).select('+password');
         
         // Check if user exists and password matches
         if (!user || !(await bcrypt.compare(credentials.password, user.password))) {
           throw new Error('Invalid email or password');
         }
-        
-        // Convert Mongoose document to plain object
-        user = toPlainObject(user);
         
         return {
           id: user._id.toString(),

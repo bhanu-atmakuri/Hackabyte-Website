@@ -3,7 +3,6 @@ import { getServerSession } from 'next-auth/next';
 import dbConnect from '../../../../../lib/mongodb';
 import User from '../../../../../models/User';
 import { authOptions } from '../../auth/[...nextauth]/route';
-import { toPlainObject } from '../../../../../lib/utils';
 
 // Get all users (admin only)
 export async function GET(req) {
@@ -34,12 +33,9 @@ export async function GET(req) {
       };
     }
     
-    const rawUsers = await User.find(query)
+    const users = await User.find(query)
       .select('-password -resetPasswordToken -resetPasswordExpire')
       .sort({ createdAt: -1 });
-    
-    // Convert Mongoose documents to plain objects
-    const users = toPlainObject(rawUsers);
     
     return NextResponse.json({
       success: true,
@@ -85,7 +81,7 @@ export async function PUT(req) {
     // Remove fields that shouldn't be updated directly except by admin
     const { password, resetPasswordToken, resetPasswordExpire, ...allowedUpdates } = updateData;
     
-    let user = await User.findByIdAndUpdate(
+    const user = await User.findByIdAndUpdate(
       userId,
       allowedUpdates,
       { new: true, runValidators: true }
@@ -97,9 +93,6 @@ export async function PUT(req) {
         { status: 404 }
       );
     }
-    
-    // Convert to plain object using our utility function
-    user = toPlainObject(user);
     
     return NextResponse.json({
       success: true,
@@ -160,7 +153,7 @@ export async function DELETE(req) {
       );
     }
     
-    let user = await User.findByIdAndDelete(userId);
+    const user = await User.findByIdAndDelete(userId);
     
     if (!user) {
       return NextResponse.json(
@@ -168,9 +161,6 @@ export async function DELETE(req) {
         { status: 404 }
       );
     }
-    
-    // Convert to plain object using our utility function
-    user = toPlainObject(user);
     
     return NextResponse.json({
       success: true,

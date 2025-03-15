@@ -4,7 +4,6 @@ import dbConnect from '../../../../../lib/mongodb';
 import Event from '../../../../../models/Event';
 import EventRegistration from '../../../../../models/EventRegistration';
 import { authOptions } from '../../auth/[...nextauth]/route';
-import { toPlainObject } from '../../../../../lib/utils';
 
 // Get all events with registration stats (admin only)
 export async function GET(req) {
@@ -40,15 +39,11 @@ export async function GET(req) {
         .populate('user', 'name email phoneNumber school age parentName parentPhone parentEmail')
         .sort({ createdAt: -1 });
       
-      // Convert Mongoose documents to plain objects
-      const plainEvent = toPlainObject(event);
-      const plainRegistrations = toPlainObject(registrations);
-      
       return NextResponse.json({
         success: true,
-        event: plainEvent,
-        registrations: plainRegistrations,
-        registrationCount: plainRegistrations.length
+        event,
+        registrations,
+        registrationCount: registrations.length
       });
     }
     
@@ -58,12 +53,8 @@ export async function GET(req) {
     // Get registration counts for each event
     const eventsWithStats = await Promise.all(events.map(async (event) => {
       const registrationCount = await EventRegistration.countDocuments({ event: event._id });
-      
-      // Convert to plain object using our utility function
-      const eventObj = toPlainObject(event);
-        
       return {
-        ...eventObj,
+        ...event.toObject(),
         registrationCount
       };
     }));
@@ -109,7 +100,7 @@ export async function PUT(req) {
       );
     }
     
-    let event = await Event.findByIdAndUpdate(
+    const event = await Event.findByIdAndUpdate(
       eventId,
       updateData,
       { new: true, runValidators: true }
@@ -121,9 +112,6 @@ export async function PUT(req) {
         { status: 404 }
       );
     }
-    
-    // Convert to plain object using our utility function
-    event = toPlainObject(event);
     
     return NextResponse.json({
       success: true,
@@ -180,7 +168,7 @@ export async function DELETE(req) {
     await EventRegistration.deleteMany({ event: eventId });
     
     // Then delete the event
-    let event = await Event.findByIdAndDelete(eventId);
+    const event = await Event.findByIdAndDelete(eventId);
     
     if (!event) {
       return NextResponse.json(
@@ -188,9 +176,6 @@ export async function DELETE(req) {
         { status: 404 }
       );
     }
-    
-    // Convert to plain object using our utility function
-    event = toPlainObject(event);
     
     return NextResponse.json({
       success: true,
