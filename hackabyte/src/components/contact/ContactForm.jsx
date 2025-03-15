@@ -13,6 +13,7 @@
 
 import { useState } from 'react';
 import { motion } from 'framer-motion';
+import { toast } from 'react-toastify';
 
 export default function ContactForm() {
   // Form field state management
@@ -87,58 +88,47 @@ export default function ContactForm() {
 
   /**
    * Form submission handler
-   * Validates form, shows loading state, and simulates API submission
-   * In production, this would connect to a real backend endpoint
+   * Validates form, shows loading state, and submits to API
    * @param {Event} e - Form submission event
    */
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     
     if (validateForm()) {
       // Show loading state while form processes
       setFormStatus('loading');
       
-      // Simulate API delay with timeout (would be a real API call in production)
-      setTimeout(() => {
-        setFormStatus('success');
-        
-        // Reset form after success
-        setFormData({
-          name: '',
-          email: '',
-          subject: '',
-          message: ''
+      try {
+        const response = await fetch('/api/contact', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(formData),
         });
         
-        // Clear success message after 5 seconds
-        setTimeout(() => {
-          setFormStatus(null);
-        }, 5000);
-      }, 1000);
-      
-      // TODO: Replace simulation with actual backend API integration
-      // Production implementation example:
-      /*
-        try {
-          const response = await fetch('/api/contact', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(formData),
-          });
-          
-          if (response.ok) {
-            setFormStatus('success');
-            setFormData({ name: '', email: '', subject: '', message: '' });
+        const result = await response.json();
+        
+          if (result.success) {
+            toast.success('Thanks for reaching out! We\'ll get back to you soon.');
+            
+            // Reset form after success
+            setFormData({
+              name: '',
+              email: '',
+              subject: '',
+              message: ''
+            });
+            
+            setFormStatus(null);
           } else {
-            setFormStatus('error');
+            toast.error(result.message || 'There was an error sending your message. Please try again later.');
+            setFormStatus(null);
           }
-        } catch (error) {
-          setFormStatus('error');
-          console.error('Error submitting form:', error);
-        }
-      */
+      } catch (error) {
+        setFormStatus('error');
+        console.error('Error submitting form:', error);
+      }
     }
   };
 
@@ -293,6 +283,18 @@ export default function ContactForm() {
             'Send Message'
           )}
         </motion.button>
+        
+        <div className="mt-6 p-4 bg-[#26262C] rounded-md border border-gray-700">
+          <div className="flex items-center mb-2">
+            <svg className="h-5 w-5 text-[#FF2247] mr-2" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3864-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286z"></path>
+            </svg>
+            <span className="text-white font-semibold">Need a quicker response?</span>
+          </div>
+          <p className="text-gray-300 mb-2">
+            Join our <a href="https://discord.gg/drXX4sZmbX" target="_blank" rel="noopener noreferrer" className="text-[#FF2247] hover:underline">Discord community</a> for faster support and connect with the Hackabyte team directly.
+          </p>
+        </div>
       </form>
     </motion.div>
   );

@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
-import dbConnect from '@/lib/mongodb';
-import User from '@/models/User';
+import dbConnect from 'lib/mongodb';
+import User from 'models/User';
 import { sendWelcomeEmail } from '@/lib/email';
 
 export async function POST(req) {
@@ -14,11 +14,13 @@ export async function POST(req) {
       password, 
       phoneNumber,
       school,
+      dateOfBirth,
       age,
       parentName,
       parentPhone,
       parentEmail,
-      dietaryRestrictions
+      dietaryRestrictions,
+      discordUsername
     } = body;
     
     // Check if user already exists
@@ -37,10 +39,12 @@ export async function POST(req) {
       password,
       phoneNumber,
       school,
+      dateOfBirth,
       age,
       parentName,
       parentPhone,
       parentEmail,
+      discordUsername,
       dietaryRestrictions
     });
     

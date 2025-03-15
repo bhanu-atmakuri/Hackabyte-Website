@@ -44,6 +44,9 @@ const EventRegistrationSchema = new mongoose.Schema(
     additionalInfo: {
       type: String,
     },
+    dietaryRestrictions: {
+      type: String,
+    },
     status: {
       type: String,
       enum: ['registered', 'confirmed', 'cancelled'],

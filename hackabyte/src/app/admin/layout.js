@@ -9,6 +9,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import Navbar from '@/components/shared/Navbar';
 import Footer from '@/components/shared/Footer';
 import Section from '@/components/shared/Section';
+import SignOutButton from '@/components/shared/SignOutButton';
 import useNoFlash from '@/lib/hooks/useNoFlash';
 
 export default function AdminLayout({ children }) {
@@ -27,18 +28,15 @@ export default function AdminLayout({ children }) {
   
   // Verify admin access
   useEffect(() => {
-    // Check if authenticated
+    // Check if authenticated - redirect to home page
     if (status === 'unauthenticated') {
-      router.push('/auth');
+      router.push('/');
       return;
     }
     
-    // Check if user is admin
+    // Check if user is admin - redirect immediately to home page
     if (status === 'authenticated' && session?.user?.role !== 'admin') {
-      toast.error('Access denied. Admin privileges required.');
-      setTimeout(() => {
-        router.push('/');
-      }, 2000);
+      router.push('/');
     }
   }, [status, session, router]);
   
@@ -56,22 +54,16 @@ export default function AdminLayout({ children }) {
     );
   }
   
-  // If not admin, show nothing (will redirect)
+  // If not admin, just return null while redirecting
   if (status === 'authenticated' && session?.user?.role !== 'admin') {
-    return (
-      <div className="min-h-screen bg-[#1A1A1E] flex items-center justify-center">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold text-white mb-4">Access Denied</h1>
-          <p className="text-gray-300 mb-6">You don't have permission to access this area.</p>
-          <p className="text-gray-300">Redirecting...</p>
-        </div>
-      </div>
-    );
+    return null; // No UI shown during redirect
   }
 
   // Determine which admin navigation item is active
   const isUsersActive = pathname.includes('/admin/users');
-  const isEventsActive = pathname.includes('/admin/events') || pathname === '/admin';
+  const isEventsActive = pathname.includes('/admin/events');
+  const isMessagesActive = pathname.includes('/admin/messages');
+  const isProfileActive = pathname.includes('/admin/profile') || pathname === '/admin' || pathname.includes('/admin/security');
 
   return (
     <main className="min-h-screen bg-[#1A1A1E]">
@@ -82,11 +74,22 @@ export default function AdminLayout({ children }) {
         <div className="py-8">
           <div className="flex justify-between items-center mb-8">
             <h1 className="text-4xl font-bold text-white">Admin Dashboard</h1>
+            <SignOutButton />
           </div>
           
           {/* Admin Navigation */}
           <div className="mb-8 border-b border-gray-800">
             <div className="flex space-x-6">
+              <a
+                href="/admin/profile"
+                className={`pb-4 px-2 text-lg font-medium border-b-2 ${
+                  isProfileActive
+                    ? 'text-[#FF2247] border-[#FF2247]'
+                    : 'text-gray-400 border-transparent hover:text-white'
+                } transition-colors`}
+              >
+                Profile
+              </a>
               <a
                 href="/admin/events"
                 className={`pb-4 px-2 text-lg font-medium border-b-2 ${
@@ -106,6 +109,16 @@ export default function AdminLayout({ children }) {
                 } transition-colors`}
               >
                 Users
+              </a>
+              <a
+                href="/admin/messages"
+                className={`pb-4 px-2 text-lg font-medium border-b-2 ${
+                  isMessagesActive
+                    ? 'text-[#FF2247] border-[#FF2247]'
+                    : 'text-gray-400 border-transparent hover:text-white'
+                } transition-colors`}
+              >
+                Messages
               </a>
             </div>
           </div>

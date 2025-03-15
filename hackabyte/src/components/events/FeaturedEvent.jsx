@@ -13,36 +13,140 @@
 
 'use client';
 
-import { useRef } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { motion, useInView } from 'framer-motion';
 import Link from 'next/link';
 import Container from '../shared/Container';
 
 export default function FeaturedEvent() {
+  // State for the featured event data
+  const [featuredEvent, setFeaturedEvent] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  
   // Reference for scroll-triggered animations
   const ref = useRef(null);
   // Detect when section enters viewport (20% visibility triggers animation)
   const isInView = useInView(ref, { once: true, amount: 0.2 });
 
-  /**
-   * Featured event data structure
-   * Contains all information about the showcase event
-   */
-  const featuredEvent = {
-    title: "National Coding Championship 2025",
-    date: "May 15-17, 2025",
-    location: "Tech Innovation Center, San Francisco",
-    image: "/api/placeholder/800/400",
-    description: "Our flagship event brings together the top young coders from across the country for an epic three-day hackathon. With challenges designed for all skill levels and age groups, this championship celebrates creativity, collaboration, and code.",
-    highlights: [
-      "Over $10,000 in prizes and scholarships",
-      "Mentorship from industry leaders",
-      "Beginner to advanced tracks for all age groups",
-      "Networking opportunities with tech companies",
-      "Special keynote from renowned tech innovators"
-    ],
-    registrationLink: "/events#registration"
-  };
+  // Fetch the featured event from the API
+  useEffect(() => {
+    async function fetchFeaturedEvent() {
+      try {
+        const response = await fetch('/api/events?status=upcoming');
+        const data = await response.json();
+        
+        if (data.success && data.events && data.events.length > 0) {
+          // Find the Spring Hackathon - WA event
+          const springWaEvent = data.events.find(event => 
+            event.name && event.name.includes('Spring Hackathon') && 
+            event.state && event.state.includes('Washington')
+          );
+          
+          // If found, set as featured, otherwise use first event
+          if (springWaEvent) {
+            console.log('Spring WA Event found:', springWaEvent);
+            setFeaturedEvent({
+              id: springWaEvent._id, // Store the ID separately
+              title: springWaEvent.name,
+              date: formatDateRange(springWaEvent.startDate, springWaEvent.endDate),
+              location: springWaEvent.location,
+              image: springWaEvent.image || "/api/placeholder/800/400",
+              description: springWaEvent.description,
+              highlights: [
+                "Mentorship from industry leaders",
+                "Beginner to advanced tracks for all age groups",
+                "Networking opportunities with tech companies",
+                "Special workshop sessions on emerging technologies",
+                "Exciting prizes for top projects"
+              ],
+              registrationLink: springWaEvent._id ? `/events/${springWaEvent._id}/register` : "/events"
+            });
+          } else {
+            // Fallback to first event if Washington event not found
+            const firstEvent = data.events[0];
+            console.log('Using first event:', firstEvent);
+            setFeaturedEvent({
+              id: firstEvent._id, // Store the ID separately
+              title: firstEvent.name,
+              date: formatDateRange(firstEvent.startDate, firstEvent.endDate),
+              location: firstEvent.location,
+              image: firstEvent.image || "/api/placeholder/800/400",
+              description: firstEvent.description,
+              highlights: [
+                "Mentorship from industry leaders",
+                "Beginner to advanced tracks for all age groups",
+                "Networking opportunities with tech companies",
+                "Special workshop sessions on emerging technologies",
+                "Exciting prizes for top projects"
+              ],
+              registrationLink: firstEvent._id ? `/events/${firstEvent._id}/register` : "/events"
+            });
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching featured event:', error);
+        // Fallback to static data if API fails
+        setFeaturedEvent({
+          title: "Spring Hackathon - WA",
+          date: "March 29-30, 2025",
+          location: "DigiPen Institute of Technology, Redmond",
+          image: "/api/placeholder/800/400",
+          description: "Our Spring Hackathon in Washington will be held at DigiPen Institute of Technology. Collaborate with peers and build innovative projects in this intensive weekend event.",
+          highlights: [
+            "Mentorship from industry leaders",
+            "Beginner to advanced tracks for all age groups",
+            "Networking opportunities with tech companies",
+            "Special workshop sessions on emerging technologies",
+            "Exciting prizes for top projects"
+          ],
+          registrationLink: "/events#registration"
+        });
+      } finally {
+        setIsLoading(false);
+      }
+    }
+    
+    fetchFeaturedEvent();
+  }, []);
+  
+  // Helper function to format date range
+  function formatDateRange(startDate, endDate) {
+    if (!startDate || !endDate) return "";
+    
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+    const options = { month: 'long', day: 'numeric', year: 'numeric' };
+    
+    if (start.getMonth() === end.getMonth() && start.getFullYear() === end.getFullYear()) {
+      return `${start.toLocaleDateString('en-US', { month: 'long' })} ${start.getDate()}-${end.getDate()}, ${start.getFullYear()}`;
+    } else {
+      return `${start.toLocaleDateString('en-US', options)} - ${end.toLocaleDateString('en-US', options)}`;
+    }
+  }
+  
+  // Show loading state
+  if (isLoading) {
+    return (
+      <section className="py-20 bg-[#16161A]" ref={ref}>
+        <Container>
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-[#FF2247]">
+              Featured Event
+            </h2>
+            <div className="animate-pulse bg-gray-700 h-6 w-64 mx-auto rounded"></div>
+          </div>
+          <div className="bg-[#1A1A1E] rounded-xl overflow-hidden border border-gray-800 animate-pulse">
+            <div className="h-96"></div>
+          </div>
+        </Container>
+      </section>
+    );
+  }
+  
+  // Return null if there's no featured event
+  if (!featuredEvent) {
+    return null;
+  }
 
   // Animation variants for the featured event card
   const featureAnimation = {

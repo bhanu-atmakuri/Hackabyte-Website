@@ -12,13 +12,12 @@
 
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { useForm } from 'react-hook-form';
 import { signIn } from 'next-auth/react';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { toast } from 'react-toastify';
 import Container from '../shared/Container';
 
 export default function AuthForm() {
@@ -29,8 +28,31 @@ export default function AuthForm() {
   const [isLoading, setIsLoading] = useState(false);
   
   // React Hook Form setup
-  const { register, handleSubmit, watch, reset, formState: { errors } } = useForm();
+  const { register, handleSubmit, watch, reset, setValue, formState: { errors } } = useForm();
   const password = watch('password', '');
+  const dateOfBirth = watch('dateOfBirth', '');
+  
+  // State to track calculated age
+  const [calculatedAge, setCalculatedAge] = useState(null);
+  const [isOver18, setIsOver18] = useState(false);
+  
+  // Calculate age based on date of birth
+  useEffect(() => {
+    if (dateOfBirth) {
+      const today = new Date();
+      const birthDate = new Date(dateOfBirth);
+      let age = today.getFullYear() - birthDate.getFullYear();
+      const monthDiff = today.getMonth() - birthDate.getMonth();
+      
+      // If birthday hasn't occurred yet this year, subtract one year
+      if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+        age--;
+      }
+      
+      setCalculatedAge(age);
+      setIsOver18(age >= 18);
+    }
+  }, [dateOfBirth]);
   
   /**
    * Handle registration form submission
@@ -40,29 +62,51 @@ export default function AuthForm() {
     try {
       setIsLoading(true);
       
+      // Prepare registration data
+      const registrationData = {
+        name: data.name,
+        email: data.email,
+        password: data.password,
+        phoneNumber: data.phoneNumber,
+        school: data.school,
+        dateOfBirth: data.dateOfBirth,
+        discordUsername: data.discordUsername,
+        age: calculatedAge > 19 ? 19 : calculatedAge  // Cap age at 19 for database constraint
+      };
+      
+      // Include parent info (with default values if user is 18 or older)
+      if (calculatedAge < 18) {
+        registrationData.parentName = data.parentName;
+        registrationData.parentPhone = data.parentPhone;
+        registrationData.parentEmail = data.parentEmail;
+      } else {
+        // Default values for users 18 and older
+        registrationData.parentName = "N/A";
+        registrationData.parentPhone = "N/A";
+        registrationData.parentEmail = "N/A@notapplicable.com"; // Valid email format for validation
+      }
+      
       const response = await fetch('/api/auth/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          name: data.name,
-          email: data.email,
-          password: data.password,
-          phoneNumber: data.phoneNumber,
-          school: data.school,
-          age: parseInt(data.age),
-          parentName: data.parentName,
-          parentPhone: data.parentPhone,
-          parentEmail: data.parentEmail,
-          dietaryRestrictions: data.dietaryRestrictions
-        }),
+        body: JSON.stringify(registrationData),
       });
       
       const result = await response.json();
       
       if (!response.ok) {
-        throw new Error(result.message || 'Registration failed');
+        // Handle validation errors specifically
+        if (result.errors && Array.isArray(result.errors)) {
+          // Display each validation error as a separate toast
+          result.errors.forEach(error => toast.error(error));
+          // Don't throw error after showing validation messages
+          setIsLoading(false);
+          return; // Exit function without throwing error
+        } else {
+          throw new Error(result.message || 'Registration failed');
+        }
       }
       
       // Show success message
@@ -98,10 +142,21 @@ export default function AuthForm() {
         throw new Error(result.error || 'Invalid email or password');
       }
       
-      // Redirect to dashboard or home page on successful login
+      // Fetch user data to determine role-based redirection
+      const userResponse = await fetch('/api/user');
+      const userData = await userResponse.json();
+      
+      if (!userData.success) {
+        throw new Error('Could not retrieve user information');
+      }
+      
+      // Determine redirect path based on user role
+      const redirectPath = userData.user.role === 'admin' ? '/admin' : '/dashboard';
+      
+      // Redirect based on user role
       toast.success('Login successful! Redirecting...');
       setTimeout(() => {
-        router.push('/dashboard');
+        router.push(redirectPath);
         router.refresh();
       }, 1500);
       
@@ -165,8 +220,6 @@ export default function AuthForm() {
 
   return (
     <Container size="half">
-      <ToastContainer position="top-right" autoClose={5000} theme="dark" />
-      
       <div className="bg-[#16161A] rounded-xl shadow-xl overflow-hidden border border-gray-800">
         <div className="p-8">
           {/* Authentication mode toggle tabs */}
@@ -355,26 +408,65 @@ export default function AuthForm() {
                     )}
                   </div>
 
-                  {/* Age */}
+                  {/* Date of Birth */}
                   <div className="mb-4">
-                    <label htmlFor="age" className="block text-gray-300 text-sm font-medium mb-2">
-                      Age
+                    <label htmlFor="dateOfBirth" className="block text-gray-300 text-sm font-medium mb-2">
+                      Date of Birth
                     </label>
-                    <select
-                      id="age"
-                      {...register('age', { 
-                        required: 'Age is required'
+                    <input
+                      type="date"
+                      id="dateOfBirth"
+                      max={new Date().toISOString().split('T')[0]} // Prevent future dates
+                      min="1900-01-01" // Set minimum date to allow older ages
+                      {...register('dateOfBirth', { 
+                        required: 'Date of birth is required',
+                        validate: value => {
+                          // Check if date is in the past
+                          const selected = new Date(value);
+                          return selected < new Date() || 'Date must be in the past';
+                        }
                       })}
                       className="bg-[#1A1A1E] border border-gray-700 text-white rounded-lg p-3 w-full focus:ring-[#FF2247] focus:border-[#FF2247]"
-                    >
-                      <option value="">Select your age</option>
-                      {[13, 14, 15, 16, 17, 18, 19].map(age => (
-                        <option key={age} value={age}>{age}</option>
-                      ))}
-                    </select>
-                    {errors.age && (
-                      <p className="text-red-500 text-xs mt-1">{errors.age.message}</p>
+                      style={{ colorScheme: 'dark' }}
+                    />
+                    {errors.dateOfBirth && (
+                      <p className="text-red-500 text-xs mt-1">{errors.dateOfBirth.message}</p>
                     )}
+                    {calculatedAge !== null && (
+                      <p className="text-gray-400 text-xs mt-1">
+                        Age: {calculatedAge} years old
+                        {calculatedAge < 18 && (
+                          <span className="text-[#FF2247] ml-2">
+                            (Parent/Guardian information required below)
+                          </span>
+                        )}
+                      </p>
+                    )}
+                  </div>
+
+                  {/* Discord Username */}
+                  <div className="mb-4">
+                    <label htmlFor="discordUsername" className="block text-gray-300 text-sm font-medium mb-2">
+                      Discord Username
+                    </label>
+                    <input
+                      type="text"
+                      id="discordUsername"
+                      {...register('discordUsername')}
+                      className="bg-[#1A1A1E] border border-gray-700 text-white rounded-lg p-3 w-full focus:ring-[#FF2247] focus:border-[#FF2247]"
+                      placeholder="username#0000"
+                    />
+                    <div className="flex items-center mt-2">
+                      <svg className="h-4 w-4 text-[#FF2247] mr-2" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3864-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286z"></path>
+                      </svg>
+                      <a href="https://discord.gg/drXX4sZmbX" target="_blank" rel="noopener noreferrer" className="text-[#FF2247] text-xs hover:underline">
+                        Join our Discord server
+                      </a>
+                    </div>
+                    <p className="text-gray-400 text-xs mt-1">
+                      We use Discord for event communication and hackathon updates
+                    </p>
                   </div>
 
                   {/* Phone Number */}
@@ -392,9 +484,12 @@ export default function AuthForm() {
                   </div>
                 </div>
 
-                {/* Parent/Guardian Section */}
-                <div className="mb-6 pb-4 border-b border-gray-800">
+                {/* Parent/Guardian Section - always there but conditionally shown */}
+                <div className={`mb-6 pb-4 border-b border-gray-800 ${calculatedAge !== null && calculatedAge < 18 ? '' : 'hidden'}`}>
                   <h3 className="text-white text-lg font-medium mb-4">Parent/Guardian Information</h3>
+                  <p className="text-gray-400 text-sm mb-4">
+                    Since you are under 18, we need parent/guardian information
+                  </p>
 
                   {/* Parent Name */}
                   <div className="mb-4">
@@ -405,7 +500,7 @@ export default function AuthForm() {
                       type="text"
                       id="parentName"
                       {...register('parentName', { 
-                        required: 'Parent/Guardian name is required' 
+                        required: calculatedAge < 18 ? 'Parent/Guardian name is required' : false
                       })}
                       className="bg-[#1A1A1E] border border-gray-700 text-white rounded-lg p-3 w-full focus:ring-[#FF2247] focus:border-[#FF2247]"
                       placeholder="Parent/Guardian name"
@@ -424,7 +519,7 @@ export default function AuthForm() {
                       type="tel"
                       id="parentPhone"
                       {...register('parentPhone', { 
-                        required: 'Parent/Guardian phone is required' 
+                        required: calculatedAge < 18 ? 'Parent/Guardian phone is required' : false
                       })}
                       className="bg-[#1A1A1E] border border-gray-700 text-white rounded-lg p-3 w-full focus:ring-[#FF2247] focus:border-[#FF2247]"
                       placeholder="(123) 456-7890"
@@ -443,7 +538,7 @@ export default function AuthForm() {
                       type="email"
                       id="parentEmail"
                       {...register('parentEmail', { 
-                        required: 'Parent/Guardian email is required',
+                        required: calculatedAge < 18 ? 'Parent/Guardian email is required' : false,
                         pattern: {
                           value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
                           message: 'Invalid email address'
@@ -458,24 +553,7 @@ export default function AuthForm() {
                   </div>
                 </div>
 
-                {/* Additional Info Section */}
-                <div className="mb-6 pb-4 border-b border-gray-800">
-                  <h3 className="text-white text-lg font-medium mb-4">Additional Information</h3>
-
-                  {/* Dietary Restrictions */}
-                  <div className="mb-4">
-                    <label htmlFor="dietaryRestrictions" className="block text-gray-300 text-sm font-medium mb-2">
-                      Dietary Restrictions (optional)
-                    </label>
-                    <textarea
-                      id="dietaryRestrictions"
-                      {...register('dietaryRestrictions')}
-                      className="bg-[#1A1A1E] border border-gray-700 text-white rounded-lg p-3 w-full focus:ring-[#FF2247] focus:border-[#FF2247]"
-                      placeholder="Please specify any dietary restrictions or allergies"
-                      rows="3"
-                    ></textarea>
-                  </div>
-                </div>
+                {/* There used to be an Additional Info section here, but dietary restrictions have been moved to event registration */}
 
                 {/* Password Section */}
                 <div className="mb-6">

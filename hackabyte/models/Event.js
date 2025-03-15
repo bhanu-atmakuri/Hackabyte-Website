@@ -34,6 +34,28 @@ const EventSchema = new mongoose.Schema(
     registrationDeadline: {
       type: Date,
     },
+    // Added fields from static events
+    state: {
+      type: String,
+      trim: true,
+    },
+    ageGroups: {
+      type: [String],
+      default: [],
+    },
+    image: {
+      type: String,
+      default: '/api/placeholder/600/400',
+    },
+    eventType: {
+      type: String,
+      default: 'Hackathon',
+    },
+    competitionLevel: {
+      type: String,
+      enum: ['National', 'State', 'Regional'],
+      default: 'State',
+    },
     prizes: [
       {
         name: String,

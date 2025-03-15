@@ -13,10 +13,9 @@
 
 'use client';
 
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { motion, useInView } from 'framer-motion';
 import Link from 'next/link';
-import { upcomingEvents, availableStates, competitionLevels } from '@/lib/data/upcomingEvents';
 import Container from '../shared/Container';
 
 export default function UpcomingEventsList() {
@@ -25,26 +24,65 @@ export default function UpcomingEventsList() {
   // Detect when section enters viewport (20% visibility triggers animation)
   const isInView = useInView(ref, { once: true, amount: 0.2 });
   
+  // Events data states
+  const [events, setEvents] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [availableStates, setAvailableStates] = useState(['All States']);
+  const [competitionLevels, setCompetitionLevels] = useState(['All Levels']);
+  
   // Filter state variables
   const [activeFilter, setActiveFilter] = useState('All Events'); // Age group filter
   const [selectedCountry, setSelectedCountry] = useState('United States'); // Country filter (currently single option)
   const [selectedState, setSelectedState] = useState('All States'); // State filter
   const [competitionLevel, setCompetitionLevel] = useState('All Levels'); // Competition level filter
+  
+  // Fetch events from API
+  useEffect(() => {
+    async function fetchEvents() {
+      try {
+        setIsLoading(true);
+        const response = await fetch('/api/events?status=upcoming');
+        const data = await response.json();
+        
+        if (data.success && data.events) {
+          setEvents(data.events);
+          
+          // Extract available states from events
+          const states = ['All States', ...new Set(data.events
+            .map(event => event.state)
+            .filter(Boolean))];
+          setAvailableStates(states);
+          
+          // Extract competition levels from events
+          const levels = ['All Levels', ...new Set(data.events
+            .map(event => event.competitionLevel)
+            .filter(Boolean))];
+          setCompetitionLevels(levels);
+        }
+      } catch (error) {
+        console.error('Error fetching events:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+    
+    fetchEvents();
+  }, []);
 
   /**
    * Event filtering logic
    * Filters events based on multiple criteria: age group, state, and competition level
    */
-  const filteredEvents = upcomingEvents.filter(event => {
+  const filteredEvents = events.filter(event => {
     // Filter by age group if not "All Events"
     const ageGroupMatch = 
       activeFilter === 'All Events' || 
-      event.ageGroups.includes(activeFilter);
+      (event.ageGroups && event.ageGroups.includes(activeFilter));
     
     // Filter by state
     const stateMatch = 
       selectedState === 'All States' || 
-      event.state === selectedState;
+      (event.state && event.state === selectedState);
     
     // Filter by competition level
     const levelMatch =
@@ -53,12 +91,62 @@ export default function UpcomingEventsList() {
     
     return ageGroupMatch && stateMatch && levelMatch;
   });
+  
+  // Helper function to format date range
+  const formatDateRange = (startDate, endDate) => {
+    if (!startDate || !endDate) return "";
+    
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+    const options = { month: 'long', day: 'numeric', year: 'numeric' };
+    
+    if (start.getMonth() === end.getMonth() && start.getFullYear() === end.getFullYear()) {
+      return `${start.toLocaleDateString('en-US', { month: 'long' })} ${start.getDate()}-${end.getDate()}, ${start.getFullYear()}`;
+    } else {
+      return `${start.toLocaleDateString('en-US', options)} - ${end.toLocaleDateString('en-US', options)}`;
+    }
+  };
 
   // Animation variants for event cards
   const cardVariants = {
     hidden: { opacity: 0, y: 50 },
     visible: { opacity: 1, y: 0, transition: { duration: 0.5 } }
   };
+  
+  // Loading state
+  if (isLoading) {
+    return (
+      <section className="py-16 md:py-20 bg-[#1A1A1E]" id="upcoming" ref={ref}>
+        <Container size="wide">
+          <div className="text-center mb-10 md:mb-16 px-4 sm:px-0">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-[#FF2247]">
+              Upcoming Events
+            </h2>
+            <div className="animate-pulse bg-gray-700 h-6 w-96 mx-auto rounded mb-4"></div>
+          </div>
+          
+          <div className="bg-[#16161A] p-6 rounded-xl border border-gray-800 mb-6 mx-4 sm:mx-0 animate-pulse">
+            <div className="h-16"></div>
+          </div>
+          
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 px-4 sm:px-0">
+            {[1, 2, 3].map(i => (
+              <div key={i} className="bg-[#16161A] rounded-xl shadow-lg overflow-hidden border border-gray-800 animate-pulse">
+                <div className="h-48 bg-gray-800"></div>
+                <div className="p-6">
+                  <div className="h-6 bg-gray-700 rounded w-3/4 mb-4"></div>
+                  <div className="h-4 bg-gray-700 rounded w-1/2 mb-2"></div>
+                  <div className="h-4 bg-gray-700 rounded w-2/3 mb-4"></div>
+                  <div className="h-24 bg-gray-700 rounded w-full mb-4"></div>
+                  <div className="h-10 bg-gray-700 rounded w-full"></div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </Container>
+      </section>
+    );
+  }
 
   return (
     <section className="py-16 md:py-20 bg-[#1A1A1E]" id="upcoming" ref={ref}>
@@ -186,16 +274,16 @@ export default function UpcomingEventsList() {
                   <div 
                     className="absolute inset-0 transition-transform duration-500 hover:scale-110"
                     style={{
-                      backgroundImage: `url(${event.image})`,
+                      backgroundImage: `url(${event.image || '/api/placeholder/600/400'})`,
                       backgroundSize: 'cover',
                       backgroundPosition: 'center'
                     }}
-                    aria-label={event.title}
+                    aria-label={event.name}
                   ></div>
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
                   <div className="absolute bottom-0 left-0 right-0 p-4">
                     <div className="flex flex-wrap gap-2 mb-2">
-                      {event.ageGroups.map((group, idx) => (
+                      {event.ageGroups && event.ageGroups.map((group, idx) => (
                         <span 
                           key={idx} 
                           className={`px-2 py-1 text-xs font-semibold rounded-full text-white ${
@@ -209,28 +297,30 @@ export default function UpcomingEventsList() {
                           {group}
                         </span>
                       ))}
-                      <span className="px-2 py-1 text-xs font-semibold rounded-full text-white bg-[#444444]">
-                        {event.competitionLevel}
-                      </span>
+                      {event.competitionLevel && (
+                        <span className="px-2 py-1 text-xs font-semibold rounded-full text-white bg-[#444444]">
+                          {event.competitionLevel}
+                        </span>
+                      )}
                     </div>
-                    <h3 className="text-xl font-bold text-white">{event.title}</h3>
+                    <h3 className="text-xl font-bold text-white">{event.name}</h3>
                   </div>
                 </div>
                 
                 {/* Event details section */}
                 <div className="p-4 sm:p-6 flex flex-col flex-grow">
-                  <div className="flex items-center text-gray-400 mb-3 sm:mb-4">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 mr-2">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
-                    </svg>
-                    {event.date}
+                <div className="flex items-center text-gray-400 mb-3 sm:mb-4">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 mr-2">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
+                  </svg>
+                  {formatDateRange(event.startDate, event.endDate)}
                   </div>
-                  <div className="flex items-start text-gray-400 mb-3 sm:mb-4">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 mr-2 mt-0.5">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
-                    </svg>
-                    <span>{event.location} <span className="text-sm text-gray-500">({event.state})</span></span>
+                <div className="flex items-start text-gray-400 mb-3 sm:mb-4">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 mr-2 mt-0.5">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
+                  </svg>
+                  <span>{event.location} {event.state && <span className="text-sm text-gray-500">({event.state})</span>}</span>
                   </div>
                   
                   <p className="text-gray-300 mb-4 sm:mb-6">{event.description}</p>
@@ -240,7 +330,7 @@ export default function UpcomingEventsList() {
                     whileTap={{ scale: 0.95 }}
                     className="mt-auto pt-3 sm:pt-6"
                   >
-                    <Link href="#registration" className="btn-primary w-full block text-center">
+                    <Link href={`/events/${event._id}/register`} className="btn-primary w-full block text-center">
                       Sign Up Now
                     </Link>
                   </motion.div>

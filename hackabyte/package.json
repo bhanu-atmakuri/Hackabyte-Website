@@ -7,11 +7,13 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "create-admin": "node scripts/create-admin.js"
   },
   "dependencies": {
     "@sendgrid/mail": "^8.1.4",
     "bcryptjs": "^3.0.2",
+    "dotenv": "^16.4.7",
     "framer-motion": "^10.18.0",
     "mongoose": "^8.12.1",
     "next": "15.2.1",

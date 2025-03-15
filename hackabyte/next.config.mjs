@@ -1,14 +1,17 @@
 /** @type {import('next').NextConfig} */
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 const nextConfig = {
-  // Force static HTML export for Vercel deployment
-  output: 'export',
+  // Enable server-side API routes for NextAuth
+  // output: 'export', // <-- Removed static export which breaks API routes
   
-  // Specify output directory
-  distDir: 'out',
-  
-  // Required for static export with images
+  // Images configuration
   images: {
-    unoptimized: true
+    domains: ['localhost'],
   },
   
   // Ensure consistent URL handling
@@ -16,6 +19,17 @@ const nextConfig = {
   
   // Ensures proper handling of rewrites and redirects for Vercel
   poweredByHeader: false,
+  
+  // Add webpack configuration to handle module resolution
+  webpack: (config) => {
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      '@': path.resolve(__dirname, './src'),
+      'lib': path.resolve(__dirname, './lib'),
+      'models': path.resolve(__dirname, './models')
+    };
+    return config;
+  }
 };
 
 export default nextConfig;
