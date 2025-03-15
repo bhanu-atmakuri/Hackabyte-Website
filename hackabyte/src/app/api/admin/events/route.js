@@ -1,8 +1,8 @@
 import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth/next';
-import dbConnect from '../../../../../lib/mongodb';
-import Event from '../../../../../models/Event';
-import EventRegistration from '../../../../../models/EventRegistration';
+import dbConnect from '@/lib/mongodb';
+import Event from '@/models/Event';
+import EventRegistration from '@/models/EventRegistration';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 
 // Get all events with registration stats (admin only)

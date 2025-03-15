@@ -1,11 +1,11 @@
 import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth/next';
-import dbConnect from '../../../../../lib/mongodb';
-import User from '../../../../../models/User';
-import Event from '../../../../../models/Event';
-import EventRegistration from '../../../../../models/EventRegistration';
-import { authOptions } from '../../auth/[...nextauth]/route';
-import { sendEventRegistrationEmail } from '../../../../../lib/email';
+import dbConnect from '@/lib/mongodb';
+import User from '@/models/User';
+import Event from '@/models/Event';
+import EventRegistration from '@/models/EventRegistration';
+import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import { sendEventRegistrationEmail } from '@/lib/email';
 
 // Register for an event
 export async function POST(req) {
