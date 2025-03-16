@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth/next';
-import { hash, compare } from 'bcrypt';
+import { hash, compare } from 'bcryptjs';
 import dbConnect from '@/lib/mongodb';
 import User from '@/models/User';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
