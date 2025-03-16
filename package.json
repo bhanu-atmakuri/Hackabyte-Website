@@ -2,11 +2,7 @@
   "name": "hackabyte-website-root",
   "version": "1.0.0",
   "private": true,
-  "engines": {
-    "node": ">=16.0.0"
-  },
   "scripts": {
-    "vercel-build": "cd hackabyte && npm run build",
     "build": "cd hackabyte && npm run build",
     "start": "cd hackabyte && npm start",
     "dev": "cd hackabyte && npm run dev"
