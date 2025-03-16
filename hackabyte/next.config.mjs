@@ -6,12 +6,19 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const nextConfig = {
-  // Enable server-side API routes for NextAuth
-  // output: 'export', // <-- Removed static export which breaks API routes
+  // Next.js server components and API routes setup
+  // Vercel will automatically use the correct output mode
   
   // Images configuration
   images: {
     domains: ['localhost'],
+    // Add Vercel domains for image optimization
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: '*.vercel.app',
+      },
+    ],
   },
   
   // Ensure consistent URL handling
@@ -29,7 +36,12 @@ const nextConfig = {
       'models': path.resolve(__dirname, './models')
     };
     return config;
-  }
+  },
+  
+  // Add environment variables that should be exposed to the browser
+  env: {
+    NEXT_PUBLIC_VERCEL_URL: process.env.VERCEL_URL,
+  },
 };
 
 export default nextConfig;

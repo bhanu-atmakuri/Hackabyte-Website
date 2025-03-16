@@ -1,8 +1,5 @@
 {
-  "routes": [
-    { "handle": "filesystem" },
-    { "src": "/(.*)", "dest": "/" }
-  ],
+  "framework": "nextjs",
   "buildCommand": "next build",
-  "outputDirectory": "out"
+  "regions": ["all"]
 }
