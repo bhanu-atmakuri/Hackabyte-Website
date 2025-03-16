@@ -10,7 +10,7 @@ const nextConfig = {
   },
   
   // Ensure consistent URL handling
-  trailingSlash: true,
+  trailingSlash: false,
   
   // Ensures proper handling of rewrites and redirects for Vercel
   poweredByHeader: false,
