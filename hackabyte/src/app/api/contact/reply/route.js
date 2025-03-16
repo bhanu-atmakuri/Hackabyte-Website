@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 import { NextResponse } from 'next/server';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import { getServerSession } from 'next-auth/next';
-import { sendEmail } from '@/lib/email';
+import { sendEmail } from '@/src/lib/email';
 
 /**
  * POST /api/contact/reply
