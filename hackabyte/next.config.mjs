@@ -44,4 +44,8 @@ const nextConfig = {
   },
 };
 
-export default nextConfig;
+// Export with both default and .default property for Vercel compatibility
+const config = nextConfig;
+config.default = nextConfig;
+
+export default config;
