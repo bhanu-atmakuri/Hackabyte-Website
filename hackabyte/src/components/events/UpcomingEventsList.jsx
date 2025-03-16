@@ -18,6 +18,46 @@ import { motion, useInView } from 'framer-motion';
 import Link from 'next/link';
 import Container from '../shared/Container';
 
+// Fallback data in case API fails
+const FALLBACK_EVENTS = [
+  {
+    _id: 'fallback-1',
+    name: 'Spring Hackathon 2025 - WA',
+    startDate: '2025-03-29T00:00:00.000Z',
+    endDate: '2025-03-30T00:00:00.000Z',
+    location: 'DigiPen Institute of Technology, Redmond',
+    state: 'Washington',
+    description: 'Join us for an exciting weekend of coding, learning, and networking at our Spring Hackathon in Redmond, WA.',
+    image: '/api/placeholder/800/400',
+    ageGroups: ['High School', 'Middle School'],
+    competitionLevel: 'Beginner-Friendly'
+  },
+  {
+    _id: 'fallback-2',
+    name: 'Summer Code Camp - CA',
+    startDate: '2025-07-15T00:00:00.000Z',
+    endDate: '2025-07-20T00:00:00.000Z',
+    location: 'UC Berkeley Campus, Berkeley',
+    state: 'California',
+    description: 'A week-long immersive coding experience for students of all skill levels, featuring workshops and hands-on projects.',
+    image: '/api/placeholder/800/400',
+    ageGroups: ['High School'],
+    competitionLevel: 'Intermediate'
+  },
+  {
+    _id: 'fallback-3',
+    name: 'Fall Hackathon 2025 - NY',
+    startDate: '2025-10-10T00:00:00.000Z',
+    endDate: '2025-10-12T00:00:00.000Z',
+    location: 'NYU Tandon School of Engineering, Brooklyn',
+    state: 'New York',
+    description: 'Experience the energy of NYC while participating in our Fall Hackathon, featuring challenges from leading tech companies.',
+    image: '/api/placeholder/800/400',
+    ageGroups: ['High School', 'College'],
+    competitionLevel: 'Advanced'
+  }
+];
+
 export default function UpcomingEventsList() {
   // Reference for scroll-triggered animations
   const ref = useRef(null);
@@ -38,35 +78,108 @@ export default function UpcomingEventsList() {
   
   // Fetch events from API
   useEffect(() => {
+    let isMounted = true;
+    
     async function fetchEvents() {
       try {
         setIsLoading(true);
-        const response = await fetch('/api/events?status=upcoming');
+        
+        // Get the base URL dynamically
+        const baseUrl = typeof window !== 'undefined' 
+          ? `${window.location.protocol}//${window.location.host}`
+          : '';
+          
+        // Try using the absolute URL with dynamic origin
+        const apiUrl = `${baseUrl}/api/events?status=upcoming`;
+        
+        console.log('Fetching events list from:', apiUrl);
+        
+        // Use a Promise race to enforce a timeout
+        const timeoutPromise = new Promise((_, reject) => 
+          setTimeout(() => reject(new Error('Request timeout')), 5000)
+        );
+        
+        const fetchPromise = fetch(apiUrl, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+          },
+          cache: 'no-store',
+        });
+        
+        const response = await Promise.race([fetchPromise, timeoutPromise]);
+        
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        
         const data = await response.json();
         
-        if (data.success && data.events) {
-          setEvents(data.events);
+        if (isMounted) {
+          if (data.success && data.events && data.events.length > 0) {
+            console.log('API data received:', data.events.length, 'events');
+            setEvents(data.events);
+            
+            // Extract available states from events
+            const states = ['All States', ...new Set(data.events
+              .map(event => event.state)
+              .filter(Boolean))];
+            setAvailableStates(states);
+            
+            // Extract competition levels from events
+            const levels = ['All Levels', ...new Set(data.events
+              .map(event => event.competitionLevel)
+              .filter(Boolean))];
+            setCompetitionLevels(levels);
+          } else {
+            console.log('No events from API, using fallback');
+            setEvents(FALLBACK_EVENTS);
+            
+            // Extract states from fallback data
+            const states = ['All States', ...new Set(FALLBACK_EVENTS
+              .map(event => event.state)
+              .filter(Boolean))];
+            setAvailableStates(states);
+            
+            // Extract competition levels from fallback data
+            const levels = ['All Levels', ...new Set(FALLBACK_EVENTS
+              .map(event => event.competitionLevel)
+              .filter(Boolean))];
+            setCompetitionLevels(levels);
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching events:', error);
+        if (isMounted) {
+          console.log('Error occurred, using fallback data');
+          setEvents(FALLBACK_EVENTS);
           
-          // Extract available states from events
-          const states = ['All States', ...new Set(data.events
+          // Extract states from fallback data
+          const states = ['All States', ...new Set(FALLBACK_EVENTS
             .map(event => event.state)
             .filter(Boolean))];
           setAvailableStates(states);
           
-          // Extract competition levels from events
-          const levels = ['All Levels', ...new Set(data.events
+          // Extract competition levels from fallback data
+          const levels = ['All Levels', ...new Set(FALLBACK_EVENTS
             .map(event => event.competitionLevel)
             .filter(Boolean))];
           setCompetitionLevels(levels);
         }
-      } catch (error) {
-        console.error('Error fetching events:', error);
       } finally {
-        setIsLoading(false);
+        if (isMounted) {
+          setIsLoading(false);
+        }
       }
     }
     
     fetchEvents();
+    
+    // Cleanup function to prevent state updates on unmounted component
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   /**
@@ -261,7 +374,7 @@ export default function UpcomingEventsList() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8 px-4 sm:px-0">
             {filteredEvents.map((event, index) => (
               <motion.div
-                key={event.title}
+                key={index}
                 variants={cardVariants}
                 initial="hidden"
                 animate={isInView ? "visible" : "hidden"}
@@ -278,7 +391,7 @@ export default function UpcomingEventsList() {
                       backgroundSize: 'cover',
                       backgroundPosition: 'center'
                     }}
-                    aria-label={event.name}
+                    aria-label={event.title || event.name}
                   ></div>
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
                   <div className="absolute bottom-0 left-0 right-0 p-4">
@@ -330,7 +443,10 @@ export default function UpcomingEventsList() {
                     whileTap={{ scale: 0.95 }}
                     className="mt-auto pt-3 sm:pt-6"
                   >
-                    <Link href={`/events/${event._id}/register`} className="btn-primary w-full block text-center">
+                    <Link 
+                      href={event._id ? `/events/${event._id}/register` : '/events'} 
+                      className="btn-primary w-full block text-center"
+                    >
                       Sign Up Now
                     </Link>
                   </motion.div>
