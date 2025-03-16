@@ -14,8 +14,11 @@ const nextConfig = {
   // Ensures proper handling of rewrites and redirects for Vercel
   poweredByHeader: false,
   
-  // External packages config (moved from experimental in Next.js 15)
-  serverExternalPackages: ['mongoose']
+  // Simplified module resolution
+  experimental: {
+    appDir: true,
+    serverComponentsExternalPackages: ['mongoose']
+  }
 };
 
 export default nextConfig;
