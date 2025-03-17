@@ -16,6 +16,7 @@ import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import Container from '@/components/shared/Container';
+import { usePathname } from 'next/navigation';
 
 export default function Navbar() {
   // State to track if the user has scrolled down the page
@@ -26,7 +27,15 @@ export default function Navbar() {
   const [activeDropdown, setActiveDropdown] = useState(null);
   // Reference to the dropdown menu for detecting outside clicks
   const dropdownRef = useRef(null);
+  // Get the current pathname for active link highlighting
+  const pathname = usePathname();
 
+  const isActive = (path) => {
+    if (path === '/' && pathname === '/') return true;
+    if (path !== '/' && pathname.startsWith(path)) return true;
+    return false;
+  };
+  
   /**
    * Scroll effect handler
    * Applies background styling to navbar when user scrolls past threshold
@@ -88,7 +97,6 @@ export default function Navbar() {
    * Defines all navigation links, their URLs, and dropdown subitems where applicable
    */
   const navItems = [
-    { name: 'Home', href: '/', hasDropdown: false },
     { name: 'LUMA', href: '/luma', hasDropdown: false },
     { 
       name: 'Events', 
@@ -233,7 +241,7 @@ export default function Navbar() {
                   >
                     <Link 
                       href={item.href}
-                      className="text-sm sm:text-base md:text-lg lg:text-xl text-white hover:text-[#FF2247] font-medium transition-colors whitespace-nowrap safari-nav-item"
+                      className={!isActive(item.href)?"text-sm sm:text-base md:text-lg lg:text-xl text-white hover:text-[#FF2247] font-medium transition-colors whitespace-nowrap safari-nav-item" : "text-sm sm:text-base md:text-lg lg:text-xl text-[#FF003C] hover:text-[#FF2247] font-medium transition-colors whitespace-nowrap safari-nav-item"}
                     >
                       {item.name}
                     </Link>
@@ -285,14 +293,14 @@ export default function Navbar() {
               animate={{ height: 'auto', opacity: 1 }}
               exit={{ height: 0, opacity: 1 }}
               transition={{ duration: 0.3 }}
-              className="md:hidden mt-4 bg-[#1A1A1E] shadow-lg rounded-b-md overflow-hidden"
+              className="md:hidden mt-0 bg-[#1A1A1E] shadow-lg rounded-b-md overflow-hidden"
             >
               <motion.div 
                 initial={{ y: -20 }}
                 animate={{ y: 0 }}
                 exit={{ y: -20 }}
                 transition={{ duration: 0.3 }}
-                className="flex flex-col space-y-0 py-2 sm:py-4"
+                className="flex flex-col space-y-1 py-3 sm:py-4"
               >
                 {navItems.map((item, index) => (
                   <div key={item.name}>
@@ -301,7 +309,7 @@ export default function Navbar() {
                         <div className="flex items-center justify-between">
                           <Link
                             href={item.href}
-                            className="text-sm sm:text-base md:text-lg lg:text-xl text-white hover:text-[#FF2247] font-medium transition-colors px-4 py-2 sm:py-3 flex-grow text-left whitespace-nowrap"
+                            className="text-sm sm:text-base md:text-lg lg:text-xl text-white hover:text-[#FF2247] font-medium transition-colors px-4 py-0 sm:py-3 flex-grow text-left whitespace-nowrap"
                             onClick={() => {
                               setIsMobileMenuOpen(false);
                             }}
@@ -375,7 +383,7 @@ export default function Navbar() {
                 ))}
                 <Link 
                   href="/auth" 
-                  className="text-sm sm:text-base md:text-lg lg:text-xl btn-primary mx-4 mt-4 text-center"
+                  className="text-sm sm:text-base md:text-lg lg:text-xl btn-primary mx-4 text-center"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   Sign In

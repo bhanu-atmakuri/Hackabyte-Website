@@ -34,11 +34,9 @@ export default function BasePageLayout({ children, className = '' }) {
 
   return (
     <>
-      <Navbar />
       <main className={`min-h-screen page-top-spacing ${className}`}>
         {children}
       </main>
-      <Footer />
     </>
   );
 }

@@ -1,8 +1,6 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import Navbar from '@/components/shared/Navbar';
-import Footer from '@/components/shared/Footer';
 import EventsHero from '@/components/events/EventsHero';
 import FeaturedEvent from '@/components/events/FeaturedEvent';
 import UpcomingEventsList from '@/components/events/UpcomingEventsList';
@@ -28,14 +26,12 @@ export default function Events() {
 
   return (
     <main className="min-h-screen">
-      <Navbar />
       <div className="page-top-spacing">
         <EventsHero />
         <FeaturedEvent />
         <UpcomingEventsList />
         <EventsRegistration />
       </div>
-      <Footer />
     </main>
   );
 }

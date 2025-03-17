@@ -1,8 +1,6 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import Navbar from '@/components/shared/Navbar';
-import Footer from '@/components/shared/Footer';
 import HackathonsHero from '@/components/events/hackathons/HackathonsHero';
 import HackathonInfo from '@/components/events/hackathons/HackathonInfo';
 import HackathonPrizes from '@/components/events/hackathons/HackathonPrizes';
@@ -28,14 +26,12 @@ export default function Hackathons() {
 
   return (
     <main className="min-h-screen">
-      <Navbar />
       <div className="page-top-spacing">
         <HackathonsHero />
         <HackathonInfo />
         <HackathonPrizes />
         <HackathonRules />
       </div>
-      <Footer />
     </main>
   );
 }

@@ -2,8 +2,6 @@
 
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import Navbar from '@/components/shared/Navbar';
-import Footer from '@/components/shared/Footer';
 import useNoFlash from '@/lib/hooks/useNoFlash';
 
 export default function NotFound() {
@@ -25,7 +23,6 @@ export default function NotFound() {
 
   return (
     <main className="min-h-screen">
-      <Navbar />
       <div className="flex flex-col items-center justify-center py-24 px-4 text-center">
         <h1 className="text-4xl md:text-6xl font-bold mb-4">404 - Page Not Found</h1>
         <p className="text-xl mb-8">The page you are looking for does not exist or has been moved.</p>
@@ -33,7 +30,6 @@ export default function NotFound() {
           Return to Homepage
         </Link>
       </div>
-      <Footer />
     </main>
   );
 }

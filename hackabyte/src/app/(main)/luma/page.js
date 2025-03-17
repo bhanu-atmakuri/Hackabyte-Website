@@ -2,8 +2,6 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import Navbar from '@/components/shared/Navbar';
-import Footer from '@/components/shared/Footer';
 import LumaHero from '@/components/luma/LumaHero';
 import LumaAbout from '@/components/luma/LumaAbout';
 import LumaOfferings from '@/components/luma/LumaOfferings';
@@ -30,13 +28,11 @@ export default function Luma() {
 
   return (
     <main className="min-h-screen">
-      <Navbar />
       <LumaHero />
       <LumaAbout />
       <LumaOfferings />
       <LumaTeam />
       <LumaJoin />
-      <Footer />
     </main>
   );
 }

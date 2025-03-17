@@ -1,8 +1,6 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import Navbar from '@/components/shared/Navbar';
-import Footer from '@/components/shared/Footer';
 import AuthForm from '@/components/auth/AuthForm';
 import Section from '@/components/shared/Section';
 import useNoFlash from '@/lib/hooks/useNoFlash';
@@ -26,11 +24,9 @@ export default function Auth() {
 
   return (
     <main className="min-h-screen bg-[#1A1A1E]">
-      <Navbar />
       <Section containerSize="narrow">
         <AuthForm />
       </Section>
-      <Footer />
     </main>
   );
 }
