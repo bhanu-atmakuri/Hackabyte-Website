@@ -6,7 +6,7 @@ import { getFirestore, collection, query, where, getDocs } from 'firebase/firest
 import { useRouter } from 'next/navigation';
 import Head from 'next/head';
 import { motion } from 'framer-motion';
-
+//
 
 const fadeIn = {
   hidden: { opacity: 0, y: 20 },
