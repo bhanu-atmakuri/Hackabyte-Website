@@ -3,15 +3,13 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
-// This component redirects from /admin to /admin/profile
-export default function AdminRedirect() {
+// This page redirects to the events management page
+export default function AdminPage() {
   const router = useRouter();
   
   useEffect(() => {
-    // Redirect to the profile page which is now the default admin page
-    router.replace('/admin/profile');
+    router.push('/admin/events');
   }, [router]);
   
-  // Return null while redirecting
   return null;
 }

@@ -1,8 +1,8 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
-import { useRouter, useParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -12,11 +12,8 @@ import EventRegistrationForm from '@/components/events/registration/EventRegistr
 import Section from '@/components/shared/Section';
 import useNoFlash from '@/lib/hooks/useNoFlash';
 
-export default function EventRegister() {
-  // Use the useParams hook instead of accessing params directly
-  const params = useParams();
-  const eventId = params?.eventId;
-  
+export default function EventRegister({ params }) {
+  const { eventId } = params;
   const { data: session, status } = useSession();
   const router = useRouter();
   const [isMounted, setIsMounted] = useState(false);
@@ -31,7 +28,7 @@ export default function EventRegister() {
   
   // Redirect if not authenticated
   useEffect(() => {
-    if (status === 'unauthenticated' && eventId) {
+    if (status === 'unauthenticated') {
       // Store the intended destination for post-login redirect
       const returnUrl = `/events/${eventId}/register`;
       router.push(`/auth?returnUrl=${encodeURIComponent(returnUrl)}`);
@@ -55,24 +52,6 @@ export default function EventRegister() {
   // If not authenticated after checking, show nothing (will redirect)
   if (status === 'unauthenticated') {
     return null;
-  }
-  
-  // Safety check for eventId
-  if (!eventId) {
-    return (
-      <div className="min-h-screen bg-[#1A1A1E] flex items-center justify-center">
-        <div className="text-white text-center">
-          <h2 className="text-2xl font-bold mb-4">Invalid Event</h2>
-          <p className="mb-6">This event doesn't exist or has been removed.</p>
-          <button 
-            onClick={() => router.push('/events')}
-            className="btn-primary"
-          >
-            Browse Events
-          </button>
-        </div>
-      </div>
-    );
   }
 
   return (

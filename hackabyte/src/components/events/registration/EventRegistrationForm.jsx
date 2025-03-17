@@ -17,7 +17,8 @@ import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import { motion } from 'framer-motion';
 import { useForm } from 'react-hook-form';
-import { toast } from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import Container from '../../shared/Container';
 
 export default function EventRegistrationForm({ eventId }) {
@@ -41,46 +42,28 @@ export default function EventRegistrationForm({ eventId }) {
     setHasTeam(watchHasTeam === 'true');
   }, [watchHasTeam]);
 
-  // For error display
-  const [eventError, setEventError] = useState(null);
-  
   // Fetch event details when component mounts or eventId changes
   useEffect(() => {
     const fetchEventDetails = async () => {
-      // Reset error state
-      setEventError(null);
-      
       try {
-        if (!eventId) {
-          setEventError('No event ID provided');
-          return;
-        }
-        
-        // Show toast for loading
-        const toastId = toast.info('Loading event details...', { autoClose: false });
+        if (!eventId) return;
         
         const response = await fetch(`/api/events?eventId=${eventId}`);
         
-        // Clear loading toast
-        toast.dismiss(toastId);
-        
         if (!response.ok) {
-          const errorData = await response.json();
-          throw new Error(errorData.message || `Error ${response.status}: Failed to load event details`);
+          throw new Error('Failed to load event details');
         }
         
         const data = await response.json();
         
         if (data.success && data.event) {
           setEvent(data.event);
-          toast.success('Event details loaded successfully');
         } else {
-          throw new Error(data.message || 'Event information not available');
+          throw new Error(data.message || 'Event not found');
         }
       } catch (error) {
         console.error('Error fetching event:', error);
-        setEventError(error.message || 'Could not load event details');
-        toast.error('Error loading event: ' + error.message);
+        toast.error('Could not load event details. Please try again later.');
       }
     };
     
@@ -140,8 +123,8 @@ export default function EventRegistrationForm({ eventId }) {
     }
   };
   
-  // If loading, show loading state
-  if (isLoading) {
+  // If loading or no event data, show loading state
+  if (isLoading || !event) {
     return (
       <Container>
         <div className="py-12 flex justify-center items-center">
@@ -156,41 +139,10 @@ export default function EventRegistrationForm({ eventId }) {
     );
   }
   
-  // If there's an error or no event data, show error state
-  if (eventError || !event) {
-    return (
-      <Container>
-        <div className="py-12 flex flex-col items-center justify-center">
-          <div className="bg-[#16161A] rounded-xl shadow-xl overflow-hidden border border-gray-800 p-8 max-w-lg w-full text-center">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-16 w-16 mx-auto text-[#FF2247] mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-            </svg>
-            <h2 className="text-2xl font-bold text-white mb-4">Event Not Found</h2>
-            <p className="text-gray-300 mb-6">
-              {eventError || "We couldn't find the event you're looking for. It might have been removed or is no longer available."}
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button 
-                onClick={() => router.push('/events')}
-                className="btn-secondary py-2 px-6"
-              >
-                Browse Events
-              </button>
-              <button 
-                onClick={() => window.location.reload()}
-                className="btn-primary py-2 px-6"
-              >
-                Try Again
-              </button>
-            </div>
-          </div>
-        </div>
-      </Container>
-    );
-  }
-  
   return (
     <Container size="narrow">
+      <ToastContainer position="top-right" autoClose={5000} theme="dark" />
+      
       <div className="bg-[#16161A] rounded-xl shadow-xl overflow-hidden border border-gray-800 mb-12">
         <div className="p-8">
           {/* Event Information Header */}
@@ -350,39 +302,24 @@ export default function EventRegistrationForm({ eventId }) {
             <div className="mb-8 pb-6 border-b border-gray-800">
               <h3 className="text-white text-lg font-medium mb-4">Additional Information</h3>
               
-              {/* Discord Server Join */}
+              {/* Discord Tag */}
               <div className="mb-4">
-                <label className="block text-gray-300 text-sm font-medium mb-2">
-                  Discord Server
+                <label htmlFor="discordTag" className="block text-gray-300 text-sm font-medium mb-2">
+                  Discord Tag
                 </label>
-                <p className="text-gray-300 mb-2">
-                  Please join our Discord server for event communication:
-                </p>
-                <a 
-                  href={event.discordLink || "https://discord.gg/drXX4sZmbX"}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="btn-primary inline-block py-2 px-4 mb-2"
-                >
-                  Join Discord Server
-                </a>
-                <p className="text-gray-400 text-xs mt-1">
-                  Joining our Discord server is required for participation. All event announcements, updates, and communication will happen through Discord.
-                </p>
-              </div>
-              
-              {/* Dietary Restrictions */}
-              <div className="mb-4">
-                <label htmlFor="dietaryRestrictions" className="block text-gray-300 text-sm font-medium mb-2">
-                  Dietary Restrictions (optional)
-                </label>
-                <textarea
-                  id="dietaryRestrictions"
-                  {...register('dietaryRestrictions')}
+                <input
+                  type="text"
+                  id="discordTag"
+                  {...register('discordTag', { required: 'Discord tag is required' })}
                   className="bg-[#1A1A1E] border border-gray-700 text-white rounded-lg p-3 w-full focus:ring-[#FF2247] focus:border-[#FF2247]"
-                  placeholder="Please specify any dietary restrictions or allergies"
-                  rows="3"
-                ></textarea>
+                  placeholder="username#0000"
+                />
+                {errors.discordTag && (
+                  <p className="text-red-500 text-xs mt-1">{errors.discordTag.message}</p>
+                )}
+                <p className="text-gray-400 text-xs mt-1">
+                  We'll use Discord for event communication. Join our server: {event.discordLink || "[Discord link will be provided]"}
+                </p>
               </div>
               
               {/* Coding Experience */}
@@ -406,14 +343,14 @@ export default function EventRegistrationForm({ eventId }) {
                 <p className="text-gray-400 text-xs mt-1">All experience levels are welcome!</p>
               </div>
               
-              {/* How did you learn about this event */}
+              {/* How did you learn about us */}
               <div className="mb-4">
                 <label htmlFor="referralSource" className="block text-gray-300 text-sm font-medium mb-2">
-                  How did you learn about this event?
+                  How did you learn about us?
                 </label>
                 <select
                   id="referralSource"
-                  {...register('referralSource', { required: 'Please select how you heard about this event' })}
+                  {...register('referralSource', { required: 'Please select how you heard about us' })}
                   className="bg-[#1A1A1E] border border-gray-700 text-white rounded-lg p-3 w-full focus:ring-[#FF2247] focus:border-[#FF2247]"
                 >
                   <option value="">Select an option</option>
@@ -422,7 +359,6 @@ export default function EventRegistrationForm({ eventId }) {
                   <option value="Social Media">Social Media</option>
                   <option value="Search Engine">Search Engine</option>
                   <option value="Previous Event">Previous Hackabyte Event</option>
-                  <option value="HackabyteMember">Through a Hackabyte member</option>
                   <option value="Other">Other</option>
                 </select>
                 {errors.referralSource && (
@@ -465,6 +401,7 @@ export default function EventRegistrationForm({ eventId }) {
               
               <div className="bg-[#212129] p-4 rounded-lg mb-6">
                 <ul className="list-disc list-inside text-gray-300 space-y-2">
+                  <li>Participants must be between 13-19 years old</li>
                   <li>Bring your own laptop and charger</li>
                   <li>Food and water will be provided</li>
                   <li>Teams of 1-4 participants are allowed</li>

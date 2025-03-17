@@ -111,24 +111,14 @@ export default function UserProfileCard() {
           <>
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-2xl font-bold text-white">My Profile</h2>
-              <div className="flex space-x-2">
-                <motion.a
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  href="/dashboard/security"
-                  className="btn-secondary py-2 px-4 text-sm"
-                >
-                  Change Password
-                </motion.a>
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  onClick={() => setIsEditing(true)}
-                  className="btn-secondary py-2 px-4 text-sm"
-                >
-                  Edit Profile
-                </motion.button>
-              </div>
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => setIsEditing(true)}
+                className="btn-secondary py-2 px-4 text-sm"
+              >
+                Edit Profile
+              </motion.button>
             </div>
             
             <div className="grid md:grid-cols-2 gap-6">
@@ -159,11 +149,6 @@ export default function UserProfileCard() {
                   <div>
                     <p className="text-gray-400 text-sm">Age</p>
                     <p className="text-white">{userData.age}</p>
-                  </div>
-                  
-                  <div>
-                    <p className="text-gray-400 text-sm">Discord Username</p>
-                    <p className="text-white">{userData.discordUsername || 'Not provided'}</p>
                   </div>
                 </div>
               </div>
@@ -315,23 +300,6 @@ export default function UserProfileCard() {
                   {errors.age && (
                     <p className="text-red-500 text-xs mt-1">{errors.age.message}</p>
                   )}
-                </div>
-                
-                {/* Discord Username */}
-                <div className="mb-4">
-                  <label htmlFor="discordUsername" className="block text-gray-300 text-sm font-medium mb-2">
-                    Discord Username
-                  </label>
-                  <input
-                    type="text"
-                    id="discordUsername"
-                    {...register('discordUsername')}
-                    className="bg-[#1A1A1E] border border-gray-700 text-white rounded-lg p-3 w-full focus:ring-[#FF2247] focus:border-[#FF2247]"
-                    placeholder="username#0000"
-                  />
-                  <p className="text-gray-400 text-xs mt-1">
-                    We use Discord for event communication
-                  </p>
                 </div>
               </div>
               

@@ -249,46 +249,11 @@ export default function EventManagement() {
             </div>
           </div>
           
-          <div className="mb-4 flex justify-end">
-            <button
-              onClick={async () => {
-                try {
-                  const response = await fetch('/api/admin/events', {
-                    method: 'PUT',
-                    headers: {
-                      'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                      eventId: event._id,
-                      status: 'past'
-                    }),
-                  });
-                  
-                  const result = await response.json();
-                  
-                  if (result.success) {
-                    toast.success('Event marked as past event');
-                    fetchEvents();
-                    setViewRegistrations(null);
-                  } else {
-                    throw new Error(result.message || 'Failed to update event');
-                  }
-                } catch (error) {
-                  console.error('Error updating event:', error);
-                  toast.error(error.message || 'Error updating event');
-                }
-              }}
-              className="bg-gray-700 hover:bg-gray-600 text-white py-2 px-4 rounded-lg text-sm"
-            >
-              {event.status === 'past' ? 'Already a Past Event' : 'Convert to Past Event'}
-            </button>
-          </div>
-          
-          {event.registrations && event.registrations.length > 0 ? (
+          {event.registrationCount > 0 ? (
             <div>
-              <h3 className="text-xl font-bold text-white mb-4">{event.registrations.length} Registrations</h3>
+              <h3 className="text-xl font-bold text-white mb-4">{event.registrationCount} Registrations</h3>
               
-              <div className="overflow-x-auto max-h-[600px] rounded-lg border border-gray-800">
+              <div className="overflow-x-auto">
                 <table className="min-w-full divide-y divide-gray-800">
                   <thead className="bg-[#1A1A1E]">
                     <tr>
@@ -520,7 +485,6 @@ export default function EventManagement() {
                     <option value="upcoming">Upcoming</option>
                     <option value="ongoing">Ongoing</option>
                     <option value="completed">Completed</option>
-                    <option value="past">Past Event</option>
                   </select>
                 </div>
                 

@@ -218,7 +218,7 @@ export default function UserRegistrations() {
                         )}
                       </div>
                       
-                      <div className="mt-4 flex justify-between items-center">
+                      <div className="mt-4">
                         <Link 
                           href={`/events/${registration.event._id}`} 
                           className="text-[#FF2247] hover:underline text-sm inline-flex items-center"
@@ -228,39 +228,6 @@ export default function UserRegistrations() {
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
                           </svg>
                         </Link>
-                        
-                        {registration.status !== 'cancelled' && (
-                          <button
-                            onClick={async (e) => {
-                              e.stopPropagation();
-                              if (confirm('Are you sure you want to cancel your registration?')) {
-                                try {
-                                  const response = await fetch(`/api/events/register?registrationId=${registration._id}`, {
-                                    method: 'DELETE',
-                                  });
-                                  
-                                  const result = await response.json();
-                                  
-                                  if (result.success) {
-                                    toast.success('Registration cancelled successfully');
-                                    // Update local state
-                                    setRegistrations(registrations.map(reg => 
-                                      reg._id === registration._id ? {...reg, status: 'cancelled'} : reg
-                                    ));
-                                  } else {
-                                    toast.error(result.message || 'Failed to cancel registration');
-                                  }
-                                } catch (error) {
-                                  console.error('Error cancelling registration:', error);
-                                  toast.error('Error cancelling registration');
-                                }
-                              }
-                            }}
-                            className="bg-gray-700 text-gray-300 hover:bg-gray-600 py-1 px-3 rounded text-sm"
-                          >
-                            Cancel Registration
-                          </button>
-                        )}
                       </div>
                     </div>
                   </div>
