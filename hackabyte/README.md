@@ -33,4 +33,11 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
+### Deployment Notes
+
+When deploying on Vercel's free tier:
+1. The project uses a single region configuration in `vercel.json`
+2. Make sure your environment variables are properly set in the Vercel dashboard
+3. If you encounter the "multiple regions" error, ensure no API routes use the Edge runtime
+
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
