@@ -132,7 +132,7 @@ export default function Navbar() {
       initial={{ y: -100 }}
       animate={{ y: 0 }}
       transition={{ duration: 0.5 }}
-      className={`fixed w-full z-50 transition-all duration-300 ${
+      className={`fixed w-full z-50 transition-all duration-50 ${
         // Apply different styling based on scroll position
         isScrolled 
           ? 'bg-[#1A1A1E]/90 backdrop-blur-md shadow-md py-3' // Scrolled state
@@ -201,7 +201,7 @@ export default function Navbar() {
                   <>
                     <Link
                       href={item.href}
-                      className="text-sm sm:text-base md:text-lg lg:text-xl text-white hover:text-[#FF2247] font-medium transition-colors flex items-center py-2 whitespace-nowrap safari-nav-item"
+                      className={!isActive(item.href)?"text-sm sm:text-base md:text-lg lg:text-xl text-white hover:text-[#FF2247] font-medium transition-colors flex items-center py-2 whitespace-nowrap safari-nav-item" : "text-sm sm:text-base md:text-lg lg:text-xl text-[#FF003C] hover:text-[#FF2247] font-medium transition-colors flex items-center py-2 whitespace-nowrap safari-nav-item"}
                       onClick={() => setActiveDropdown(null)}
                     >
                       {item.name}
