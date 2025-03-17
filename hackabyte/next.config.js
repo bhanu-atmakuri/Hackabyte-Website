@@ -8,4 +8,5 @@ const nextConfig = {
   }
 }
 
-module.exports = nextConfig
+// Convert from CommonJS to ES Module syntax
+export default nextConfig;
