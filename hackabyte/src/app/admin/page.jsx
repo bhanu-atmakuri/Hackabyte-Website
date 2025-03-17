@@ -80,7 +80,7 @@ export default function AdminLogin() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center">
+    <div className="min-h-screen flex items-center justify-center">
       <Head>
         <title>EVolve Charge | Admin Login</title>
         <meta name="description" content="Admin login for EVolve Charge" />
@@ -90,10 +90,10 @@ export default function AdminLogin() {
         initial="hidden"
         animate="visible"
         variants={fadeIn}
-        className="max-w-md w-full p-8 bg-white rounded-xl shadow-lg"
+        className="max-w-md w-full p-8 bg-[#16161A] border border-gray-800 rounded-xl shadow-lg"
       >
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Admin Portal</h1>
+          <h1 className="text-3xl font-bold text-[#F93236] mb-2">Admin Portal</h1>
         </div>
 
         {error && (
@@ -104,7 +104,7 @@ export default function AdminLogin() {
 
         <form onSubmit={handleLogin}>
           <div className="mb-4">
-            <label htmlFor="email" className="block text-gray-700 text-sm font-medium mb-2">
+            <label htmlFor="email" className="block text-white text-sm font-medium mb-2">
               Email Address
             </label>
             <input
@@ -118,7 +118,7 @@ export default function AdminLogin() {
           </div>
 
           <div className="mb-6">
-            <label htmlFor="password" className="block text-gray-700 text-sm font-medium mb-2">
+            <label htmlFor="password" className="block text-white text-sm font-medium mb-2">
               Password
             </label>
             <input
@@ -134,14 +134,14 @@ export default function AdminLogin() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3 rounded-lg bg-gradient-to-r from-teal-500 to-cyan-500 text-white font-medium shadow-md hover:shadow-lg transition-all disabled:opacity-50"
+            className="w-full py-3 rounded-lg btn-primary font-medium shadow-md hover:shadow-lg transition-all disabled:opacity-50"
           >
             {loading ? 'Signing in...' : 'Sign In'}
           </button>
         </form>
 
         <div className="mt-6 text-center">
-          <a href="/" className="text-sm text-teal-600 hover:text-teal-800">
+          <a href="/" className="text-sm text-[#F93236] hover:text-red">
             Return to Website
           </a>
         </div>
