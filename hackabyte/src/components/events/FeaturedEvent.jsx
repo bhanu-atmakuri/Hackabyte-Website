@@ -18,23 +18,6 @@ import { motion, useInView } from 'framer-motion';
 import Link from 'next/link';
 import Container from '../shared/Container';
 
-// Fallback data in case API fails
-const FALLBACK_EVENT = {
-  title: "Spring Hackathon - WA",
-  date: "March 29-30, 2025",
-  location: "DigiPen Institute of Technology, Redmond",
-  image: "/api/placeholder/800/400",
-  description: "Our Spring Hackathon in Washington will be held at DigiPen Institute of Technology. Collaborate with peers and build innovative projects in this intensive weekend event.",
-  highlights: [
-    "Mentorship from industry leaders",
-    "Beginner to advanced tracks for all age groups",
-    "Networking opportunities with tech companies",
-    "Special workshop sessions on emerging technologies",
-    "Exciting prizes for top projects"
-  ],
-  registrationLink: "/events#registration"
-};
-
 export default function FeaturedEvent() {
   // State for the featured event data
   const [featuredEvent, setFeaturedEvent] = useState(null);
@@ -47,115 +30,83 @@ export default function FeaturedEvent() {
 
   // Fetch the featured event from the API
   useEffect(() => {
-    let isMounted = true;
-    
     async function fetchFeaturedEvent() {
       try {
-        // Get the base URL dynamically
-        const baseUrl = typeof window !== 'undefined' 
-          ? `${window.location.protocol}//${window.location.host}`
-          : '';
-          
-        // Try using the absolute URL with dynamic origin
-        const apiUrl = `${baseUrl}/api/events?status=upcoming`;
-        
-        console.log('Fetching featured event from:', apiUrl);
-        
-        // Use a Promise race to enforce a timeout
-        const timeoutPromise = new Promise((_, reject) => 
-          setTimeout(() => reject(new Error('Request timeout')), 5000)
-        );
-        
-        const fetchPromise = fetch(apiUrl, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-          },
-          cache: 'no-store',
-        });
-        
-        const response = await Promise.race([fetchPromise, timeoutPromise]);
-        
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        
+        const response = await fetch('/api/events?status=upcoming');
         const data = await response.json();
         
-        if (isMounted) {
-          if (data.success && data.events && data.events.length > 0) {
-            // Find the Spring Hackathon - WA event
-            const springWaEvent = data.events.find(event => 
-              event.name && event.name.includes('Spring Hackathon') && 
-              event.state && event.state.includes('Washington')
-            );
-            
-            // If found, set as featured, otherwise use first event
-            if (springWaEvent) {
-              console.log('Spring WA Event found:', springWaEvent);
-              setFeaturedEvent({
-                id: springWaEvent._id, // Store the ID separately
-                title: springWaEvent.name,
-                date: formatDateRange(springWaEvent.startDate, springWaEvent.endDate),
-                location: springWaEvent.location,
-                image: springWaEvent.image || "/api/placeholder/800/400",
-                description: springWaEvent.description,
-                highlights: [
-                  "Mentorship from industry leaders",
-                  "Beginner to advanced tracks for all age groups",
-                  "Networking opportunities with tech companies",
-                  "Special workshop sessions on emerging technologies",
-                  "Exciting prizes for top projects"
-                ],
-                registrationLink: springWaEvent._id ? `/events/${springWaEvent._id}/register` : "/events"
-              });
-            } else {
-              // Fallback to first event if Washington event not found
-              const firstEvent = data.events[0];
-              console.log('Using first event:', firstEvent);
-              setFeaturedEvent({
-                id: firstEvent._id, // Store the ID separately
-                title: firstEvent.name,
-                date: formatDateRange(firstEvent.startDate, firstEvent.endDate),
-                location: firstEvent.location,
-                image: firstEvent.image || "/api/placeholder/800/400",
-                description: firstEvent.description,
-                highlights: [
-                  "Mentorship from industry leaders",
-                  "Beginner to advanced tracks for all age groups",
-                  "Networking opportunities with tech companies",
-                  "Special workshop sessions on emerging technologies",
-                  "Exciting prizes for top projects"
-                ],
-                registrationLink: firstEvent._id ? `/events/${firstEvent._id}/register` : "/events"
-              });
-            }
+        if (data.success && data.events && data.events.length > 0) {
+          // Find the Spring Hackathon - WA event
+          const springWaEvent = data.events.find(event => 
+            event.name && event.name.includes('Spring Hackathon') && 
+            event.state && event.state.includes('Washington')
+          );
+          
+          // If found, set as featured, otherwise use first event
+          if (springWaEvent) {
+            console.log('Spring WA Event found:', springWaEvent);
+            setFeaturedEvent({
+              id: springWaEvent._id, // Store the ID separately
+              title: springWaEvent.name,
+              date: formatDateRange(springWaEvent.startDate, springWaEvent.endDate),
+              location: springWaEvent.location,
+              image: springWaEvent.image || "/api/placeholder/800/400",
+              description: springWaEvent.description,
+              highlights: [
+                "Mentorship from industry leaders",
+                "Beginner to advanced tracks for all age groups",
+                "Networking opportunities with tech companies",
+                "Special workshop sessions on emerging technologies",
+                "Exciting prizes for top projects"
+              ],
+              registrationLink: springWaEvent._id ? `/events/${springWaEvent._id}/register` : "/events"
+            });
           } else {
-            console.log('No events from API, using fallback');
-            setFeaturedEvent(FALLBACK_EVENT);
+            // Fallback to first event if Washington event not found
+            const firstEvent = data.events[0];
+            console.log('Using first event:', firstEvent);
+            setFeaturedEvent({
+              id: firstEvent._id, // Store the ID separately
+              title: firstEvent.name,
+              date: formatDateRange(firstEvent.startDate, firstEvent.endDate),
+              location: firstEvent.location,
+              image: firstEvent.image || "/api/placeholder/800/400",
+              description: firstEvent.description,
+              highlights: [
+                "Mentorship from industry leaders",
+                "Beginner to advanced tracks for all age groups",
+                "Networking opportunities with tech companies",
+                "Special workshop sessions on emerging technologies",
+                "Exciting prizes for top projects"
+              ],
+              registrationLink: firstEvent._id ? `/events/${firstEvent._id}/register` : "/events"
+            });
           }
         }
       } catch (error) {
         console.error('Error fetching featured event:', error);
-        if (isMounted) {
-          // Fallback to static data if API fails
-          console.log('Error occurred, using fallback data');
-          setFeaturedEvent(FALLBACK_EVENT);
-        }
+        // Fallback to static data if API fails
+        setFeaturedEvent({
+          title: "Spring Hackathon - WA",
+          date: "March 29-30, 2025",
+          location: "DigiPen Institute of Technology, Redmond",
+          image: "/api/placeholder/800/400",
+          description: "Our Spring Hackathon in Washington will be held at DigiPen Institute of Technology. Collaborate with peers and build innovative projects in this intensive weekend event.",
+          highlights: [
+            "Mentorship from industry leaders",
+            "Beginner to advanced tracks for all age groups",
+            "Networking opportunities with tech companies",
+            "Special workshop sessions on emerging technologies",
+            "Exciting prizes for top projects"
+          ],
+          registrationLink: "/events#registration"
+        });
       } finally {
-        if (isMounted) {
-          setIsLoading(false);
-        }
+        setIsLoading(false);
       }
     }
     
     fetchFeaturedEvent();
-    
-    // Cleanup function to prevent state updates on unmounted component
-    return () => {
-      isMounted = false;
-    };
   }, []);
   
   // Helper function to format date range

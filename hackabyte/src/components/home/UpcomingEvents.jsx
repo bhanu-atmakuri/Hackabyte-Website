@@ -16,32 +16,6 @@ import Link from 'next/link';
 import { motion, useInView } from 'framer-motion';
 import Container from '@/components/shared/Container';
 
-// Fallback data in case API fails
-const FALLBACK_EVENTS = [
-  {
-    _id: 'fallback-1',
-    name: 'Spring Hackathon 2025 - WA',
-    startDate: '2025-03-29T00:00:00.000Z',
-    endDate: '2025-03-30T00:00:00.000Z',
-    location: 'DigiPen Institute of Technology, Redmond',
-    description: 'Join us for an exciting weekend of coding, learning, and networking at our Spring Hackathon in Redmond, WA.',
-    image: '/api/placeholder/800/400',
-    ageGroups: ['High School', 'Middle School'],
-    competitionLevel: 'Beginner-Friendly'
-  },
-  {
-    _id: 'fallback-2',
-    name: 'Summer Code Camp - CA',
-    startDate: '2025-07-15T00:00:00.000Z',
-    endDate: '2025-07-20T00:00:00.000Z',
-    location: 'UC Berkeley Campus, Berkeley',
-    description: 'A week-long immersive coding experience for students of all skill levels, featuring workshops and hands-on projects.',
-    image: '/api/placeholder/800/400',
-    ageGroups: ['High School'],
-    competitionLevel: 'Intermediate'
-  }
-];
-
 export default function UpcomingEvents() {
   // State for events data
   const [events, setEvents] = useState([]);
@@ -54,74 +28,25 @@ export default function UpcomingEvents() {
   // amount: 0.2 means animation triggers when 20% of the element is visible
   const isInView = useInView(ref, { once: true, amount: 0.2 });
 
-  // Fetch events from API with fallback handling
+  // Fetch events from API
   useEffect(() => {
-    let isMounted = true;
-    
     async function fetchEvents() {
       try {
         setIsLoading(true);
-        
-        // Get the base URL dynamically
-        const baseUrl = typeof window !== 'undefined' 
-          ? `${window.location.protocol}//${window.location.host}`
-          : '';
-          
-        // Try using the absolute URL with dynamic origin
-        const apiUrl = `${baseUrl}/api/events?status=upcoming`;
-        
-        console.log('Fetching from URL:', apiUrl);
-        
-        // Use a Promise race to enforce a timeout
-        const timeoutPromise = new Promise((_, reject) => 
-          setTimeout(() => reject(new Error('Request timeout')), 5000)
-        );
-        
-        const fetchPromise = fetch(apiUrl, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-          },
-          cache: 'no-store',
-        });
-        
-        const response = await Promise.race([fetchPromise, timeoutPromise]);
-        
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        
+        const response = await fetch('/api/events?status=upcoming');
         const data = await response.json();
         
-        if (isMounted) {
-          if (data.success && data.events && data.events.length > 0) {
-            console.log('API data received:', data.events.length, 'events');
-            setEvents(data.events);
-          } else {
-            console.log('No events from API, using fallback');
-            setEvents(FALLBACK_EVENTS);
-          }
+        if (data.success && data.events) {
+          setEvents(data.events);
         }
       } catch (error) {
         console.error('Error fetching events:', error);
-        if (isMounted) {
-          console.log('Error occurred, using fallback data');
-          setEvents(FALLBACK_EVENTS);
-        }
       } finally {
-        if (isMounted) {
-          setIsLoading(false);
-        }
+        setIsLoading(false);
       }
     }
     
     fetchEvents();
-    
-    // Cleanup function to prevent state updates on unmounted component
-    return () => {
-      isMounted = false;
-    };
   }, []);
 
   // Helper function to format date range
@@ -214,11 +139,11 @@ export default function UpcomingEvents() {
                 <div 
                   className="absolute inset-0 transition-transform duration-500 hover:scale-110"
                   style={{
-                    backgroundImage: `url(${event.image || '/api/placeholder/800/400'})`,
+                    backgroundImage: `url(${event.image})`,
                     backgroundSize: 'cover',
                     backgroundPosition: 'center'
                   }}
-                  aria-label={event.title || event.name}
+                  aria-label={event.title}
                 ></div>
                 {/* Gradient overlay to improve text readability over image */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
@@ -278,10 +203,7 @@ export default function UpcomingEvents() {
                   whileTap={{ scale: 0.95 }}
                   className="mt-auto"
                 >
-                  <Link 
-                    href={event._id ? `/events/${event._id}/register` : '/events'} 
-                    className="btn-primary w-full block text-center"
-                  >
+                  <Link href={`/events/${event._id}/register`} className="btn-primary w-full block text-center">
                     Learn More
                   </Link>
                 </motion.div>
