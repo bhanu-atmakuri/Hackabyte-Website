@@ -214,10 +214,6 @@ export default function MentorProgram() {
             </motion.div>
           </div>
           
-          <p className="mt-4 text-gray-300">
-            Join our <a href="https://discord.gg/drXX4sZmbX" target="_blank" rel="noopener noreferrer" className="text-[#FF2247] hover:underline">Discord community</a> to connect with other mentors and receive updates about upcoming hackathons.
-          </p>
-          
           {/* Mentor testimonial quote card */}
           <div className="mt-10 max-w-4xl mx-auto px-6 py-8 bg-[#16161A] rounded-xl border border-gray-800">
             <div className="flex flex-col md:flex-row items-center gap-6">

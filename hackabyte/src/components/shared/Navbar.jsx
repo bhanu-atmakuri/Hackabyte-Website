@@ -10,19 +10,14 @@
  * - Dropdown menu for nested navigation items
  * - Mobile menu with animations and accessibility support
  * - Framer Motion animations for interactive elements
- * - Authentication-aware navigation (sign in / dashboard)
  */
 
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useSession } from 'next-auth/react';
 import Container from '@/components/shared/Container';
 
 export default function Navbar() {
-  // Get authentication session
-  const { data: session, status } = useSession();
-  
   // State to track if the user has scrolled down the page
   const [isScrolled, setIsScrolled] = useState(false);
   // State to control mobile menu visibility
@@ -250,18 +245,9 @@ export default function Navbar() {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
-              {session ? (
-                <Link 
-                  href={session.user.role === 'admin' ? '/admin' : '/dashboard'} 
-                  className="text-sm sm:text-base md:text-lg lg:text-xl btn-primary whitespace-nowrap"
-                >
-                  Dashboard
-                </Link>
-              ) : (
-                <Link href="/auth" className="text-sm sm:text-base md:text-lg lg:text-xl btn-primary whitespace-nowrap">
-                  Sign In
-                </Link>
-              )}
+              <Link href="/auth" className="text-sm sm:text-base md:text-lg lg:text-xl btn-primary whitespace-nowrap">
+                Sign In
+              </Link>
             </motion.div>
           </div>
 
@@ -387,23 +373,13 @@ export default function Navbar() {
                     )}
                   </div>
                 ))}
-                {session ? (
-                  <Link 
-                    href={session.user.role === 'admin' ? '/admin' : '/dashboard'} 
-                    className="text-sm sm:text-base md:text-lg lg:text-xl btn-primary mx-4 mt-4 text-center"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
-                    Dashboard
-                  </Link>
-                ) : (
-                  <Link 
-                    href="/auth" 
-                    className="text-sm sm:text-base md:text-lg lg:text-xl btn-primary mx-4 mt-4 text-center"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
-                    Sign In
-                  </Link>
-                )}
+                <Link 
+                  href="/auth" 
+                  className="text-sm sm:text-base md:text-lg lg:text-xl btn-primary mx-4 mt-4 text-center"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  Sign In
+                </Link>
               </motion.div>
             </motion.div>
           )}
