@@ -6,12 +6,6 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const nextConfig = {
-  reactStrictMode: true,
-  swcMinify: true,
-  // Ensure experimental edge runtime isn't enabled by default
-  experimental: {
-    // Remove any runtime: 'edge' settings if they exist
-  },
   // Next.js server components and API routes setup
   // Vercel will automatically use the correct output mode
   
@@ -50,4 +44,8 @@ const nextConfig = {
   },
 };
 
-export default nextConfig;
+// Export with both default and .default property for Vercel compatibility
+const config = nextConfig;
+config.default = nextConfig;
+
+export default config;
