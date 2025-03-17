@@ -180,6 +180,10 @@ export default function VolunteerOpportunities() {
                 Apply to Volunteer
               </Link>
             </motion.div>
+            
+            <p className="mt-4 text-gray-300">
+              Join our <a href="https://discord.gg/drXX4sZmbX" target="_blank" rel="noopener noreferrer" className="text-[#FF2247] hover:underline">Discord community</a> to connect with other volunteers and stay updated on opportunities!
+            </p>
           </div>
         </motion.div>
       </Container>

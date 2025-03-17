@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth/next';
-import dbConnect from '@/lib/mongodb';
-import Event from '@/models/Event';
+import dbConnect from 'lib/mongodb';
+import Event from 'models/Event';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 
 // Get all events
@@ -11,7 +11,26 @@ export async function GET(req) {
     
     const { searchParams } = new URL(req.url);
     const status = searchParams.get('status');
+    const eventId = searchParams.get('eventId');
     
+    // If eventId is provided, return a single event
+    if (eventId) {
+      const event = await Event.findById(eventId);
+      
+      if (!event) {
+        return NextResponse.json({ 
+          success: false, 
+          message: 'Event not found' 
+        }, { status: 404 });
+      }
+      
+      return NextResponse.json({
+        success: true,
+        event
+      });
+    }
+    
+    // Otherwise, return events based on filters
     let query = {};
     if (status && ['upcoming', 'ongoing', 'completed'].includes(status)) {
       query.status = status;
