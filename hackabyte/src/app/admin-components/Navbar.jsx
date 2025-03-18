@@ -89,6 +89,12 @@ export default function AdminNavbar() {
     router.push('/admin');
   };
 
+  // Exit handler
+  const handleExit = () => {
+    // Redirect to main site
+    router.push('/');
+  };
+
   /**
    * Navigation items data structure - Removed Home as requested
    * Defines all navigation links, their URLs, and dropdown subitems where applicable
@@ -113,17 +119,21 @@ export default function AdminNavbar() {
   };
 
   return (
-    <motion.nav
-      // Animation for navbar entrance from top of screen
-      initial={{ y: -100 }}
-      animate={{ y: 0 }}
-      transition={{ duration: 0.5 }}
-      className="fixed w-full z-50 bg-[#1A1A1E] shadow-md py-3"
-      style={{
-        WebkitTransform: 'translate3d(0,0,0)',
-        WebkitBackfaceVisibility: 'hidden'
-      }}
-    >
+    <>
+      {/* Add invisible spacer div to create room for the fixed navbar */}
+      <div className="h-[76px]"></div>
+      
+      <motion.nav
+        // Animation for navbar entrance from top of screen
+        initial={{ y: -100 }}
+        animate={{ y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="fixed w-full top-0 z-50 bg-[#1A1A1E] shadow-md py-3"
+        style={{
+          WebkitTransform: 'translate3d(0,0,0)',
+          WebkitBackfaceVisibility: 'hidden'
+        }}
+      >
       <Container>
         <div className="flex items-center justify-between w-full px-1 sm:px-0">
           {/* Site Logo and Branding - Changed "Hackabyte" to "Admin" as requested */}
@@ -230,16 +240,28 @@ export default function AdminNavbar() {
                 )}
               </div>
             ))}
-            {/* Changed Sign In to Logout button as requested */}
+            {/* Changed Logout button to gray styling */}
             <motion.div
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
               <button 
                 onClick={handleLogout} 
-                className="text-sm sm:text-base md:text-lg lg:text-xl btn-primary whitespace-nowrap"
+                className="text-sm sm:text-base md:text-lg lg:text-xl bg-[#1A1A1E] border border-gray-700 text-white py-2 px-4 rounded-lg hover:border-gray-500 whitespace-nowrap"
               >
                 Logout
+              </button>
+            </motion.div>
+            {/* Added Exit button with red styling */}
+            <motion.div
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <button 
+                onClick={handleExit} 
+                className="text-sm sm:text-base md:text-lg lg:text-xl btn-primary px-6 whitespace-nowrap"
+              >
+                Exit
               </button>
             </motion.div>
           </div>
@@ -366,15 +388,25 @@ export default function AdminNavbar() {
                     )}
                   </div>
                 ))}
-                {/* Changed Sign In to Logout button as requested in mobile menu */}
+                {/* Changed Logout button to gray in mobile menu */}
                 <button 
                   onClick={() => {
                     handleLogout();
                     setIsMobileMenuOpen(false);
                   }} 
-                  className="text-sm sm:text-base md:text-lg lg:text-xl btn-primary mx-4 text-center"
+                  className="text-sm sm:text-base md:text-lg lg:text-xl bg-[#1A1A1E] border border-gray-700 text-white py-2 px-4 rounded-lg hover:border-gray-500 mx-4 text-center"
                 >
                   Logout
+                </button>
+                {/* Added Exit button with red styling in mobile menu */}
+                <button 
+                  onClick={() => {
+                    handleExit();
+                    setIsMobileMenuOpen(false);
+                  }} 
+                  className="text-sm sm:text-base md:text-lg lg:text-xl btn-primary px-6 mx-4 text-center"
+                >
+                  Exit
                 </button>
               </motion.div>
             </motion.div>
@@ -382,5 +414,6 @@ export default function AdminNavbar() {
         </AnimatePresence>
       </Container>
     </motion.nav>
+    </>
   );
 }
