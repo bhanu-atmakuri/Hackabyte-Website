@@ -58,6 +58,8 @@ export default function AdminEvents() {
   const [error, setError] = useState('');
   const [showEventForm, setShowEventForm] = useState(false);
   const [editingEvent, setEditingEvent] = useState(null);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [deleteEventId, setDeleteEventId] = useState(null);
   const [expandedEvents, setExpandedEvents] = useState({});
   const [formData, setFormData] = useState({
     name: '',
@@ -207,19 +209,28 @@ export default function AdminEvents() {
   };
 
   const handleDeleteEvent = async (eventId) => {
-    if (window.confirm('Are you sure you want to delete this event?')) {
-      try {
-        setLoading(true);
-        await deleteDoc(doc(db, 'events', eventId));
-        await fetchEvents();
-        setError('');
-      } catch (err) {
-        console.error('Error deleting event:', err);
-        setError('Failed to delete event. Please try again.');
-      } finally {
-        setLoading(false);
-      }
+    setDeleteEventId(eventId);
+    setShowDeleteModal(true);
+  };
+
+  const confirmDelete = async () => {
+    try {
+      setLoading(true);
+      await deleteDoc(doc(db, 'events', deleteEventId));
+      await fetchEvents();
+      setError('');
+      setShowDeleteModal(false);
+    } catch (err) {
+      console.error('Error deleting event:', err);
+      setError('Failed to delete event. Please try again.');
+    } finally {
+      setLoading(false);
     }
+  };
+
+  const cancelDelete = () => {
+    setShowDeleteModal(false);
+    setDeleteEventId(null);
   };
 
   const toggleEventExpansion = (eventId) => {
@@ -240,8 +251,8 @@ export default function AdminEvents() {
   return (
     <div className="min-h-screen">
       <Head>
-        <title>EVolve Charge | Admin Events</title>
-        <meta name="description" content="Admin events management for EVolve Charge" />
+        <title>Hackabyte | Admin Events</title>
+        <meta name="description" content="Admin events management for Hackabyte" />
       </Head>
 
       <main className="container mx-auto py-8 px-4">
@@ -260,14 +271,14 @@ export default function AdminEvents() {
                 resetForm();
                 setShowEventForm(!showEventForm);
               }}
-              className="btn-primary"
+              className="px-4 py-2 bg-[#FF2247] text-white rounded-lg hover:bg-[#e01f41] transition-colors"
             >
               {showEventForm ? 'Cancel' : 'Add New Event'}
             </motion.button>
           </div>
 
           {error && (
-            <div className="mb-4 p-3 bg-red-100 text-red-700 rounded-lg text-sm">
+            <div className="mb-4 p-3 bg-red-900/30 text-red-400 rounded-lg text-sm border border-red-800">
               {error}
             </div>
           )}
@@ -275,19 +286,19 @@ export default function AdminEvents() {
           <AnimatePresence>
             {showEventForm && (
               <motion.div 
-                initial={{y: -20 }}
+                initial={{y: -20, opacity: 0 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={{y: -20 }}
+                exit={{y: -20, opacity: 0 }}
                 transition={{ duration: 0.3 }}
-                className="mb-8 p-6 bg-[#16161A] rounded-xl shadow-md"
+                className="mb-8 p-6 bg-[#16161A] rounded-xl shadow-md border border-gray-800"
               >
-                <h3 className="text-xl font-semibold mb-4">
+                <h3 className="text-xl font-semibold mb-4 text-white">
                   {editingEvent ? 'Edit Event' : 'Add New Event'}
                 </h3>
                 <form onSubmit={editingEvent ? handleUpdateEvent : handleAddEvent}>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                      <label className="block text-gray-300 text-sm font-medium mb-1">
                         Event Name*
                       </label>
                       <input
@@ -295,13 +306,14 @@ export default function AdminEvents() {
                         name="name"
                         value={formData.name}
                         onChange={handleInputChange}
-                        className="w-full p-2 text-black bg-gray-200 border border-gray-300 rounded-md"
+                        className="w-full p-3 bg-[#1A1A1E] border border-gray-700 text-white rounded-lg focus:ring-[#FF2247] focus:border-[#FF2247]"
                         required
+                        placeholder="Event name"
                       />
                     </div>
                     
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                      <label className="block text-gray-300 text-sm font-medium mb-1">
                         Location*
                       </label>
                       <input
@@ -309,13 +321,14 @@ export default function AdminEvents() {
                         name="location"
                         value={formData.location}
                         onChange={handleInputChange}
-                        className="w-full p-2 text-black bg-gray-200 border border-gray-300 rounded-md"
+                        className="w-full p-3 bg-[#1A1A1E] border border-gray-700 text-white rounded-lg focus:ring-[#FF2247] focus:border-[#FF2247]"
                         required
+                        placeholder="City"
                       />
                     </div>
                     
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                      <label className="block text-gray-300 text-sm font-medium mb-1">
                         State*
                       </label>
                       <input
@@ -323,13 +336,14 @@ export default function AdminEvents() {
                         name="state"
                         value={formData.state}
                         onChange={handleInputChange}
-                        className="w-full p-2 text-black bg-gray-200 border border-gray-300 rounded-md"
+                        className="w-full p-3 bg-[#1A1A1E] border border-gray-700 text-white rounded-lg focus:ring-[#FF2247] focus:border-[#FF2247]"
                         required
+                        placeholder="State"
                       />
                     </div>
                     
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                      <label className="block text-gray-300 text-sm font-medium mb-1">
                         Event Type*
                       </label>
                       <input
@@ -337,13 +351,14 @@ export default function AdminEvents() {
                         name="eventType"
                         value={formData.eventType}
                         onChange={handleInputChange}
-                        className="w-full p-2 text-black bg-gray-200 border border-gray-300 rounded-md"
+                        className="w-full p-3 bg-[#1A1A1E] border border-gray-700 text-white rounded-lg focus:ring-[#FF2247] focus:border-[#FF2247]"
                         required
+                        placeholder="Type of event"
                       />
                     </div>
                     
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                      <label className="block text-gray-300 text-sm font-medium mb-1">
                         Start Date*
                       </label>
                       <input
@@ -351,13 +366,13 @@ export default function AdminEvents() {
                         name="startDate"
                         value={formData.startDate}
                         onChange={handleInputChange}
-                        className="w-full p-2 text-black bg-gray-200 border border-gray-300 rounded-md"
+                        className="w-full p-3 bg-[#1A1A1E] border border-gray-700 text-white rounded-lg focus:ring-[#FF2247] focus:border-[#FF2247]"
                         required
                       />
                     </div>
                     
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                      <label className="block text-gray-300 text-sm font-medium mb-1">
                         End Date*
                       </label>
                       <input
@@ -365,13 +380,13 @@ export default function AdminEvents() {
                         name="endDate"
                         value={formData.endDate}
                         onChange={handleInputChange}
-                        className="w-full p-2 text-black bg-gray-200 border border-gray-300 rounded-md"
+                        className="w-full p-3 bg-[#1A1A1E] border border-gray-700 text-white rounded-lg focus:ring-[#FF2247] focus:border-[#FF2247]"
                         required
                       />
                     </div>
                     
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                      <label className="block text-gray-300 text-sm font-medium mb-1">
                         Registration Deadline*
                       </label>
                       <input
@@ -379,13 +394,13 @@ export default function AdminEvents() {
                         name="registrationDeadline"
                         value={formData.registrationDeadline}
                         onChange={handleInputChange}
-                        className="w-full p-2 text-black bg-gray-200 border border-gray-300 rounded-md"
+                        className="w-full p-3 bg-[#1A1A1E] border border-gray-700 text-white rounded-lg focus:ring-[#FF2247] focus:border-[#FF2247]"
                         required
                       />
                     </div>
                     
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                      <label className="block text-gray-300 text-sm font-medium mb-1">
                         Age Groups
                       </label>
                       <input
@@ -393,12 +408,13 @@ export default function AdminEvents() {
                         name="ageGroups"
                         value={formData.ageGroups}
                         onChange={handleInputChange}
-                        className="w-full p-2 text-black bg-gray-200 border border-gray-300 rounded-md"
+                        className="w-full p-3 bg-[#1A1A1E] border border-gray-700 text-white rounded-lg focus:ring-[#FF2247] focus:border-[#FF2247]"
+                        placeholder="e.g. 18-24, 25-34"
                       />
                     </div>
                     
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                      <label className="block text-gray-300 text-sm font-medium mb-1">
                         Competition Level
                       </label>
                       <input
@@ -406,7 +422,8 @@ export default function AdminEvents() {
                         name="competitionLevel"
                         value={formData.competitionLevel}
                         onChange={handleInputChange}
-                        className="w-full p-2 text-black bg-gray-200 border border-gray-300 rounded-md"
+                        className="w-full p-3 bg-[#1A1A1E] border border-gray-700 text-white rounded-lg focus:ring-[#FF2247] focus:border-[#FF2247]"
+                        placeholder="e.g. Beginner, Intermediate, Advanced"
                       />
                     </div>
                     
@@ -417,16 +434,16 @@ export default function AdminEvents() {
                         name="hostNeeded"
                         checked={formData.hostNeeded}
                         onChange={handleInputChange}
-                        className="mr-2 text-black"
+                        className="h-4 w-4 bg-[#1A1A1E] border border-gray-700 rounded focus:ring-[#FF2247]"
                       />
-                      <label htmlFor="hostNeeded" className="text-sm font-medium text-white">
+                      <label htmlFor="hostNeeded" className="ml-2 block text-sm text-gray-300">
                         Has Passed
                       </label>
                     </div>
                   </div>
                   
                   <div className="mt-4">
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label className="block text-gray-300 text-sm font-medium mb-1">
                       Description*
                     </label>
                     <textarea
@@ -434,13 +451,14 @@ export default function AdminEvents() {
                       value={formData.description}
                       onChange={handleInputChange}
                       rows="3"
-                      className="w-full p-2 text-black bg-gray-200 border text-black border-gray-300 rounded-md"
+                      className="w-full p-3 bg-[#1A1A1E] border border-gray-700 text-white rounded-lg focus:ring-[#FF2247] focus:border-[#FF2247]"
                       required
+                      placeholder="Event description"
                     ></textarea>
                   </div>
                   
                   <div className="mt-4">
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label className="block text-gray-300 text-sm font-medium mb-1">
                       Requirements
                     </label>
                     <textarea
@@ -448,7 +466,8 @@ export default function AdminEvents() {
                       value={formData.requirements}
                       onChange={handleInputChange}
                       rows="3"
-                      className="w-full p-2 text-black bg-gray-200 border border-gray-300 rounded-md"
+                      className="w-full p-3 bg-[#1A1A1E] border border-gray-700 text-white rounded-lg focus:ring-[#FF2247] focus:border-[#FF2247]"
+                      placeholder="Event requirements"
                     ></textarea>
                   </div>
                   
@@ -463,7 +482,7 @@ export default function AdminEvents() {
                         resetForm();
                         setShowEventForm(false);
                       }}
-                      className="mr-2 text-black bg-gray-300 hover:bg-gray-400 text-gray-800 py-2 px-4 rounded-md"
+                      className="mr-2 bg-[#1A1A1E] border border-gray-700 text-white py-2 px-4 rounded-lg hover:border-gray-500"
                     >
                       Cancel
                     </motion.button>
@@ -474,7 +493,7 @@ export default function AdminEvents() {
                       whileTap="tap"
                       variants={buttonHover}
                       disabled={loading}
-                      className="bg-[#F93236] hover:bg-red-700 text-white py-2 px-4 rounded-md disabled:opacity-50"
+                      className="bg-[#FF2247] hover:bg-[#e01f41] text-white py-2 px-4 rounded-lg disabled:opacity-50"
                     >
                       {loading ? 'Processing...' : editingEvent ? 'Update Event' : 'Add Event'}
                     </motion.button>
@@ -486,23 +505,25 @@ export default function AdminEvents() {
 
           {loading && !showEventForm ? (
             <div className="text-center py-8">
-              <div className="inline-block animate-spin rounded-full h-8 w-8 border-4 border-t-[#F93236] border-r-[#F93236] border-b-transparent border-l-transparent"></div>
-              <p className="mt-2 text-gray-600">Loading events...</p>
+              <div className="inline-block animate-spin rounded-full h-8 w-8 border-4 border-t-[#FF2247] border-r-[#FF2247] border-b-transparent border-l-transparent"></div>
+              <p className="mt-2 text-gray-400">Loading events...</p>
             </div>
           ) : events.length === 0 ? (
-            <div className="text-center py-8 bg-[#16161A] rounded-xl">
+            <div className="text-center py-8 bg-[#16161A] rounded-xl border border-gray-800">
               <p className="text-gray-400">No events found. Add your first event!</p>
             </div>
           ) : (
-            <div className="bg-[#16161A] rounded-xl shadow-md overflow-hidden">
-              <div className="divide-y divide-gray-700">
+            <div className="bg-[#16161A] rounded-xl shadow-md overflow-hidden border border-gray-800">
+              <div className="divide-y divide-gray-800">
                 {events.map((event) => (
                   <div key={event.id} className="overflow-hidden">
+                    {/* Gradient strip at the top of each event */}
+                    <div className={`h-2 w-full bg-gradient-to-r from-[#F93236] to-[#FF003C]`}></div>
                     {/* Event Header - Always visible */}
                     <motion.div 
                       className="px-6 py-4 flex items-center justify-between cursor-pointer"
                       initial={{ backgroundColor: "#16161A" }}
-                      whileHover={{ backgroundColor: "#2e2e2e" }}
+                      whileHover={{ backgroundColor: "#1A1A1E" }}
                       transition={{ duration: 0.2 }}
                       onClick={() => toggleEventExpansion(event.id)}
                     >
@@ -512,7 +533,7 @@ export default function AdminEvents() {
                           variants={arrowAnimation}
                           initial="closed"
                           animate={expandedEvents[event.id] ? "open" : "closed"}
-                          className="h-5 w-5 mr-2" 
+                          className="h-5 w-5 mr-2 text-[#FF2247]" 
                           fill="none" 
                           strokeLinecap="round" 
                           strokeLinejoin="round" 
@@ -529,24 +550,24 @@ export default function AdminEvents() {
                       {/* Action Buttons */}
                       <div className="flex space-x-4">
                         <motion.button
-                          whileHover={{ scale: 1.05, color: "#a5b4fc" }}
+                          whileHover={{ scale: 1.05 }}
                           whileTap={{ scale: 0.95 }}
                           onClick={(e) => {
                             e.stopPropagation();
                             handleEditEvent(event);
                           }}
-                          className="text-indigo-400"
+                          className="text-blue-500 hover:text-blue-400"
                         >
                           Edit
                         </motion.button>
                         <motion.button
-                          whileHover={{ scale: 1.05, color: "#f87171" }}
+                          whileHover={{ scale: 1.05 }}
                           whileTap={{ scale: 0.95 }}
                           onClick={(e) => {
                             e.stopPropagation();
                             handleDeleteEvent(event.id);
                           }}
-                          className="text-red-500"
+                          className="text-red-500 hover:text-red-600"
                         >
                           Delete
                         </motion.button>
@@ -561,7 +582,7 @@ export default function AdminEvents() {
                           animate="visible"
                           exit="hidden"
                           variants={dropdownAnimation}
-                          className="px-6 py-4 bg-[#2e2e2e] grid grid-cols-1 md:grid-cols-2 gap-4 overflow-hidden"
+                          className="px-6 py-4 bg-[#1A1A1E] grid grid-cols-1 md:grid-cols-2 gap-4 overflow-hidden"
                         >
                           <div>
                             <h4 className="text-sm font-medium text-gray-400">Date</h4>
@@ -625,6 +646,60 @@ export default function AdminEvents() {
           )}
         </motion.div>
       </main>
+
+      {/* Delete Confirmation Modal */}
+      <AnimatePresence>
+        {showDeleteModal && (
+          <>
+            {/* Backdrop */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              className="fixed inset-0 bg-black bg-opacity-50 z-40 flex items-center justify-center"
+              onClick={cancelDelete}
+            >
+              {/* Modal */}
+              <motion.div
+                initial={{ scale: 0.9, opacity: 0, y: 20 }}
+                animate={{ scale: 1, opacity: 1, y: 0 }}
+                exit={{ scale: 0.9, opacity: 0, y: 20 }}
+                transition={{ type: "spring", duration: 0.3 }}
+                className="bg-[#16161A] border border-gray-800 rounded-xl overflow-hidden max-w-md mx-4 z-50"
+                onClick={e => e.stopPropagation()}
+              >
+                {/* Gradient strip at the top */}
+                <div className="h-2 w-full bg-gradient-to-r from-[#F93236] to-[#FF003C]"></div>
+                
+                <div className="p-6">
+                  <h3 className="text-xl font-bold text-white mb-4">Confirm Deletion</h3>
+                  <p className="text-gray-300 mb-6">Are you sure you want to delete this event? This action cannot be undone.</p>
+                  
+                  <div className="flex justify-end space-x-3">
+                    <motion.button
+                      whileHover={{ scale: 1.03 }}
+                      whileTap={{ scale: 0.97 }}
+                      onClick={cancelDelete}
+                      className="px-4 py-2 bg-[#1A1A1E] text-white rounded-lg border border-gray-700 hover:border-gray-500"
+                    >
+                      Cancel
+                    </motion.button>
+                    <motion.button
+                      whileHover={{ scale: 1.03 }}
+                      whileTap={{ scale: 0.97 }}
+                      onClick={confirmDelete}
+                      className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
+                    >
+                      Delete
+                    </motion.button>
+                  </div>
+                </div>
+              </motion.div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

@@ -8,9 +8,8 @@
  * - Smooth transitions between form states
  * - Password confirmation for registration
  * - "Remember me" option for login
- * 
- * In a production environment, this would connect to actual authentication services
- * but currently implements demo functionality with console logs and alerts.
+ * - Admin authentication support with redirection to admin console
+ * - Priority logic: if user exists in both users and admins database, admin access is prioritized
  */
 
 'use client';
@@ -18,8 +17,14 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import Container from '../shared/Container';
+import { db } from '../../app/firebaseConfig.js';
+import { collection, query, where, getDocs } from 'firebase/firestore';
+import { useRouter } from 'next/navigation';
 
 export default function AuthForm() {
+  // Router for page navigation
+  const router = useRouter();
+  
   // State for toggling between login and registration modes
   const [isLogin, setIsLogin] = useState(true);
   
@@ -28,32 +33,107 @@ export default function AuthForm() {
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [rememberMe, setRememberMe] = useState(false);
+
+  /**
+   * Check if user is an admin
+   * @param {string} email - User email
+   * @param {string} password - User password
+   * @returns {Promise<{isAdmin: boolean, adminId: string|null}>}
+   */
+  const checkAdminCredentials = async (email, password) => {
+    try {
+      // Query Firestore for admin user with matching email
+      const adminRef = collection(db, 'admins');
+      const q = query(adminRef, where('email', '==', email));
+      const querySnapshot = await getDocs(q);
+
+      if (querySnapshot.empty) {
+        return { isAdmin: false, adminId: null };
+      }
+
+      // Check password
+      const adminDoc = querySnapshot.docs[0];
+      const adminData = adminDoc.data();
+
+      // In a real app, you should never store plain passwords
+      // This is just for demonstration - you should use proper authentication
+      if (adminData.password !== password) {
+        return { isAdmin: false, adminId: null };
+      }
+
+      return { isAdmin: true, adminId: adminDoc.id };
+    } catch (error) {
+      console.error("Error checking admin credentials:", error);
+      return { isAdmin: false, adminId: null };
+    }
+  };
 
   /**
    * Form submission handler
-   * Currently implements demo functionality with console logs and alerts
-   * Would be connected to actual auth services in production
+   * Handles both regular user authentication and admin authentication
+   * IMPORTANT: Admin accounts take precedence over regular user accounts
+   * if the same email/password exists in both databases
    * 
    * @param {Event} e - Form submission event
    */
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle login/register logic here
-    console.log(isLogin ? 'Login attempt' : 'Registration attempt', {
-      email,
-      password,
-      name: isLogin ? null : name,
-    });
+    setError('');
+    setLoading(true);
     
-    // For demo purposes
-    alert(isLogin 
-      ? `Login attempt with ${email}` 
-      : `Registration attempt for ${name} with ${email}`
-    );
+    try {
+      if (isLogin) {
+        // Login mode
+        // First, check if these are admin credentials (PRIORITY CHECK)
+        // This ensures admin accounts take precedence over regular user accounts
+        const { isAdmin, adminId } = await checkAdminCredentials(email, password);
+        
+        if (isAdmin) {
+          // Admin credentials are valid - prioritize admin login
+          // Set admin session
+          sessionStorage.setItem('adminLoggedIn', 'true');
+          sessionStorage.setItem('adminEmail', email);
+          sessionStorage.setItem('adminId', adminId);
+          
+          // Redirect to admin home
+          router.push('/admin');
+          return; // Exit early to ensure admin flow takes precedence
+        }
+        
+        // If we get here, the user is not an admin (or admin credentials were invalid)
+        // Regular user login logic would go here
+        // For demo - just log and alert
+        console.log('Regular user login attempt', { email, password });
+        alert(`Login successful for: ${email}`);
+        
+        // TODO: Implement your regular user authentication here
+        // ...
+      } else {
+        // Registration mode
+        // Validate passwords match
+        if (password !== confirmPassword) {
+          throw new Error('Passwords do not match');
+        }
+        
+        // Registration logic would go here
+        console.log('Registration attempt', { name, email, password });
+        alert(`Account created for: ${name} (${email})`);
+        
+        // TODO: Implement your user registration here
+        // ...
+      }
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <Container size = 'half'>
+    <Container size='half'>
       <div className="bg-[#16161A] rounded-xl shadow-xl overflow-hidden border border-gray-800">
         <div className="p-8">
           {/* Authentication mode toggle tabs */}
@@ -90,6 +170,13 @@ export default function AuthForm() {
             <h2 className="text-2xl font-bold text-white mb-6">
               {isLogin ? 'Sign in to your account' : 'Create a new account'}
             </h2>
+
+            {/* Error message */}
+            {error && (
+              <div className="mb-4 p-3 bg-red-900/30 text-red-400 rounded-lg text-sm border border-red-800">
+                {error}
+              </div>
+            )}
 
             {/* Conditional name field - only shown in registration mode */}
             {!isLogin && (
@@ -166,6 +253,8 @@ export default function AuthForm() {
                   <input
                     id="remember"
                     type="checkbox"
+                    checked={rememberMe}
+                    onChange={(e) => setRememberMe(e.target.checked)}
                     className="h-4 w-4 bg-[#1A1A1E] border border-gray-700 rounded focus:ring-[#FF2247]"
                   />
                   <label htmlFor="remember" className="ml-2 block text-sm text-gray-300">
@@ -183,9 +272,13 @@ export default function AuthForm() {
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               type="submit"
-              className="w-full btn-primary py-3 mb-4"
+              disabled={loading}
+              className="w-full btn-primary py-3 mb-4 disabled:opacity-70"
             >
-              {isLogin ? 'Sign In' : 'Create Account'}
+              {loading 
+                ? (isLogin ? 'Signing in...' : 'Creating account...')
+                : (isLogin ? 'Sign In' : 'Create Account')
+              }
             </motion.button>
 
             {/* Mode toggle link - changes text based on current mode */}

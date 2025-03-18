@@ -1,29 +1,84 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+/**
+ * Admin Navbar Component
+ * 
+ * Displays the admin navigation bar for the Hackabyte admin interface with responsive design
+ * supporting both desktop and mobile views. Features include:
+ * - Responsive layout that adapts to different screen sizes
+ * - Background changes on scroll for better visibility
+ * - Dropdown menu for nested navigation items
+ * - Mobile menu with animations and accessibility support
+ * - Framer Motion animations for interactive elements
+ */
+
+import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { useRouter } from 'next/navigation';
-import useNoFlash from '@/lib/hooks/useNoFlash';
+import { motion, AnimatePresence } from 'framer-motion';
+import Container from '@/components/shared/Container';
+import { usePathname, useRouter } from 'next/navigation';
 
 export default function AdminNavbar() {
-  const [isMounted, setIsMounted] = useState(false);
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  // State to control mobile menu visibility
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  // State to track which dropdown menu is currently active
+  const [activeDropdown, setActiveDropdown] = useState(null);
+  // Reference to the dropdown menu for detecting outside clicks
+  const dropdownRef = useRef(null);
+  // Get the current pathname for active link highlighting
   const pathname = usePathname();
+  // Router for navigation
   const router = useRouter();
 
-    useNoFlash();   
+  const isActive = (path) => {
+    if (path === '/' && pathname === '/') return true;
+    if (path !== '/' && pathname.startsWith(path)) return true;
+    return false;
+  };
+  
+  // No scroll effect for admin navbar
 
+  // Check if admin is logged in on component mount
   useEffect(() => {
-    setIsMounted(true);
-    
-    // Check if admin is logged in
     const adminLoggedIn = sessionStorage.getItem('adminLoggedIn');
     if (!adminLoggedIn) {
       router.push('/admin');
     }
   }, [router]);
 
+  /**
+   * Outside click handler for dropdown menus
+   * Closes dropdowns when clicking outside or pressing Escape/Tab keys
+   * Improves accessibility and user experience
+   */
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      // Close dropdown menu when clicking outside its container
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setActiveDropdown(null);
+      }
+    };
+
+    // Handle keyboard events for accessibility
+    const handleKeyDown = (e) => {
+      // Close dropdown when Tab or Escape key is pressed
+      if (e.key === 'Tab' || e.key === 'Escape') {
+        setActiveDropdown(null);
+      }
+    };
+
+    // Add event listeners for mouse and keyboard interactions
+    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener('keydown', handleKeyDown);
+    
+    // Clean up event listeners on component unmount
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, []); // Empty dependency array ensures this only runs once
+
+  // Logout handler
   const handleLogout = () => {
     // Clear session storage
     sessionStorage.removeItem('adminLoggedIn');
@@ -34,118 +89,298 @@ export default function AdminNavbar() {
     router.push('/admin');
   };
 
-  if (!isMounted) {
-    return null;
-  }
-
+  /**
+   * Navigation items data structure - Removed Home as requested
+   * Defines all navigation links, their URLs, and dropdown subitems where applicable
+   */
   const navItems = [
-    { name: 'Home', path: '/admin/home' },
-    { name: 'Events', path: '/admin/events' },
-    { name: 'Analytics', path: '/admin/analytics' },
+    { name: 'Events', href: '/admin/events', hasDropdown: false },
+    { name: 'Analytics', href: '/admin/analytics', hasDropdown: false },
   ];
 
-  return (
-    <nav className="bg-[#16161A] border-b border-gray-800">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between h-16">
-          <div className="flex">
-            <div className="flex-shrink-0 flex items-center">
-              <span className="text-[#F93236] text-xl font-bold">Hackabyte Admin</span>
-            </div>
-            <div className="hidden sm:ml-6 sm:flex sm:items-center">
-              {navItems.map((item) => (
-                <Link
-                  key={item.name}
-                  href={item.path}
-                  className={`px-3 py-2 text-sm font-medium rounded-md mx-1 ${
-                    pathname === item.path
-                      ? 'bg-[#F93236] text-white'
-                      : 'text-gray-300 hover:bg-gray-800 hover:text-white'
-                  }`}
-                >
-                  {item.name}
-                </Link>
-              ))}
-            </div>
-          </div>
-          <div className="hidden sm:flex sm:items-center">
-            <button
-              onClick={handleLogout}
-              className="btn-secondary"
-            >
-              Logout
-            </button>
-          </div>
-          
-          {/* Mobile menu button */}
-          <div className="flex items-center sm:hidden">
-            <button
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none"
-              aria-expanded="false"
-            >
-              <span className="sr-only">Open main menu</span>
-              {/* Icon when menu is closed */}
-              <svg
-                className={`${isMenuOpen ? 'hidden' : 'block'} h-6 w-6`}
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                aria-hidden="true"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M4 6h16M4 12h16M4 18h16"
-                />
-              </svg>
-              {/* Icon when menu is open */}
-              <svg
-                className={`${isMenuOpen ? 'block' : 'hidden'} h-6 w-6`}
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                aria-hidden="true"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              </svg>
-            </button>
-          </div>
-        </div>
-      </div>
+  /**
+   * Toggles dropdown menu visibility in mobile view
+   * @param {number} index - Index of the dropdown menu to toggle
+   */
+  const handleDropdownToggle = (index) => {
+    if (activeDropdown === index) {
+      // Close the dropdown if it's already open
+      setActiveDropdown(null);
+    } else {
+      // Open the clicked dropdown and close any others
+      setActiveDropdown(index);
+    }
+  };
 
-      {/* Mobile menu, show/hide based on menu state */}
-      <div className={`${isMenuOpen ? 'block' : 'hidden'} sm:hidden`}>
-        <div className="px-2 pt-2 pb-3 space-y-1">
-          {navItems.map((item) => (
-            <Link
-              key={item.name}
-              href={item.path}
-              className={`block px-3 py-2 rounded-md text-base font-medium ${
-                pathname === item.path
-                  ? 'bg-[#F93236] text-white'
-                  : 'text-gray-300 hover:bg-gray-700 hover:text-white'
-              }`}
-            >
-              {item.name}
-            </Link>
-          ))}
-          <button
-            onClick={handleLogout}
-            className="w-full text-left px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
+  return (
+    <motion.nav
+      // Animation for navbar entrance from top of screen
+      initial={{ y: -100 }}
+      animate={{ y: 0 }}
+      transition={{ duration: 0.5 }}
+      className="fixed w-full z-50 bg-[#1A1A1E] shadow-md py-3"
+      style={{
+        WebkitTransform: 'translate3d(0,0,0)',
+        WebkitBackfaceVisibility: 'hidden'
+      }}
+    >
+      <Container>
+        <div className="flex items-center justify-between w-full px-1 sm:px-0">
+          {/* Site Logo and Branding - Changed "Hackabyte" to "Admin" as requested */}
+          <Link 
+            href="/admin/home" 
+            className="flex items-center space-x-1 sm:space-x-2 justify-start mr-auto safari-fix" 
+            style={{
+              display: '-webkit-box',
+              display: 'flex',
+              WebkitBoxAlign: 'center',
+              WebkitBoxPack: 'start',
+              WebkitAlignItems: 'center',
+              alignItems: 'center'
+            }}
           >
-            Logout
+            <div 
+              className="h-7 sm:h-9 md:h-10 lg:h-11 relative safari-logo-container" 
+              style={{
+                minWidth: '40px',
+                width: '40px',
+                display: 'block',
+                WebkitFlexShrink: 0,
+                flexShrink: 0
+              }}
+            >
+              <img 
+                src="/logo.png" 
+                alt="Hackabyte Admin Logo" 
+                className="w-full h-full object-contain safari-logo-img"
+                style={{
+                  WebkitObjectFit: 'contain',
+                  objectFit: 'contain'
+                }}
+              />
+            </div>
+            <span 
+              className="text-xl sm:text-2xl md:text-2xl lg:text-3xl font-bold text-gray-100 safari-text"
+              style={{
+                WebkitBoxFlex: '0',
+                WebkitFlex: '0 0 auto',
+                flex: '0 0 auto'
+              }}
+            >
+              Admin
+            </span>
+          </Link>
+
+          {/* Desktop Navigation - Hidden on mobile screens */}
+          <div className="hidden md:flex items-center space-x-6">
+            {navItems.map((item, index) => (
+              <div key={item.name} 
+                className={`relative ${item.hasDropdown ? 'group' : ''}`} 
+                ref={item.hasDropdown && index === 2 ? dropdownRef : null}
+              >
+                {item.hasDropdown ? (
+                  <>
+                    <Link
+                      href={item.href}
+                      className={!isActive(item.href)?"text-sm sm:text-base md:text-lg lg:text-xl text-white hover:text-[#FF2247] font-medium transition-colors flex items-center py-2 whitespace-nowrap safari-nav-item" : "text-sm sm:text-base md:text-lg lg:text-xl text-[#FF003C] hover:text-[#FF2247] font-medium transition-colors flex items-center py-2 whitespace-nowrap safari-nav-item"}
+                      onClick={() => setActiveDropdown(null)}
+                    >
+                      {item.name}
+                      <svg 
+                        xmlns="http://www.w3.org/2000/svg" 
+                        className={`w-4 h-4 ml-1 transition-transform group-hover:rotate-180`} 
+                        fill="none" 
+                        viewBox="0 0 24 24" 
+                        stroke="currentColor"
+                      >
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                      </svg>
+                    </Link>
+                    
+                    {/* Invisible spacer to maintain hover area for better UX */}
+                    <div className="absolute h-2 w-full left-0 bottom-0 z-10"></div>
+                    
+                    {/* Dropdown Menu - Appears on hover */}
+                    <div className="absolute invisible group-hover:visible opacity-0 group-hover:opacity-100 left-0 top-full w-48 rounded-md shadow-lg bg-[#16161A] border border-gray-800 ring-1 ring-black ring-opacity-5 z-50 transition-all duration-200" style={{backdropFilter: 'blur(8px)'}}>
+                      <div className="py-1">
+                        {item.dropdownItems && item.dropdownItems.map((dropdownItem) => (
+                          <Link
+                            key={dropdownItem.name}
+                            href={dropdownItem.href}
+                            className="block px-4 py-2 text-sm sm:text-base md:text-lg lg:text-xl text-gray-300 hover:bg-[#1A1A1E] hover:text-[#FF2247] whitespace-nowrap"
+                          >
+                            {dropdownItem.name}
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
+                  </>
+                ) : (
+                  <motion.div
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    <Link 
+                      href={item.href}
+                      className={!isActive(item.href)?"text-sm sm:text-base md:text-lg lg:text-xl text-white hover:text-[#FF2247] font-medium transition-colors whitespace-nowrap safari-nav-item" : "text-sm sm:text-base md:text-lg lg:text-xl text-[#FF003C] hover:text-[#FF2247] font-medium transition-colors whitespace-nowrap safari-nav-item"}
+                    >
+                      {item.name}
+                    </Link>
+                  </motion.div>
+                )}
+              </div>
+            ))}
+            {/* Changed Sign In to Logout button as requested */}
+            <motion.div
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <button 
+                onClick={handleLogout} 
+                className="text-sm sm:text-base md:text-lg lg:text-xl btn-primary whitespace-nowrap"
+              >
+                Logout
+              </button>
+            </motion.div>
+          </div>
+
+          {/* Mobile Menu Toggle Button - Only visible on smaller screens */}
+          <button 
+            className="md:hidden text-gray-300 p-2"
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            aria-label="Toggle mobile menu"
+          >
+            <svg 
+              xmlns="http://www.w3.org/2000/svg" 
+              width="24" 
+              height="24" 
+              viewBox="0 0 24 24" 
+              fill="none" 
+              stroke="currentColor" 
+              strokeWidth="2" 
+              strokeLinecap="round" 
+              strokeLinejoin="round"
+            >
+              {isMobileMenuOpen ? (
+                <path d="M18 6L6 18M6 6l12 12" />
+              ) : (
+                <path d="M3 12h18M3 6h18M3 18h18" />
+              )}
+            </svg>
           </button>
         </div>
-      </div>
-    </nav>
+
+        {/* Mobile Menu - Animated dropdown with nested navigation items */}
+        <AnimatePresence>
+          {isMobileMenuOpen && (
+            <motion.div
+              initial={{ height: 0, opacity: 1 }}
+              animate={{ height: 'auto', opacity: 1 }}
+              exit={{ height: 0, opacity: 1 }}
+              transition={{ duration: 0.3 }}
+              className="md:hidden mt-0 bg-[#1A1A1E] shadow-lg rounded-b-md overflow-hidden"
+            >
+              <motion.div 
+                initial={{ y: -20 }}
+                animate={{ y: 0 }}
+                exit={{ y: -20 }}
+                transition={{ duration: 0.3 }}
+                className="flex flex-col space-y-1 py-3 sm:py-4"
+              >
+                {navItems.map((item, index) => (
+                  <div key={item.name}>
+                    {item.hasDropdown ? (
+                      <>
+                        <div className="flex items-center justify-between">
+                          <Link
+                            href={item.href}
+                            className="text-sm sm:text-base md:text-lg lg:text-xl text-white hover:text-[#FF2247] font-medium transition-colors px-4 py-0 sm:py-3 flex-grow text-left whitespace-nowrap"
+                            onClick={() => {
+                              setIsMobileMenuOpen(false);
+                            }}
+                          >
+                            {item.name}
+                          </Link>
+                          <button
+                            onClick={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              handleDropdownToggle(index);
+                            }}
+                            className="px-4 py-2 sm:py-3"
+                            aria-label={`Toggle ${item.name} dropdown`}
+                          >
+                            <svg 
+                              xmlns="http://www.w3.org/2000/svg" 
+                              className={`w-4 h-4 transition-transform ${activeDropdown === index ? 'rotate-180' : ''} text-white`} 
+                              fill="none" 
+                              viewBox="0 0 24 24" 
+                              stroke="currentColor"
+                            >
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                            </svg>
+                          </button>
+                        </div>
+                        
+                        <AnimatePresence>
+                          {activeDropdown === index && item.dropdownItems && (
+                            <motion.div
+                              initial={{ height: 0, opacity: 1 }}
+                              animate={{ height: 'auto', opacity: 1 }}
+                              exit={{ height: 0, opacity: 1 }}
+                              transition={{ duration: 0.2 }}
+                              className="pl-6 bg-[#1A1A1E] border-l-2 border-[#F93236]/30 ml-4 shadow-lg rounded-b-md overflow-hidden"
+                            >
+                              <motion.div
+                                initial={{ y: -10 }}
+                                animate={{ y: 0 }}
+                                exit={{ y: -10 }}
+                                transition={{ duration: 0.2 }}
+                              >
+                                {item.dropdownItems.map((dropdownItem) => (
+                                  <Link 
+                                    key={dropdownItem.name}
+                                    href={dropdownItem.href}
+                                    className="block py-1 sm:py-2 px-4 text-sm sm:text-base md:text-lg lg:text-xl text-gray-300 hover:text-[#FF2247] whitespace-nowrap"
+                                    onClick={() => {
+                                      setActiveDropdown(null);
+                                      setIsMobileMenuOpen(false);
+                                    }}
+                                  >
+                                    {dropdownItem.name}
+                                  </Link>
+                                ))}
+                              </motion.div>
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
+                      </>
+                    ) : (
+                      <Link 
+                        href={item.href}
+                        className="text-sm sm:text-base md:text-lg lg:text-xl text-white hover:text-[#FF2247] font-medium transition-colors px-4 py-2 sm:py-3 block whitespace-nowrap"
+                        onClick={() => setIsMobileMenuOpen(false)}
+                      >
+                        {item.name}
+                      </Link>
+                    )}
+                  </div>
+                ))}
+                {/* Changed Sign In to Logout button as requested in mobile menu */}
+                <button 
+                  onClick={() => {
+                    handleLogout();
+                    setIsMobileMenuOpen(false);
+                  }} 
+                  className="text-sm sm:text-base md:text-lg lg:text-xl btn-primary mx-4 text-center"
+                >
+                  Logout
+                </button>
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </Container>
+    </motion.nav>
   );
 }
