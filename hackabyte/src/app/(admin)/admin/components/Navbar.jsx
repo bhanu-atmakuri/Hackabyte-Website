@@ -138,7 +138,7 @@ export default function AdminNavbar() {
         <div className="flex items-center justify-between w-full px-1 sm:px-0">
           {/* Site Logo and Branding - Changed "Hackabyte" to "Admin" as requested */}
           <Link 
-            href="/admin/home" 
+            href="/admin" 
             className="flex items-center space-x-1 sm:space-x-2 justify-start mr-auto safari-fix" 
             style={{
               display: '-webkit-box',

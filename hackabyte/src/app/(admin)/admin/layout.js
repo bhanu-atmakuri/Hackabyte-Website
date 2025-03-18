@@ -1,7 +1,7 @@
 // hackabyte/src/app/layout.js
 import { Inter } from 'next/font/google';
 import '../../globals.css';
-import Navbar from "../../admin-components/Navbar.jsx"
+import Navbar from "./components/Navbar.jsx"
 
 // Load Inter font once and use it throughout the app
 const inter = Inter({ 

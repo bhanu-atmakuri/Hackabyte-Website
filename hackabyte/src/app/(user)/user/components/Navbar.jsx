@@ -1,9 +1,9 @@
 'use client';
 
 /**
- * Navbar Component
+ * Admin Navbar Component
  * 
- * Displays the main navigation bar for the Hackabyte website with responsive design
+ * Displays the admin navigation bar for the Hackabyte admin interface with responsive design
  * supporting both desktop and mobile views. Features include:
  * - Responsive layout that adapts to different screen sizes
  * - Background changes on scroll for better visibility
@@ -16,11 +16,9 @@ import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import Container from '@/components/shared/Container';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 
-export default function Navbar() {
-  // State to track if the user has scrolled down the page
-  const [isScrolled, setIsScrolled] = useState(false);
+export default function AdminNavbar() {
   // State to control mobile menu visibility
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   // State to track which dropdown menu is currently active
@@ -29,19 +27,8 @@ export default function Navbar() {
   const dropdownRef = useRef(null);
   // Get the current pathname for active link highlighting
   const pathname = usePathname();
-  // State to track if the user is an admin
-  const [isAdmin, setIsAdmin] = useState(false);
-
-  /**
-   * Check for admin login status
-   * Determines if the user is logged in as an admin
-   */
-  useEffect(() => {
-    const adminLoggedIn = sessionStorage.getItem('adminLoggedIn');
-    if (adminLoggedIn === 'true') {
-      setIsAdmin(true);
-    }
-  }, []);
+  // Router for navigation
+  const router = useRouter();
 
   const isActive = (path) => {
     if (path === '/' && pathname === '/') return true;
@@ -49,29 +36,15 @@ export default function Navbar() {
     return false;
   };
   
-  /**
-   * Scroll effect handler
-   * Applies background styling to navbar when user scrolls past threshold
-   */
-  useEffect(() => {
-    const handleScroll = () => {
-      // Apply scrolled styling when page is scrolled more than 10px
-      if (window.scrollY > 10) {
-        setIsScrolled(true);
-      } else {
-        setIsScrolled(false);
-      }
-    };
+  // No scroll effect for admin navbar
 
-    // Add the event listener
-    window.addEventListener('scroll', handleScroll);
-    
-    // Initial check to set correct state on component mount
-    handleScroll();
-    
-    // Clean up event listener on component unmount
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []); // Empty dependency array ensures this only runs once on mount
+  // Check if admin is logged in on component mount
+  useEffect(() => {
+    const adminLoggedIn = sessionStorage.getItem('adminLoggedIn');
+    if (!adminLoggedIn) {
+      router.push('/admin');
+    }
+  }, [router]);
 
   /**
    * Outside click handler for dropdown menus
@@ -105,24 +78,30 @@ export default function Navbar() {
     };
   }, []); // Empty dependency array ensures this only runs once
 
+  // Logout handler
+  const handleLogout = () => {
+    // Clear session storage
+    sessionStorage.removeItem('adminLoggedIn');
+    sessionStorage.removeItem('adminEmail');
+    sessionStorage.removeItem('adminId');
+    
+    // Redirect to login
+    router.push('/admin');
+  };
+
+  // Exit handler
+  const handleExit = () => {
+    // Redirect to main site
+    router.push('/');
+  };
+
   /**
-   * Navigation items data structure
+   * Navigation items data structure - Removed Home as requested
    * Defines all navigation links, their URLs, and dropdown subitems where applicable
    */
   const navItems = [
-    { name: 'LUMA', href: '/luma', hasDropdown: false },
-    { 
-      name: 'Events', 
-      href: '/events', 
-      hasDropdown: true,
-      dropdownItems: [
-        { name: 'Hackathons', href: '/events/hackathons' },
-        { name: 'Past Events', href: '/events/past-events' }
-      ]
-    },
-    { name: 'About', href: '/about', hasDropdown: false },
-    { name: 'Join Us', href: '/join-us', hasDropdown: false },
-    { name: 'Contact Us', href: '/contact', hasDropdown: false },
+    { name: 'Events', href: '/admin/events', hasDropdown: false },
+    { name: 'Analytics', href: '/admin/analytics', hasDropdown: false },
   ];
 
   /**
@@ -139,31 +118,27 @@ export default function Navbar() {
     }
   };
 
-  // Dashboard link path based on admin status
-  const dashboardLink = isAdmin ? '/admin' : '/dashboard';
-
   return (
-    <motion.nav
-      // Animation for navbar entrance from top of screen
-      initial={{ y: -100 }}
-      animate={{ y: 0 }}
-      transition={{ duration: 0.5 }}
-      className={`fixed w-full z-50 transition-all duration-50 ${
-        // Apply different styling based on scroll position
-        isScrolled 
-          ? 'bg-[#1A1A1E]/90 backdrop-blur-md shadow-md py-3' // Scrolled state
-          : 'bg-transparent py-5' // Default state at top of page
-      }`}
-      style={{
-        WebkitTransform: 'translate3d(0,0,0)',
-        WebkitBackfaceVisibility: 'hidden'
-      }}
-    >
+    <>
+      {/* Add invisible spacer div to create room for the fixed navbar */}
+      <div className="h-[76px]"></div>
+      
+      <motion.nav
+        // Animation for navbar entrance from top of screen
+        initial={{ y: -100 }}
+        animate={{ y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="fixed w-full top-0 z-50 bg-[#1A1A1E] shadow-md py-3"
+        style={{
+          WebkitTransform: 'translate3d(0,0,0)',
+          WebkitBackfaceVisibility: 'hidden'
+        }}
+      >
       <Container>
         <div className="flex items-center justify-between w-full px-1 sm:px-0">
-          {/* Site Logo and Branding */}
+          {/* Site Logo and Branding - Changed "Hackabyte" to "Admin" as requested */}
           <Link 
-            href="/" 
+            href="/admin" 
             className="flex items-center space-x-1 sm:space-x-2 justify-start mr-auto safari-fix" 
             style={{
               display: '-webkit-box',
@@ -186,7 +161,7 @@ export default function Navbar() {
             >
               <img 
                 src="/logo.png" 
-                alt="Hackabyte Logo" 
+                alt="Hackabyte Admin Logo" 
                 className="w-full h-full object-contain safari-logo-img"
                 style={{
                   WebkitObjectFit: 'contain',
@@ -202,7 +177,7 @@ export default function Navbar() {
                 flex: '0 0 auto'
               }}
             >
-              Hackabyte
+              Admin
             </span>
           </Link>
 
@@ -238,7 +213,7 @@ export default function Navbar() {
                     {/* Dropdown Menu - Appears on hover */}
                     <div className="absolute invisible group-hover:visible opacity-0 group-hover:opacity-100 left-0 top-full w-48 rounded-md shadow-lg bg-[#16161A] border border-gray-800 ring-1 ring-black ring-opacity-5 z-50 transition-all duration-200" style={{backdropFilter: 'blur(8px)'}}>
                       <div className="py-1">
-                        {item.dropdownItems.map((dropdownItem) => (
+                        {item.dropdownItems && item.dropdownItems.map((dropdownItem) => (
                           <Link
                             key={dropdownItem.name}
                             href={dropdownItem.href}
@@ -265,13 +240,29 @@ export default function Navbar() {
                 )}
               </div>
             ))}
+            {/* Changed Logout button to gray styling */}
             <motion.div
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
-              <Link href={dashboardLink} className="text-sm sm:text-base md:text-lg lg:text-xl btn-primary whitespace-nowrap">
-                Dashboard
-              </Link>
+              <button 
+                onClick={handleLogout} 
+                className="text-sm sm:text-base md:text-lg lg:text-xl bg-[#1A1A1E] border border-gray-700 text-white py-2 px-4 rounded-lg hover:border-gray-500 whitespace-nowrap"
+              >
+                Logout
+              </button>
+            </motion.div>
+            {/* Added Exit button with red styling */}
+            <motion.div
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <button 
+                onClick={handleExit} 
+                className="text-sm sm:text-base md:text-lg lg:text-xl btn-primary px-6 whitespace-nowrap"
+              >
+                Exit
+              </button>
             </motion.div>
           </div>
 
@@ -354,7 +345,7 @@ export default function Navbar() {
                         </div>
                         
                         <AnimatePresence>
-                          {activeDropdown === index && (
+                          {activeDropdown === index && item.dropdownItems && (
                             <motion.div
                               initial={{ height: 0, opacity: 1 }}
                               animate={{ height: 'auto', opacity: 1 }}
@@ -397,18 +388,32 @@ export default function Navbar() {
                     )}
                   </div>
                 ))}
-                <Link 
-                  href={dashboardLink} 
-                  className="text-sm sm:text-base md:text-lg lg:text-xl btn-primary mx-4 text-center"
-                  onClick={() => setIsMobileMenuOpen(false)}
+                {/* Changed Logout button to gray in mobile menu */}
+                <button 
+                  onClick={() => {
+                    handleLogout();
+                    setIsMobileMenuOpen(false);
+                  }} 
+                  className="text-sm sm:text-base md:text-lg lg:text-xl bg-[#1A1A1E] border border-gray-700 text-white py-2 px-4 rounded-lg hover:border-gray-500 mx-4 text-center"
                 >
-                  Dashboard
-                </Link>
+                  Logout
+                </button>
+                {/* Added Exit button with red styling in mobile menu */}
+                <button 
+                  onClick={() => {
+                    handleExit();
+                    setIsMobileMenuOpen(false);
+                  }} 
+                  className="text-sm sm:text-base md:text-lg lg:text-xl btn-primary px-6 mx-4 text-center"
+                >
+                  Exit
+                </button>
               </motion.div>
             </motion.div>
           )}
         </AnimatePresence>
       </Container>
     </motion.nav>
+    </>
   );
 }
