@@ -64,7 +64,7 @@ export default function LumaJoin() {
 
  return (
    <section className="py-20 bg-[#16161A]" id="join" ref={ref}>
-     <Container size = "half">
+     <Container>
        {/* Section heading with fade-in and slide-up animation */}
        <motion.div
          initial={{ opacity: 0, y: 20 }}

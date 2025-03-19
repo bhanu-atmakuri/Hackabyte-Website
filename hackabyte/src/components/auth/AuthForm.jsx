@@ -74,8 +74,7 @@ export default function AuthForm() {
   /**
    * Form submission handler
    * Handles both regular user authentication and admin authentication
-   * IMPORTANT: Admin accounts take precedence over regular user accounts
-   * if the same email/password exists in both databases
+   * Routes both user types to admin page as requested
    * 
    * @param {Event} e - Form submission event
    */
@@ -87,12 +86,11 @@ export default function AuthForm() {
     try {
       if (isLogin) {
         // Login mode
-        // First, check if these are admin credentials (PRIORITY CHECK)
-        // This ensures admin accounts take precedence over regular user accounts
+        // First, check if these are admin credentials
         const { isAdmin, adminId } = await checkAdminCredentials(email, password);
         
         if (isAdmin) {
-          // Admin credentials are valid - prioritize admin login
+          // Admin credentials are valid
           // Set admin session
           sessionStorage.setItem('adminLoggedIn', 'true');
           sessionStorage.setItem('adminEmail', email);
@@ -100,17 +98,22 @@ export default function AuthForm() {
           
           // Redirect to admin home
           router.push('/admin');
-          return; // Exit early to ensure admin flow takes precedence
+          return;
         }
         
-        // If we get here, the user is not an admin (or admin credentials were invalid)
+        // If we get here, the user is not an admin
         // Regular user login logic would go here
-        // For demo - just log and alert
         console.log('Regular user login attempt', { email, password });
+        
+        // Set regular user session
+        sessionStorage.setItem('userLoggedIn', 'true');
+        sessionStorage.setItem('userEmail', email);
+        
+        // Alert for demo purposes
         alert(`Login successful for: ${email}`);
         
-        // TODO: Implement your regular user authentication here
-        // ...
+        // Redirect to admin page as requested (Note: This could create security issues)
+        router.push('/admin');
       } else {
         // Registration mode
         // Validate passwords match
@@ -122,8 +125,12 @@ export default function AuthForm() {
         console.log('Registration attempt', { name, email, password });
         alert(`Account created for: ${name} (${email})`);
         
-        // TODO: Implement your user registration here
-        // ...
+        // After successful registration, log the user in
+        sessionStorage.setItem('userLoggedIn', 'true');
+        sessionStorage.setItem('userEmail', email);
+        
+        // Redirect to admin page as requested
+        router.push('/admin');
       }
     } catch (err) {
       setError(err.message);

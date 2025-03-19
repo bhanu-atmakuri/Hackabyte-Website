@@ -249,7 +249,7 @@ export default function AdminEvents() {
   }
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-[#1A1A1E]">
       <Head>
         <title>Hackabyte | Admin Events</title>
         <meta name="description" content="Admin events management for Hackabyte" />
@@ -271,7 +271,7 @@ export default function AdminEvents() {
                 resetForm();
                 setShowEventForm(!showEventForm);
               }}
-              className="px-4 py-2 bg-[#FF2247] text-white rounded-lg hover:bg-[#e01f41] transition-colors"
+              className="btn-primary px-4 py-2 rounded-lg"
             >
               {showEventForm ? 'Cancel' : 'Add New Event'}
             </motion.button>

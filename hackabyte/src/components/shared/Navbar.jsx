@@ -31,15 +31,26 @@ export default function Navbar() {
   const pathname = usePathname();
   // State to track if the user is an admin
   const [isAdmin, setIsAdmin] = useState(false);
+  // State to track if the user is logged in (any type of user)
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   /**
-   * Check for admin login status
-   * Determines if the user is logged in as an admin
+   * Check for user login status
+   * Determines if the user is logged in and what type of user they are
    */
   useEffect(() => {
     const adminLoggedIn = sessionStorage.getItem('adminLoggedIn');
+    const userLoggedIn = sessionStorage.getItem('userLoggedIn');
+    
     if (adminLoggedIn === 'true') {
       setIsAdmin(true);
+      setIsLoggedIn(true);
+    } else if (userLoggedIn === 'true') {
+      setIsAdmin(false);
+      setIsLoggedIn(true);
+    } else {
+      setIsAdmin(false);
+      setIsLoggedIn(false);
     }
   }, []);
 
@@ -139,8 +150,9 @@ export default function Navbar() {
     }
   };
 
-  // Dashboard link path based on admin status
-  const dashboardLink = isAdmin ? '/admin' : '/dashboard';
+  // Get appropriate button text and link based on auth status
+  const buttonText = isLoggedIn ? "Dashboard" : "Sign In";
+  const buttonLink = isLoggedIn ? (isAdmin ? '/admin' : '/dashboard') : '/auth';
 
   return (
     <motion.nav
@@ -269,8 +281,8 @@ export default function Navbar() {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
-              <Link href={dashboardLink} className="text-sm sm:text-base md:text-lg lg:text-xl btn-primary whitespace-nowrap">
-                Dashboard
+              <Link href={buttonLink} className="text-sm sm:text-base md:text-lg lg:text-xl btn-primary whitespace-nowrap">
+                {buttonText}
               </Link>
             </motion.div>
           </div>
@@ -398,11 +410,11 @@ export default function Navbar() {
                   </div>
                 ))}
                 <Link 
-                  href={dashboardLink} 
+                  href={buttonLink}
                   className="text-sm sm:text-base md:text-lg lg:text-xl btn-primary mx-4 text-center"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
-                  Dashboard
+                  {buttonText}
                 </Link>
               </motion.div>
             </motion.div>
