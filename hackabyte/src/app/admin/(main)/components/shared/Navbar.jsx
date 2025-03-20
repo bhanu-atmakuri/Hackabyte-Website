@@ -86,7 +86,7 @@ export default function AdminNavbar() {
     sessionStorage.removeItem('adminId');
     
     // Redirect to login
-    router.push('/admin');
+    router.push('/');
   };
 
   // Exit handler
