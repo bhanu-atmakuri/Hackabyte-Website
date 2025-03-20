@@ -10,11 +10,20 @@
  * @returns {JSX.Element}
  */
 export default function Container({ children, size = 'default', className = '' }) {
-  // Determine base container class
-  const containerClass = 
-    size === 'half' ? 'container-half' :
-    size === 'wide' ? 'container-wide' :
-    'container-normal';
+  // Determine base container class based on size
+  let containerClass;
+  
+  switch(size) {
+    case 'half':
+      containerClass = 'max-w-4xl mx-auto px-4 sm:px-6 lg:px-8';
+      break;
+    case 'wide':
+      containerClass = 'max-w-8xl mx-auto px-4 sm:px-6 lg:px-8';
+      break;
+    default: // default size
+      containerClass = 'max-w-7xl mx-auto px-4 sm:px-6 lg:px-8';
+      break;
+  }
   
   return (
     <div className={`${containerClass} ${className}`}>

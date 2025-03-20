@@ -1,8 +1,6 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import Navbar from './Navbar';
-import Footer from './Footer';
 import useNoFlash from '@/lib/hooks/useNoFlash';
 
 /**
@@ -33,10 +31,8 @@ export default function BasePageLayout({ children, className = '' }) {
   }
 
   return (
-    <>
-      <main className={`min-h-screen page-top-spacing ${className}`}>
-        {children}
-      </main>
-    </>
+    <main className={`relative min-h-screen ${className}`}>
+      {children}
+    </main>
   );
 }

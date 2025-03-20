@@ -35,7 +35,7 @@ export default function SectionLayout({
   return (
     <section 
       id={id} 
-      className={`py-10 sm:py-14 md:py-16 lg:py-20 2xl:py-24 ${bgColor} ${className}`}
+      className={`relative py-10 sm:py-14 md:py-16 lg:py-20 2xl:py-24 ${bgColor} ${className}`}
     >
       <Container size={containerSize}>
         {children}

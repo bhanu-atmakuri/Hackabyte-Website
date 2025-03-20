@@ -23,7 +23,7 @@ export default function Section({
   return (
     <section 
       id={id || undefined} 
-      className={`${noPadding ? '' : 'py-16 md:py-20 lg:py-24'} ${className}`}
+      className={`relative ${noPadding ? '' : 'py-16 md:py-20 lg:py-24'} ${className}`}
     >
       <Container size={containerSize}>
         {children}
