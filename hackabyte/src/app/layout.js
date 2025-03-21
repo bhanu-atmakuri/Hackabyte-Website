@@ -14,6 +14,13 @@ export const metadata = {
   viewport: 'width=device-width, initial-scale=1, viewport-fit=cover'
 };
 
+// Add this export alongside your metadata export
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  viewportFit: 'cover'
+};
+
 // Using a function component instead of just returning JSX to handle hydration more carefully
 export default function RootLayout({ children }) {
   return (
