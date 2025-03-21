@@ -2,15 +2,13 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import AdminLayout from '@/components/layouts/AdminLayout';
-import AnalyticsSummary from '@/components/admin/analytics/AnalyticsSummary';
-import EventAnalytics from '@/components/admin/analytics/EventAnalytics';
-import UserAnalytics from '@/components/admin/analytics/UserAnalytics';
-import PageViewsChart from '@/components/admin/analytics/PageViewsChart';
+import AdminLayout from '../components/analytics/AdminLayout';
+import AnalyticsSummary from '../components/analytics/AnalyticsSummary';
+import EventAnalytics from '../components/analytics/EventAnalytics';
+import UserAnalytics from '../components/analytics/UserAnalytics';
+import PageViewsChart from '../components/analytics/PageViewsChart';
 import { ensureAdminAuth } from '@/lib/auth/adminAuth';
 import { fetchAnalyticsData } from '@/lib/firebase/analytics';
-import LoadingSpinner from '@/components/shared/LoadingSpinner';
-import AdminErrorHandler from '@/components/admin/ErrorBoundary';
 
 export default function AnalyticsPage() {
   const [isLoading, setIsLoading] = useState(true);
@@ -60,39 +58,37 @@ export default function AnalyticsPage() {
     return (
       <AdminLayout>
         <div className="flex justify-center items-center h-96">
-          <LoadingSpinner size="large" />
+          <p className="text-white text-lg">Loading analytics data...</p>
         </div>
       </AdminLayout>
     );
   }
 
   return (
-    <AdminErrorHandler>
-      <AdminLayout>
-        <div className="p-6">
-          <div className="flex justify-between items-center mb-8">
-            <h1 className="text-3xl font-bold text-white">Analytics Dashboard</h1>
-            <div className="flex space-x-2">
-              <TimeRangeSelector 
-                currentRange={timeRange} 
-                onChange={handleTimeRangeChange} 
-              />
-            </div>
-          </div>
-          
-          <AnalyticsSummary data={analyticsData?.summary} />
-          
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-8">
-            <PageViewsChart data={analyticsData?.pageViews} timeRange={timeRange} />
-            <UserAnalytics data={analyticsData?.users} />
-          </div>
-          
-          <div className="mt-8">
-            <EventAnalytics data={analyticsData?.events} />
+    <AdminLayout>
+      <div className="p-6">
+        <div className="flex justify-between items-center mb-8">
+          <h1 className="text-3xl font-bold text-white">Analytics Dashboard</h1>
+          <div className="flex space-x-2">
+            <TimeRangeSelector 
+              currentRange={timeRange} 
+              onChange={handleTimeRangeChange} 
+            />
           </div>
         </div>
-      </AdminLayout>
-    </AdminErrorHandler>
+        
+        <AnalyticsSummary data={analyticsData?.summary} />
+        
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-8">
+          <PageViewsChart data={analyticsData?.pageViews} timeRange={timeRange} />
+          <UserAnalytics data={analyticsData?.users} />
+        </div>
+        
+        <div className="mt-8">
+          <EventAnalytics data={analyticsData?.events} />
+        </div>
+      </div>
+    </AdminLayout>
   );
 }
 
