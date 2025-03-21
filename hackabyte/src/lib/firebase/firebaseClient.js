@@ -75,12 +75,17 @@ export async function signUp(email, password, name) {
 export async function logOut() {
   try {
     await signOut(auth);
-    // Clear any session storage
+    // Clear all session storage related to authentication
     sessionStorage.removeItem('userLoggedIn');
     sessionStorage.removeItem('userEmail');
     sessionStorage.removeItem('adminLoggedIn');
     sessionStorage.removeItem('adminEmail');
     sessionStorage.removeItem('adminId');
+    
+    // Also clear any relevant cookies
+    if (typeof document !== 'undefined') {
+      document.cookie = 'admin_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+    }
   } catch (error) {
     console.error('Error signing out:', error);
     throw error;

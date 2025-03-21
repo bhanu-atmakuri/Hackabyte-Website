@@ -17,6 +17,7 @@ import { COLLECTIONS } from './analyticsSchemas';
  * @returns {Promise<Object>} Analytics data object
  */
 export async function fetchAnalyticsData(timeRange = 'week') {
+  console.log('Fetching analytics data for timeRange:', timeRange);
   try {
     // Calculate the start date based on timeRange
     const now = new Date();
@@ -91,7 +92,10 @@ export async function fetchAnalyticsData(timeRange = 'week') {
     
   } catch (error) {
     console.error("Error fetching analytics data:", error);
+    // Show the complete error stack for debugging
+    console.error(error.stack);
     // Fall back to mock data in case of error
+    console.log('Returning mock data due to error');
     return generateMockData(timeRange);
   }
 }

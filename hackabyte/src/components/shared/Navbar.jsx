@@ -39,6 +39,17 @@ export default function Navbar() {
    * Determines if the user is logged in and what type of user they are
    */
   useEffect(() => {
+    // Clear login state in development environment for consistency
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Development environment detected, clearing session storage');
+      sessionStorage.removeItem('adminLoggedIn');
+      sessionStorage.removeItem('adminEmail');
+      sessionStorage.removeItem('adminId');
+      sessionStorage.removeItem('userLoggedIn');
+      sessionStorage.removeItem('userEmail');
+    }
+    
+    // Check login status
     const adminLoggedIn = sessionStorage.getItem('adminLoggedIn');
     const userLoggedIn = sessionStorage.getItem('userLoggedIn');
     

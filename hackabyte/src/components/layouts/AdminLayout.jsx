@@ -19,13 +19,24 @@ export default function AdminLayout({ children }) {
   const pathname = usePathname();
   
   useEffect(() => {
-    // Get admin info from session storage
-    const email = sessionStorage.getItem('adminEmail');
-    if (email) {
-      // Just use the part before @ for a simple name
-      setAdminName(email.split('@')[0]);
+    // Debug log
+    console.log('AdminLayout mounted, pathname:', pathname);
+    
+    try {
+      // Get admin info from session storage
+      const email = sessionStorage.getItem('adminEmail');
+      console.log('Admin email from session:', email);
+      
+      if (email) {
+        // Just use the part before @ for a simple name
+        setAdminName(email.split('@')[0]);
+      } else {
+        console.warn('No admin email found in session storage');
+      }
+    } catch (error) {
+      console.error('Error accessing session storage:', error);
     }
-  }, []);
+  }, [pathname]);
 
   const navigation = [
     { name: 'Dashboard', href: '/admin', icon: HomeIcon },
