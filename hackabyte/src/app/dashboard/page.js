@@ -1,13 +1,16 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import BasePageLayout from '@/components/shared/BasePageLayout';
 import Section from '@/components/shared/Section';
 import Container from '@/components/shared/Container';
 import useNoFlash from '@/lib/hooks/useNoFlash';
+import { ensureUserAuth } from '@/lib/auth/adminAuth';
 
 export default function Dashboard() {
   const [isMounted, setIsMounted] = useState(false);
+  const router = useRouter();
   
   // Use the no-flash hook
   useNoFlash();
@@ -15,7 +18,18 @@ export default function Dashboard() {
   // Only render content after client-side hydration
   useEffect(() => {
     setIsMounted(true);
-  }, []);
+    
+    // Check if user is logged in
+    const checkAuth = async () => {
+      const isLoggedIn = await ensureUserAuth();
+      if (!isLoggedIn) {
+        console.log('User not logged in, redirecting to auth');
+        router.push('/auth');
+      }
+    };
+    
+    checkAuth();
+  }, [router]);
   
   if (!isMounted) {
     return <div className="min-h-screen flex items-center justify-center">
