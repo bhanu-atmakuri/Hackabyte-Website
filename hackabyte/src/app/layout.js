@@ -11,10 +11,9 @@ const inter = Inter({
 export const metadata = {
   title: 'Hackabyte - Hackathons for Students',
   description: 'Hackabyte hosts in-person hackathons for high school, middle school, and elementary students, building coding experience, problem-solving skills, and mentor connections.',
-  viewport: 'width=device-width, initial-scale=1, viewport-fit=cover'
 };
 
-// Add this export alongside your metadata export
+// Separate viewport export as recommended by Next.js
 export const viewport = {
   width: 'device-width',
   initialScale: 1,
