@@ -1,4 +1,5 @@
 import { Inter } from 'next/font/google';
+import '../globals.css';
 
 // Load Inter font
 const inter = Inter({ 
@@ -19,8 +20,13 @@ export const viewport = {
 
 export default function AdminLayout({ children }) {
   return (
-    <div className={`${inter.className} min-h-screen bg-[#1A1A1E] text-white`}>
-      {children}
-    </div>
+    <html lang="en" suppressHydrationWarning className="scroll-smooth">
+      <body className={`${inter.className} min-h-screen bg-[#1A1A1E] text-white`} suppressHydrationWarning>
+        <div className="admin-layout">
+          {/* Admin sidebar or navigation could go here */}
+          <main>{children}</main>
+        </div>
+      </body>
+    </html>
   );
 }
