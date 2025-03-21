@@ -1,5 +1,4 @@
 import { Inter } from 'next/font/google';
-import '../globals.css';
 import AdminNavbar from '@/components/admin/AdminNavbar';
 
 // Load Inter font
@@ -13,15 +12,9 @@ export const metadata = {
   description: 'Admin panel for Hackabyte events and user management',
 };
 
-export const viewport = {
-  width: 'device-width',
-  initialScale: 1,
-  viewportFit: 'cover'
-};
-
 export default function AdminLayout({ children }) {
   return (
-    <div className="flex h-screen bg-[#1A1A1E] text-white">
+    <div className={`flex h-screen bg-[#1A1A1E] text-white ${inter.className}`}>
       <AdminNavbar />
       <main className="flex-1 overflow-y-auto p-4">
         {children}

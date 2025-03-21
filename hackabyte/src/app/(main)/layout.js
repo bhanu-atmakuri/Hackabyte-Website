@@ -22,14 +22,12 @@ export const viewport = {
 };
 
 // Using a function component instead of just returning JSX to handle hydration more carefully
-export default function RootLayout({ children }) {
+export default function MainLayout({ children }) {
   return (
-    <html lang="en" suppressHydrationWarning className="scroll-smooth">
-      <body className={`${inter.className} antialiased text-white bg-[#1A1A1E]`} suppressHydrationWarning>
-        <Navbar />
-        {children}
-        <Footer />
-      </body>
-    </html>
+    <>
+      <Navbar />
+      {children}
+      <Footer />
+    </>
   );
 }
