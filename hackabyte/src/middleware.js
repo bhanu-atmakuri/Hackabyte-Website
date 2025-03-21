@@ -10,8 +10,16 @@ export function middleware(request) {
   // Check if the path starts with /admin
   if (pathname.startsWith('/admin')) {
     // Check for authentication here
-    // For now, we'll just let all admin requests pass through
-    // In a real app, you would verify a session/token
+    // For now, let's set up a simple cookie check (replace with your actual auth logic)
+    const authToken = request.cookies.get('auth_token')?.value;
+    
+    // If no auth token and not on the login page, redirect to auth page
+    if (!authToken) {
+      // In a real app, you would redirect to a login page
+      // For now, we'll just continue to allow development
+      console.log('Admin area accessed without authentication');
+    }
+    
     return NextResponse.next();
   }
   
@@ -22,7 +30,6 @@ export function middleware(request) {
 // Configure which paths this middleware should run on
 export const config = {
   matcher: [
-    // Apply to all paths except static files, api routes, and _next
-    '/((?!_next/static|_next/image|favicon.ico|api).*)',
+    '/((?!api|_next/static|_next/image|favicon.ico).*)',
   ],
 };
