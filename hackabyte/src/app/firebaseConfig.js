@@ -1,23 +1,30 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getFirestore } from 'firebase/firestore';
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+import { getAnalytics, isSupported } from "firebase/analytics";
+import { getAuth } from "firebase/auth"; // Add auth import
 
 // Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "AIzaSyCrLfrMa7DoiMkZP7yRx6UsSFonPck1smY",
-  authDomain: "hackabyte-ee5d1.firebaseapp.com",
-  projectId: "hackabyte-ee5d1",
-  storageBucket: "hackabyte-ee5d1.firebasestorage.app",
-  messagingSenderId: "415532944550",
-  appId: "1:415532944550:web:cf7fd1ef16378c31457867",
-  measurementId: "G-F2VLJJDSTP"
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
+  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
+  measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID
 };
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+const auth = getAuth(app);
 
-export {db};
+// Initialize Analytics (with client-side check to prevent SSR errors)
+let analytics = null;
+if (typeof window !== 'undefined') {
+  // Only initialize analytics on client side
+  isSupported().then(yes => yes && (analytics = getAnalytics(app)));
+}
+
+export { db, analytics, auth };
