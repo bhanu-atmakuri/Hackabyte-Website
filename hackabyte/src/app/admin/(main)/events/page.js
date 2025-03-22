@@ -255,7 +255,7 @@ export default function AdminEvents() {
         <meta name="description" content="Admin events management for Hackabyte" />
       </Head>
 
-      <main className="container mx-auto py-8 px-4">
+      <main className="max-w-7xl mx-auto py-12 px-6 sm:px-8">
         <motion.div
           initial="hidden"
           animate="visible"

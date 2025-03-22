@@ -238,7 +238,7 @@ export default function AdminDashboard() {
         <meta name="description" content="Admin dashboard for Hackabyte" />
       </Head>
 
-      <main className="container mx-auto py-12 px-4">
+      <main className="max-w-7xl mx-auto py-12 px-6 sm:px-8">
         <motion.div
           initial="hidden"
           animate="visible"
@@ -250,30 +250,6 @@ export default function AdminDashboard() {
               <p className="text-gray-400">
                 {admin ? `Welcome back, ${admin.name || 'Admin'}` : 'Welcome to your dashboard'}
               </p>
-            </div>
-            
-            <div className="flex space-x-4 mt-4 md:mt-0">
-              <motion.button
-                initial="rest"
-                whileHover="hover"
-                whileTap="tap"
-                variants={buttonHover}
-                onClick={() => router.push('/admin/events')}
-                className="px-4 py-2 bg-[#1E1E22] border border-gray-700 text-white rounded-lg hover:border-gray-500 transition-colors"
-              >
-                Manage Events
-              </motion.button>
-              
-              <motion.button
-                initial="rest"
-                whileHover="hover"
-                whileTap="tap"
-                variants={buttonHover}
-                onClick={handleLogout}
-                className="px-4 py-2 bg-[#1E1E22] border border-gray-700 text-white rounded-lg hover:border-gray-500 transition-colors"
-              >
-                Logout
-              </motion.button>
             </div>
           </div>
 
@@ -287,7 +263,7 @@ export default function AdminDashboard() {
                 
                 <div className="p-6">
                   <h2 className="text-2xl font-bold text-white mb-6">Account Information</h2>
-                  
+                        
                   {error && (
                     <div className="mb-6 p-3 bg-red-900/30 text-red-400 rounded-lg text-sm border border-red-800">
                       {error}
