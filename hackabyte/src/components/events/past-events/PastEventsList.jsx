@@ -59,36 +59,22 @@ export default function PastEventsList() {
   };
 
   return (
-    <section className="py-20 bg-[#1A1A1E]" id="past-events" ref={ref}>
+    <section className="bg-[#1A1A1E] pt-4 md:pt-6" id="past-events" ref={ref}>
       <Container size="wide">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-16"
-        >
-          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-[#FF2247]">
-            Previous Hackathons
-          </h2>
-          <p className="text-xl text-white max-w-3xl mx-auto">
-            Explore our past hackathons and see the amazing projects that our participants created.
-          </p>
-        </motion.div>
-
         {/* Filter Section */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
           transition={{ duration: 0.5, delay: 0.2 }}
-          className="mb-12"
+          className="mb-6"
         >
-          <div className="bg-[#16161A] p-6 rounded-xl border border-gray-800 mb-6">
-            <h3 className="text-xl font-bold text-white mb-4">Filter Past Events</h3>
+          <div className="bg-[#16161A] p-4 rounded-xl border border-gray-800 mb-4">
+            <h3 className="text-xl font-bold text-white mb-3">Filter Past Events</h3>
             
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-6 flex items-center">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 flex items-center">
               {/* Age Group Filter */}
               <div>
-                <label className="block text-gray-300 text-sm font-medium mb-2">Age Group</label>
+                <label className="block text-gray-300 text-sm font-medium mb-1">Age Group</label>
                 <div className="flex flex-wrap gap-2">
                   {['All Events', 'High School', 'Middle School', 'College'].map((filter) => (
                     <button
@@ -108,12 +94,12 @@ export default function PastEventsList() {
 
               {/* Year Filter */}
               <div>
-                <label htmlFor="year" className="block text-gray-300 text-sm font-medium mb-2">Year</label>
+                <label htmlFor="year" className="block text-gray-300 text-sm font-medium mb-1">Year</label>
                 <select
                   id="year"
                   value={selectedYear}
                   onChange={(e) => setSelectedYear(parseInt(e.target.value))}
-                  className="bg-[#1A1A1E] border border-gray-700 text-white rounded-lg p-2.5 w-full focus:ring-[#FF2247] focus:border-[#FF2247]"
+                  className="bg-[#1A1A1E] border border-gray-700 text-white rounded-lg p-2 w-full focus:ring-[#FF2247] focus:border-[#FF2247]"
                 >
                   {pastEventYears.map(year => (
                     <option key={year} value={year}>{year}</option>
@@ -123,12 +109,12 @@ export default function PastEventsList() {
 
               {/* Country Dropdown */}
               <div>
-                <label htmlFor="country" className="block text-gray-300 text-sm font-medium mb-2">Country</label>
+                <label htmlFor="country" className="block text-gray-300 text-sm font-medium mb-1">Country</label>
                 <select
                   id="country"
                   value={selectedCountry}
                   onChange={(e) => setSelectedCountry(e.target.value)}
-                  className="bg-[#1A1A1E] border border-gray-700 text-white rounded-lg p-2.5 w-full focus:ring-[#FF2247] focus:border-[#FF2247]"
+                  className="bg-[#1A1A1E] border border-gray-700 text-white rounded-lg p-2 w-full focus:ring-[#FF2247] focus:border-[#FF2247]"
                 >
                   <option value="United States">United States</option>
                 </select>
@@ -136,12 +122,12 @@ export default function PastEventsList() {
 
               {/* State Dropdown */}
               <div>
-                <label htmlFor="state" className="block text-gray-300 text-sm font-medium mb-2">State</label>
+                <label htmlFor="state" className="block text-gray-300 text-sm font-medium mb-1">State</label>
                 <select
                   id="state"
                   value={selectedState}
                   onChange={(e) => setSelectedState(e.target.value)}
-                  className="bg-[#1A1A1E] border border-gray-700 text-white rounded-lg p-2.5 w-full focus:ring-[#FF2247] focus:border-[#FF2247]"
+                  className="bg-[#1A1A1E] border border-gray-700 text-white rounded-lg p-2 w-full focus:ring-[#FF2247] focus:border-[#FF2247]"
                 >
                   {availableStates.map(state => (
                     <option key={state} value={state}>{state}</option>
@@ -152,7 +138,7 @@ export default function PastEventsList() {
           </div>
 
           {/* Results Count */}
-          <div className="text-gray-300 mb-6">
+          <div className="text-gray-300 mb-4">
             Showing {filteredEvents.length} events
             {selectedState !== 'All States' && ` in ${selectedState}`}
             {activeFilter !== 'All Events' && ` for ${activeFilter} students`}
@@ -161,7 +147,7 @@ export default function PastEventsList() {
         </motion.div>
 
         {filteredEvents.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredEvents.map((event, index) => (
               <motion.div
                 key={event.id}
@@ -183,8 +169,8 @@ export default function PastEventsList() {
                     aria-label={event.title}
                   ></div>
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
-                  <div className="absolute bottom-0 left-0 right-0 p-4">
-                    <div className="flex flex-wrap gap-2 mb-2">
+                  <div className="absolute bottom-0 left-0 right-0 p-3">
+                    <div className="flex flex-wrap gap-2 mb-1">
                       {event.ageGroups.map((group, idx) => (
                         <span 
                           key={idx} 
@@ -207,14 +193,14 @@ export default function PastEventsList() {
                   </div>
                 </div>
                 
-                <div className="p-6 flex flex-col flex-grow">
-                  <div className="flex items-center text-gray-400 mb-4">
+                <div className="p-4 flex flex-col flex-grow">
+                  <div className="flex items-center text-gray-400 mb-2">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 mr-2">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
                     </svg>
                     {event.date}
                   </div>
-                  <div className="flex items-start text-gray-400 mb-4">
+                  <div className="flex items-start text-gray-400 mb-3">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 mr-2 mt-0.5">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
                       <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
@@ -223,9 +209,9 @@ export default function PastEventsList() {
                   </div>
                   
                   {/* Winners */}
-                  <div className="mb-6">
-                    <h4 className="text-white font-semibold mb-2">Winners</h4>
-                    <ul className="text-gray-300 space-y-3">
+                  <div className="mb-4">
+                    <h4 className="text-white font-semibold mb-1">Winners</h4>
+                    <ul className="text-gray-300 space-y-2">
                       {event.winners.slice(0, 1).map((winner, idx) => (
                         <li key={idx} className="bg-[#1A1A1E] p-2 rounded-md">
                           <div className="text-[#FF2247] font-medium">{winner.category}</div>
@@ -238,7 +224,7 @@ export default function PastEventsList() {
                   <motion.div
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
-                    className="mt-auto pt-6"
+                    className="mt-auto pt-3"
                   >
                     {/* Note: This link would navigate to a future event recap page */}
                     <Link href={`/events/past-events/${event.id}`} className="btn-primary w-full block text-center">
@@ -250,12 +236,12 @@ export default function PastEventsList() {
             ))}
           </div>
         ) : (
-          <div className="bg-[#16161A] rounded-xl p-12 text-center border border-gray-800">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-16 w-16 mx-auto text-gray-500 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <div className="bg-[#16161A] rounded-xl p-8 text-center border border-gray-800">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-16 w-16 mx-auto text-gray-500 mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
             </svg>
             <h3 className="text-xl font-bold text-white mb-2">No Events Found</h3>
-            <p className="text-gray-400 mb-6">There are no events matching your current filters.</p>
+            <p className="text-gray-400 mb-4">There are no events matching your current filters.</p>
             <button 
               onClick={() => {
                 setActiveFilter('All Events');
@@ -273,7 +259,7 @@ export default function PastEventsList() {
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
           transition={{ duration: 0.5, delay: 0.5 }}
-          className="text-center mt-12"
+          className="text-center mt-6"
         >
           <Link href="/events" className="text-white hover:text-[#FF2247] inline-flex items-center font-semibold transition-colors">
             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
