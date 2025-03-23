@@ -314,14 +314,14 @@ export default function NewEventPage() {
         <div className="mt-8 flex justify-end gap-4">
           <Link
             href="/admin/events"
-            className="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition-colors"
+            className="btn-secondary"
           >
             Cancel
           </Link>
           <button
             type="submit"
             disabled={isSubmitting}
-            className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors disabled:opacity-50"
+            className="btn-primary disabled:opacity-50"
           >
             {isSubmitting ? 'Creating...' : 'Create Event'}
           </button>

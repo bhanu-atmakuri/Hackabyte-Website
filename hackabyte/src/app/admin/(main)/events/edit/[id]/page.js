@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { getEvent, updateEvent } from '@/lib/firebase/events';
 import Link from 'next/link';
 import useNoFlash from '@/lib/hooks/useNoFlash';
+import { motion } from 'framer-motion';
 
 export default function EditEventPage({ params }) {
   const router = useRouter();
@@ -111,8 +112,8 @@ export default function EditEventPage({ params }) {
   
   if (isLoading) {
     return (
-      <div className="py-10 px-4 max-w-4xl mx-auto flex justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+      <div className="py-10 px-4 max-w-4xl mx-auto flex justify-center items-center min-h-[60vh]">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#FF2247]"></div>
       </div>
     );
   }
@@ -130,11 +131,11 @@ export default function EditEventPage({ params }) {
         </div>
       )}
       
-      <form onSubmit={handleSubmit} className="bg-gray-800 rounded-lg p-6 shadow-lg">
+      <form onSubmit={handleSubmit} className="bg-[#16161A] rounded-lg p-6 shadow-lg border border-gray-800">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Event Name */}
           <div className="col-span-full">
-            <label htmlFor="name" className="block text-sm font-medium mb-1">
+            <label htmlFor="name" className="block text-sm font-medium mb-1 text-gray-300">
               Event Name*
             </label>
             <input
@@ -144,13 +145,13 @@ export default function EditEventPage({ params }) {
               value={formData.name}
               onChange={handleChange}
               required
-              className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 bg-[#1A1A1E] border border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-[#FF2247] focus:border-[#FF2247] text-white"
             />
           </div>
           
           {/* Event Type */}
           <div>
-            <label htmlFor="eventType" className="block text-sm font-medium mb-1">
+            <label htmlFor="eventType" className="block text-sm font-medium mb-1 text-gray-300">
               Event Type*
             </label>
             <select
@@ -159,7 +160,7 @@ export default function EditEventPage({ params }) {
               value={formData.eventType}
               onChange={handleChange}
               required
-              className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 bg-[#1A1A1E] border border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-[#FF2247] focus:border-[#FF2247] text-white"
             >
               <option value="Hackathon">Hackathon</option>
               <option value="Workshop">Workshop</option>
@@ -171,7 +172,7 @@ export default function EditEventPage({ params }) {
           
           {/* Competition Level */}
           <div>
-            <label htmlFor="competitionLevel" className="block text-sm font-medium mb-1">
+            <label htmlFor="competitionLevel" className="block text-sm font-medium mb-1 text-gray-300">
               Competition Level*
             </label>
             <select
@@ -180,7 +181,7 @@ export default function EditEventPage({ params }) {
               value={formData.competitionLevel}
               onChange={handleChange}
               required
-              className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 bg-[#1A1A1E] border border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-[#FF2247] focus:border-[#FF2247] text-white"
             >
               <option value="">Select a level</option>
               <option value="Local">Local</option>
@@ -193,7 +194,7 @@ export default function EditEventPage({ params }) {
           
           {/* Location */}
           <div>
-            <label htmlFor="location" className="block text-sm font-medium mb-1">
+            <label htmlFor="location" className="block text-sm font-medium mb-1 text-gray-300">
               Location Address*
             </label>
             <input
@@ -203,13 +204,13 @@ export default function EditEventPage({ params }) {
               value={formData.location}
               onChange={handleChange}
               required
-              className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 bg-[#1A1A1E] border border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-[#FF2247] focus:border-[#FF2247] text-white"
             />
           </div>
           
           {/* State */}
           <div>
-            <label htmlFor="state" className="block text-sm font-medium mb-1">
+            <label htmlFor="state" className="block text-sm font-medium mb-1 text-gray-300">
               State*
             </label>
             <input
@@ -219,13 +220,13 @@ export default function EditEventPage({ params }) {
               value={formData.state}
               onChange={handleChange}
               required
-              className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 bg-[#1A1A1E] border border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-[#FF2247] focus:border-[#FF2247] text-white"
             />
           </div>
           
           {/* Start Date */}
           <div>
-            <label htmlFor="startDate" className="block text-sm font-medium mb-1">
+            <label htmlFor="startDate" className="block text-sm font-medium mb-1 text-gray-300">
               Start Date*
             </label>
             <input
@@ -235,13 +236,13 @@ export default function EditEventPage({ params }) {
               value={formData.startDate}
               onChange={handleChange}
               required
-              className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 bg-[#1A1A1E] border border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-[#FF2247] focus:border-[#FF2247] text-white"
             />
           </div>
           
           {/* End Date */}
           <div>
-            <label htmlFor="endDate" className="block text-sm font-medium mb-1">
+            <label htmlFor="endDate" className="block text-sm font-medium mb-1 text-gray-300">
               End Date*
             </label>
             <input
@@ -251,13 +252,13 @@ export default function EditEventPage({ params }) {
               value={formData.endDate}
               onChange={handleChange}
               required
-              className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 bg-[#1A1A1E] border border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-[#FF2247] focus:border-[#FF2247] text-white"
             />
           </div>
           
           {/* Registration Deadline */}
           <div>
-            <label htmlFor="registrationDeadline" className="block text-sm font-medium mb-1">
+            <label htmlFor="registrationDeadline" className="block text-sm font-medium mb-1 text-gray-300">
               Registration Deadline*
             </label>
             <input
@@ -267,7 +268,7 @@ export default function EditEventPage({ params }) {
               value={formData.registrationDeadline}
               onChange={handleChange}
               required
-              className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 bg-[#1A1A1E] border border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-[#FF2247] focus:border-[#FF2247] text-white"
             />
           </div>
           
@@ -279,16 +280,16 @@ export default function EditEventPage({ params }) {
               name="hasPassed"
               checked={formData.hasPassed}
               onChange={handleChange}
-              className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+              className="h-4 w-4 rounded border-gray-700 text-[#FF2247] focus:ring-[#FF2247] bg-[#1A1A1E]"
             />
-            <label htmlFor="hasPassed" className="ml-2 block text-sm">
+            <label htmlFor="hasPassed" className="ml-2 block text-sm text-gray-300">
               Event has already passed
             </label>
           </div>
           
           {/* Age Groups */}
           <div className="col-span-full">
-            <span className="block text-sm font-medium mb-2">Age Groups*</span>
+            <span className="block text-sm font-medium mb-2 text-gray-300">Age Groups*</span>
             <div className="flex flex-wrap gap-4">
               <div className="flex items-center">
                 <input
@@ -297,9 +298,9 @@ export default function EditEventPage({ params }) {
                   name="ageGroups.middle school"
                   checked={formData.ageGroups['middle school']}
                   onChange={handleChange}
-                  className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                  className="h-4 w-4 rounded border-gray-700 text-[#FF2247] focus:ring-[#FF2247] bg-[#1A1A1E]"
                 />
-                <label htmlFor="ageGroup-middle" className="ml-2 block text-sm">
+                <label htmlFor="ageGroup-middle" className="ml-2 block text-sm text-gray-300">
                   Middle School
                 </label>
               </div>
@@ -310,9 +311,9 @@ export default function EditEventPage({ params }) {
                   name="ageGroups.high school"
                   checked={formData.ageGroups['high school']}
                   onChange={handleChange}
-                  className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                  className="h-4 w-4 rounded border-gray-700 text-[#FF2247] focus:ring-[#FF2247] bg-[#1A1A1E]"
                 />
-                <label htmlFor="ageGroup-high" className="ml-2 block text-sm">
+                <label htmlFor="ageGroup-high" className="ml-2 block text-sm text-gray-300">
                   High School
                 </label>
               </div>
@@ -323,9 +324,9 @@ export default function EditEventPage({ params }) {
                   name="ageGroups.college"
                   checked={formData.ageGroups['college']}
                   onChange={handleChange}
-                  className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                  className="h-4 w-4 rounded border-gray-700 text-[#FF2247] focus:ring-[#FF2247] bg-[#1A1A1E]"
                 />
-                <label htmlFor="ageGroup-college" className="ml-2 block text-sm">
+                <label htmlFor="ageGroup-college" className="ml-2 block text-sm text-gray-300">
                   College
                 </label>
               </div>
@@ -334,7 +335,7 @@ export default function EditEventPage({ params }) {
           
           {/* Description */}
           <div className="col-span-full">
-            <label htmlFor="description" className="block text-sm font-medium mb-1">
+            <label htmlFor="description" className="block text-sm font-medium mb-1 text-gray-300">
               Description*
             </label>
             <textarea
@@ -344,13 +345,13 @@ export default function EditEventPage({ params }) {
               value={formData.description}
               onChange={handleChange}
               required
-              className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 bg-[#1A1A1E] border border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-[#FF2247] focus:border-[#FF2247] text-white"
             ></textarea>
           </div>
           
           {/* Requirements */}
           <div className="col-span-full">
-            <label htmlFor="requirements" className="block text-sm font-medium mb-1">
+            <label htmlFor="requirements" className="block text-sm font-medium mb-1 text-gray-300">
               Requirements
             </label>
             <textarea
@@ -359,7 +360,7 @@ export default function EditEventPage({ params }) {
               rows="4"
               value={formData.requirements}
               onChange={handleChange}
-              className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 bg-[#1A1A1E] border border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-[#FF2247] focus:border-[#FF2247] text-white"
             ></textarea>
           </div>
         </div>
@@ -367,17 +368,19 @@ export default function EditEventPage({ params }) {
         <div className="mt-8 flex justify-end gap-4">
           <Link
             href="/admin/events"
-            className="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition-colors"
+            className="btn-secondary"
           >
             Cancel
           </Link>
-          <button
+          <motion.button
             type="submit"
             disabled={isSubmitting}
-            className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors disabled:opacity-50"
+            className="btn-primary disabled:opacity-50 disabled:hover:bg-[#FF2247]"
+            whileHover={{ scale: isSubmitting ? 1 : 1.03 }}
+            whileTap={{ scale: isSubmitting ? 1 : 0.97 }}
           >
             {isSubmitting ? 'Saving...' : 'Save Changes'}
-          </button>
+          </motion.button>
         </div>
       </form>
     </div>
