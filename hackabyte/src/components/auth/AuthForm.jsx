@@ -96,6 +96,11 @@ export default function AuthForm() {
           sessionStorage.setItem('adminEmail', email);
           sessionStorage.setItem('adminId', adminId);
           
+          // Set admin cookie with expiration (7 days)
+          const expirationDate = new Date();
+          expirationDate.setDate(expirationDate.getDate() + 7);
+          document.cookie = `admin_token=${adminId}; expires=${expirationDate.toUTCString()}; path=/; SameSite=Strict`;
+          
           // Redirect to admin home
           router.push('/admin');
           return;

@@ -177,7 +177,7 @@ export default function AdminNavbar() {
                 flex: '0 0 auto'
               }}
             >
-              Admin
+              Admin Console
             </span>
           </Link>
 

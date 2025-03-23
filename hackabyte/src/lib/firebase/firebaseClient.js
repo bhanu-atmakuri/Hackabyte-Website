@@ -31,6 +31,17 @@ import {
 export async function signIn(email, password) {
   try {
     const userCredential = await signInWithEmailAndPassword(auth, email, password);
+    
+    // Check if user is an admin
+    const isAdmin = await checkAdminStatus(userCredential.user.uid);
+    
+    // If admin, set a secure cookie with an expiration (7 days)
+    if (isAdmin && typeof document !== 'undefined') {
+      const expirationDate = new Date();
+      expirationDate.setDate(expirationDate.getDate() + 7);
+      document.cookie = `admin_token=${userCredential.user.uid}; expires=${expirationDate.toUTCString()}; path=/; SameSite=Strict; Secure`;
+    }
+    
     return userCredential;
   } catch (error) {
     console.error('Error signing in:', error);
