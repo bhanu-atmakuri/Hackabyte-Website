@@ -113,7 +113,7 @@ export default function Hero() {
 
             <motion.div variants={item}>
               <h2 className="text-xl sm:text-2xl md:text-3xl font-semibold mb-3 md:mb-4">
-                Empowering Young Minds Through Coding Challenges
+                Inspiring Innovation, Shaping Tomorrow
               </h2>
             </motion.div>
 
