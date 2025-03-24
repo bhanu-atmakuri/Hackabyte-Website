@@ -1,46 +1,37 @@
-/**
- * Past Events Hero Component
- * 
- * Hero section for the Past Events page featuring:
- * - Main headline and descriptive text about previous hackathons
- * - Fade-in animations for visual engagement
- * - Responsive layout that adapts to screen size
- * - Serves as an introduction to the past events listings below
- * - Consistent styling with other hero sections across the site
- */
-
 'use client';
 
-import { motion } from 'framer-motion';
-import Container from '../../shared/Container';
+import { useRef } from 'react';
+import { motion, useInView } from 'framer-motion';
+import Container from '@/components/shared/Container';
 
 export default function PastEventsHero() {
+  // Reference for scroll-triggered animations
+  const ref = useRef(null);
+  // Detect when section enters viewport
+  const isInView = useInView(ref, { once: true, amount: 0.2 });
+
   return (
-    <section className="relative pt-16 md:pt-32 pb-20 bg-[#1A1A1E] flex items-center">
-      {/* Decorative background blur elements */}
-      <div className="absolute inset-0 -z-10 opacity-10">
-        <div className="absolute top-20 right-20 w-64 h-64 bg-[#F93236] rounded-full blur-3xl"></div>
-        <div className="absolute bottom-20 left-20 w-72 h-72 bg-[#FF2247] rounded-full blur-3xl"></div>
-      </div>
-      
+    <section className="pt-20 pb-12 bg-[#1A1A1E]" ref={ref}>
       <Container>
-        <div className="text-center">
-          {/* Main content with fade-in and slide-up animation */}
+        <div className="relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
+            animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
             transition={{ duration: 0.6 }}
+            className="text-center"
           >
-            <h1 className="text-4xl md:text-5xl font-bold text-[#FF2247] mb-6">
-              Past Events
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-white">
+              Past <span className="text-[#FF2247]">Events</span>
             </h1>
-            
-            <p className="text-xl text-white mb-8 max-w-3xl mx-auto">
-              Explore our previous hackathons and events. See the amazing projects, 
-              winning teams, and highlights from past Hackabyte competitions.
+            <p className="text-xl text-gray-300 max-w-3xl mx-auto mb-6">
+              Explore our past events and see the amazing projects, collaborations, and innovations that emerged from our hackathons.
             </p>
           </motion.div>
         </div>
+
+        {/* Decorative elements */}
+        <div className="absolute top-0 right-0 w-1/2 h-1/2 bg-[#FF2247]/5 rounded-full blur-3xl -z-10"></div>
+        <div className="absolute bottom-0 left-0 w-1/3 h-1/3 bg-[#FF2247]/5 rounded-full blur-3xl -z-10"></div>
       </Container>
     </section>
   );

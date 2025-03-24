@@ -1,287 +1,190 @@
-/**
- * Upcoming Events List Component
- * 
- * A comprehensive listing of all upcoming hackathon events with advanced filtering capabilities.
- * Features include:
- * - Multi-criteria filtering (age group, location, competition level)
- * - Responsive grid layout that adapts to different screen sizes
- * - Interactive filter UI with toggle buttons and dropdowns
- * - Animated event cards with hover effects
- * - Empty state handling when no events match filter criteria
- * - Links to event registration and past events
- */
-
 'use client';
 
-import { useRef, useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
 import Link from 'next/link';
-import { upcomingEvents, availableStates, competitionLevels } from '@/lib/data/upcomingEvents';
-import Container from '../shared/Container';
+import Container from '@/components/shared/Container';
+import { getAllEvents } from '@/lib/firebase/events';
+import useEventEmitter from '@/lib/hooks/useEventEmitter';
+import { EVENT_TYPES } from '@/lib/services/eventEmitterService';
 
 export default function UpcomingEventsList() {
+  const [events, setEvents] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [filter, setFilter] = useState('All'); // Add filter state
+  
   // Reference for scroll-triggered animations
   const ref = useRef(null);
   // Detect when section enters viewport (20% visibility triggers animation)
   const isInView = useInView(ref, { once: true, amount: 0.2 });
-  
-  // Filter state variables
-  const [activeFilter, setActiveFilter] = useState('All Events'); // Age group filter
-  const [selectedCountry, setSelectedCountry] = useState('United States'); // Country filter (currently single option)
-  const [selectedState, setSelectedState] = useState('All States'); // State filter
-  const [competitionLevel, setCompetitionLevel] = useState('All Levels'); // Competition level filter
 
-  /**
-   * Event filtering logic
-   * Filters events based on multiple criteria: age group, state, and competition level
-   */
-  const filteredEvents = upcomingEvents.filter(event => {
-    // Filter by age group if not "All Events"
-    const ageGroupMatch = 
-      activeFilter === 'All Events' || 
-      event.ageGroups.includes(activeFilter);
-    
-    // Filter by state
-    const stateMatch = 
-      selectedState === 'All States' || 
-      event.state === selectedState;
-    
-    // Filter by competition level
-    const levelMatch =
-      competitionLevel === 'All Levels' ||
-      (event.competitionLevel && event.competitionLevel === competitionLevel);
-    
-    return ageGroupMatch && stateMatch && levelMatch;
+  // Listen for events data changes
+  useEventEmitter(EVENT_TYPES.EVENTS_LOADED, (loadedEvents) => {
+    setEvents(loadedEvents.filter(event => !event.hasPassed));
+    setLoading(false);
   });
 
-  // Animation variants for event cards
-  const cardVariants = {
-    hidden: { opacity: 0, y: 50 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.5 } }
-  };
+  // Listen for errors
+  useEventEmitter(EVENT_TYPES.EVENT_ERROR, (err) => {
+    console.error('Error loading events:', err);
+    setError('Failed to load events. Please try again later.');
+    setLoading(false);
+  });
+
+  // Fetch events on component mount
+  useEffect(() => {
+    const fetchEvents = async () => {
+      try {
+        await getAllEvents();
+      } catch (err) {
+        console.error('Error fetching events:', err);
+        setError('Failed to load events. Please try again later.');
+        setLoading(false);
+      }
+    };
+
+    fetchEvents();
+  }, []);
+
+  // Get unique event types for filtering
+  const eventTypes = ['All', ...new Set(events.map(event => event.eventType).filter(Boolean))];
+
+  // Filter events based on selected type
+  const filteredEvents = filter === 'All' 
+    ? events 
+    : events.filter(event => event.eventType === filter);
 
   return (
-    <section className="py-16 md:py-20 bg-[#1A1A1E]" id="upcoming" ref={ref}>
-      <Container size="wide">
-        {/* Section heading with animation */}
+    <section className="py-20 bg-[#16161A]" ref={ref} id="upcoming-events">
+      <Container>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
           transition={{ duration: 0.6 }}
-          className="text-center mb-10 md:mb-16 px-4 sm:px-0"
+          className="text-center mb-16"
         >
           <h2 className="text-3xl md:text-4xl font-bold mb-4 text-[#FF2247]">
             Upcoming Events
           </h2>
-          <p className="text-lg md:text-xl text-white max-w-3xl mx-auto">
-            Mark your calendars for these exciting hackathons and join a community of young innovators.
+          <p className="text-xl text-white max-w-3xl mx-auto">
+            Register now for our next events and start your journey of innovation and collaboration.
           </p>
         </motion.div>
 
-        {/* Interactive Filter Controls Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-          className="mb-12"
-        >
-          <div className="bg-[#16161A] p-4 md:p-6 rounded-xl border border-gray-800 mb-4 md:mb-6 mx-4 sm:mx-0">
-            <h3 className="text-xl font-bold text-white mb-4">Filter Events</h3>
-            
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 flex items-center">
-              {/* Age Group Filter - Toggle buttons */}
-              <div>
-                <label className="block text-gray-300 text-sm font-medium mb-2">Age Group</label>
-                <div className="flex flex-wrap gap-2">
-                  {['All Events', 'High School', 'Middle School', 'College'].map((filter) => (
-                    <button
-                      key={filter}
-                      onClick={() => setActiveFilter(filter)}
-                      className={`px-3 py-1 text-sm rounded-full transition-colors ${
-                        activeFilter === filter
-                          ? 'bg-[#FF2247] text-white'
-                          : 'bg-[#1A1A1E] text-gray-300 hover:bg-[#1E1E22] border border-gray-700'
-                      }`}
-                    >
-                      {filter}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Competition Level Filter - Toggle buttons */}
-              <div>
-                <label className="block text-gray-300 text-sm font-medium mb-2">Competition Level</label>
-                <div className="flex flex-wrap gap-2">
-                  {competitionLevels.map((level) => (
-                    <button
-                      key={level}
-                      onClick={() => setCompetitionLevel(level)}
-                      className={`px-3 py-1 text-sm rounded-full transition-colors ${
-                        competitionLevel === level
-                          ? 'bg-[#FF2247] text-white'
-                          : 'bg-[#1A1A1E] text-gray-300 hover:bg-[#1E1E22] border border-gray-700'
-                      }`}
-                    >
-                      {level}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Country Dropdown - Currently limited to United States */}
-              <div>
-                <label htmlFor="country" className="block text-gray-300 text-sm font-medium mb-2">Country</label>
-                <select
-                  id="country"
-                  value={selectedCountry}
-                  onChange={(e) => setSelectedCountry(e.target.value)}
-                  className="bg-[#1A1A1E] border border-gray-700 text-white rounded-lg p-2.5 w-full focus:ring-[#FF2247] focus:border-[#FF2247]"
-                >
-                  <option value="United States">United States</option>
-                </select>
-              </div>
-
-              {/* State Dropdown - Dynamic options based on available event locations */}
-              <div>
-                <label htmlFor="state" className="block text-gray-300 text-sm font-medium mb-2">State</label>
-                <select
-                  id="state"
-                  value={selectedState}
-                  onChange={(e) => setSelectedState(e.target.value)}
-                  className="bg-[#1A1A1E] border border-gray-700 text-white rounded-lg p-2.5 w-full focus:ring-[#FF2247] focus:border-[#FF2247]"
-                >
-                  {availableStates.map(state => (
-                    <option key={state} value={state}>{state}</option>
-                  ))}
-                </select>
-              </div>
-            </div>
+        {loading ? (
+          <div className="flex justify-center items-center h-64">
+            <div className="animate-pulse text-white">Loading events...</div>
           </div>
-
-          {/* Results Count - Dynamic text showing active filters */}
-          <div className="text-gray-300 mb-6">
-            Showing {filteredEvents.length} events
-            {selectedState !== 'All States' && ` in ${selectedState}`}
-            {activeFilter !== 'All Events' && ` for ${activeFilter} students`}
-            {competitionLevel !== 'All Levels' && ` at ${competitionLevel} level`}
+        ) : error ? (
+          <div className="text-center text-red-400 p-8 bg-[#1A1A1E] rounded-xl">
+            {error}
           </div>
-        </motion.div>
-
-        {/* Conditional rendering based on filter results */}
-        {filteredEvents.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8 px-4 sm:px-0">
-            {filteredEvents.map((event, index) => (
-              <motion.div
-                key={event.title}
-                variants={cardVariants}
-                initial="hidden"
-                animate={isInView ? "visible" : "hidden"}
-                transition={{ delay: index * 0.1 }}
-                className="bg-[#16161A] rounded-xl shadow-lg overflow-hidden border border-gray-800 hover:border-[#FF2247]/30 transition-all duration-300 flex flex-col"
-              >
-                {/* Event card image with overlay and tags */}
-                <div className="relative h-48 overflow-hidden">
-                  {/* Using div with background image instead of img to avoid Next.js hydration issues */}
-                  <div 
-                    className="absolute inset-0 transition-transform duration-500 hover:scale-110"
-                    style={{
-                      backgroundImage: `url(${event.image})`,
-                      backgroundSize: 'cover',
-                      backgroundPosition: 'center'
-                    }}
-                    aria-label={event.title}
-                  ></div>
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
-                  <div className="absolute bottom-0 left-0 right-0 p-4">
-                    <div className="flex flex-wrap gap-2 mb-2">
-                      {event.ageGroups.map((group, idx) => (
-                        <span 
-                          key={idx} 
-                          className={`px-2 py-1 text-xs font-semibold rounded-full text-white ${
-                            group === "High School" 
-                              ? "bg-[#F93236]" 
-                              : group === "Middle School" 
-                              ? "bg-[#FF2247]" 
-                              : "bg-[#333333]"
-                          }`}
-                        >
-                          {group}
-                        </span>
-                      ))}
-                      <span className="px-2 py-1 text-xs font-semibold rounded-full text-white bg-[#444444]">
-                        {event.competitionLevel}
-                      </span>
-                    </div>
-                    <h3 className="text-xl font-bold text-white">{event.title}</h3>
-                  </div>
-                </div>
-                
-                {/* Event details section */}
-                <div className="p-4 sm:p-6 flex flex-col flex-grow">
-                  <div className="flex items-center text-gray-400 mb-3 sm:mb-4">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 mr-2">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
-                    </svg>
-                    {event.date}
-                  </div>
-                  <div className="flex items-start text-gray-400 mb-3 sm:mb-4">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 mr-2 mt-0.5">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
-                    </svg>
-                    <span>{event.location} <span className="text-sm text-gray-500">({event.state})</span></span>
-                  </div>
-                  
-                  <p className="text-gray-300 mb-4 sm:mb-6">{event.description}</p>
-                  
-                  <motion.div
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    className="mt-auto pt-3 sm:pt-6"
-                  >
-                    <Link href="#registration" className="btn-primary w-full block text-center">
-                      Sign Up Now
-                    </Link>
-                  </motion.div>
-                </div>
-              </motion.div>
-            ))}
+        ) : events.length === 0 ? (
+          <div className="text-center text-gray-400 p-8 bg-[#1A1A1E] rounded-xl">
+            No upcoming events found. Check back soon!
           </div>
         ) : (
-          <div className="bg-[#16161A] rounded-xl p-12 text-center border border-gray-800">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-16 w-16 mx-auto text-gray-500 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-            </svg>
-            <h3 className="text-xl font-bold text-white mb-2">No Events Found</h3>
-            <p className="text-gray-400 mb-6">There are no events matching your current filters.</p>
-            <button 
-              onClick={() => {
-                setActiveFilter('All Events');
-                setSelectedState('All States');
-                setCompetitionLevel('All Levels');
-              }}
-              className="btn-primary"
-            >
-              Reset Filters
-            </button>
-          </div>
+          <>
+            {/* Filter controls - only show if there are multiple event types */}
+            {eventTypes.length > 1 && (
+              <div className="flex flex-wrap justify-center gap-3 mb-10">
+                {eventTypes.map((type) => (
+                  <button
+                    key={type}
+                    onClick={() => setFilter(type)}
+                    className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                      filter === type
+                        ? 'bg-[#FF2247] text-white'
+                        : 'bg-[#1A1A1E] text-gray-400 hover:bg-[#252529]'
+                    }`}
+                  >
+                    {type}
+                  </button>
+                ))}
+              </div>
+            )}
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              {filteredEvents.map((event, index) => (
+                <motion.div
+                  key={event.id}
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+                  transition={{ duration: 0.5, delay: index * 0.2 }}
+                  className="bg-[#1A1A1E] rounded-xl overflow-hidden border border-gray-800 hover:border-[#FF2247]/30 transition-all duration-300"
+                >
+                  <div className="grid md:grid-cols-5 gap-0">
+                    {/* Event Image */}
+                    <div className="md:col-span-2 relative h-48 md:h-full min-h-[200px]">
+                      <div 
+                        className="absolute inset-0 w-full h-full"
+                        style={{
+                          backgroundImage: `url(${event.image || "/api/placeholder/600/400"})`,
+                          backgroundSize: 'cover',
+                          backgroundPosition: 'center'
+                        }}
+                      ></div>
+                      <div className="absolute inset-0 bg-gradient-to-r from-[#1A1A1E]/80 to-transparent md:bg-gradient-to-l"></div>
+                      
+                      {/* Event Type Badge */}
+                      {event.eventType && (
+                        <div className="absolute top-3 right-3 bg-black/70 text-white text-xs px-2 py-1 rounded">
+                          {event.eventType}
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Event Details */}
+                    <div className="md:col-span-3 p-6">
+                      <h3 className="text-2xl font-bold text-white mb-2">{event.title}</h3>
+                    
+                    <div className="flex items-center text-gray-400 mb-3">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 text-[#FF2247]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                      </svg>
+                      <span>{event.date}</span>
+                    </div>
+                    
+                    <div className="flex items-start text-gray-400 mb-4">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 mt-0.5 text-[#FF2247]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                      </svg>
+                      <div>
+                        <div>{event.location}</div>
+                        {event.city && <div className="text-sm text-gray-500">{event.city}</div>}
+                      </div>
+                    </div>
+                    
+                    <p className="text-gray-300 mb-6">{event.description}</p>
+                    
+                    <div className="flex flex-wrap gap-3">
+                      <motion.div
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                      >
+                        <Link href={event.registrationLink || "/events#registration"} className="btn-primary inline-block">
+                          Sign Up
+                        </Link>
+                      </motion.div>
+                      
+                      <motion.div
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                      >
+                        <Link href={`/events/${event.id}`} className="btn-secondary inline-block">
+                          Learn More
+                        </Link>
+                      </motion.div>
+                    </div>
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </>
         )}
-        
-        {/* Link to past events with animation */}
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-          transition={{ duration: 0.5, delay: 0.5 }}
-          className="text-center mt-12"
-        >
-          <Link href="/events/past-events" className="text-white hover:text-[#FF2247] inline-flex items-center font-semibold transition-colors">
-            <span>View Past Events</span>
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-            </svg>
-          </Link>
-        </motion.div>
       </Container>
     </section>
   );

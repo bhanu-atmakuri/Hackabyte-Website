@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react';
 import EventsHero from '@/components/events/EventsHero';
-import FeaturedEvent from '@/components/events/FeaturedEvent';
 import UpcomingEventsList from '@/components/events/UpcomingEventsList';
 import EventsRegistration from '@/components/events/EventsRegistration';
 import useNoFlash from '@/lib/hooks/useNoFlash';
@@ -28,7 +27,6 @@ export default function Events() {
     <main className="min-h-screen">
       <div className="page-top-spacing">
         <EventsHero />
-        <FeaturedEvent />
         <UpcomingEventsList />
         <EventsRegistration />
       </div>

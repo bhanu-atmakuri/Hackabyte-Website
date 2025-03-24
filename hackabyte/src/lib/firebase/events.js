@@ -10,6 +10,7 @@ import {
   query,
   orderBy
 } from 'firebase/firestore';
+import { eventService, EVENT_TYPES } from '@/lib/services/eventEmitterService';
 
 const eventsCollection = 'events';
 
@@ -18,16 +19,22 @@ const eventsCollection = 'events';
  */
 export async function getAllEvents() {
   try {
+    eventService.emit(EVENT_TYPES.EVENTS_LOADING);
+    
     const eventsRef = collection(db, eventsCollection);
     const q = query(eventsRef, orderBy('startDate', 'desc'));
     const snapshot = await getDocs(q);
     
-    return snapshot.docs.map(doc => ({
+    const events = snapshot.docs.map(doc => ({
       id: doc.id,
       ...doc.data()
     }));
+    
+    eventService.emit(EVENT_TYPES.EVENTS_LOADED, events);
+    return events;
   } catch (error) {
     console.error('Error getting events:', error);
+    eventService.emit(EVENT_TYPES.EVENT_ERROR, error);
     throw error;
   }
 }
@@ -41,15 +48,20 @@ export async function getEvent(id) {
     const eventSnap = await getDoc(eventRef);
     
     if (!eventSnap.exists()) {
-      throw new Error('Event not found');
+      const error = new Error('Event not found');
+      eventService.emit(EVENT_TYPES.EVENT_ERROR, error);
+      throw error;
     }
     
-    return {
+    const event = {
       id: eventSnap.id,
       ...eventSnap.data()
     };
+    
+    return event;
   } catch (error) {
     console.error('Error getting event:', error);
+    eventService.emit(EVENT_TYPES.EVENT_ERROR, error);
     throw error;
   }
 }
@@ -66,9 +78,12 @@ export async function addEvent(eventData) {
       createdAt: new Date().toISOString()
     });
     
-    return newEventRef.id;
+    const newEventId = newEventRef.id;
+    eventService.emit(EVENT_TYPES.EVENT_CREATED, { id: newEventId, ...eventData });
+    return newEventId;
   } catch (error) {
     console.error('Error adding event:', error);
+    eventService.emit(EVENT_TYPES.EVENT_ERROR, error);
     throw error;
   }
 }
@@ -84,9 +99,11 @@ export async function updateEvent(id, eventData) {
       updatedAt: new Date().toISOString()
     });
     
+    eventService.emit(EVENT_TYPES.EVENT_UPDATED, { id, ...eventData });
     return id;
   } catch (error) {
     console.error('Error updating event:', error);
+    eventService.emit(EVENT_TYPES.EVENT_ERROR, error);
     throw error;
   }
 }
@@ -98,9 +115,12 @@ export async function deleteEvent(id) {
   try {
     const eventRef = doc(db, eventsCollection, id);
     await deleteDoc(eventRef);
+    
+    eventService.emit(EVENT_TYPES.EVENT_DELETED, id);
     return true;
   } catch (error) {
     console.error('Error deleting event:', error);
+    eventService.emit(EVENT_TYPES.EVENT_ERROR, error);
     throw error;
   }
 }

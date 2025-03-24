@@ -25,8 +25,21 @@ export default function UpcomingEvents() {
   // amount: 0.2 means animation triggers when 20% of the element is visible
   const isInView = useInView(ref, { once: true, amount: 0.2 });
 
-  // Limit display to only the first two upcoming events
-  const displayedEvents = upcomingEvents.slice(0, 2);
+  // Get current date for filtering upcoming events
+  const currentDate = new Date();
+  
+  // Filter for future events, sort by date, and limit to first two
+  const displayedEvents = upcomingEvents
+    .filter(event => {
+      // Parse event date string to Date object
+      const eventDate = new Date(event.date);
+      return eventDate >= currentDate;
+    })
+    .sort((a, b) => {
+      // Sort by date (ascending)
+      return new Date(a.date) - new Date(b.date);
+    })
+    .slice(0, 2);
 
   // Animation variants for the event cards
   const cardVariants = {
