@@ -74,7 +74,7 @@ export default function AuthForm() {
   /**
    * Form submission handler
    * Handles both regular user authentication and admin authentication
-   * Routes both user types to admin page as requested
+   * Routes users to appropriate dashboards based on account type
    * 
    * @param {Event} e - Form submission event
    */
@@ -117,8 +117,8 @@ export default function AuthForm() {
         // Alert for demo purposes
         alert(`Login successful for: ${email}`);
         
-        // Redirect to admin page as requested (Note: This could create security issues)
-        router.push('/admin');
+        // Redirect to user dashboard instead of admin
+        router.push('/dashboard');
       } else {
         // Registration mode
         // Validate passwords match
@@ -134,8 +134,8 @@ export default function AuthForm() {
         sessionStorage.setItem('userLoggedIn', 'true');
         sessionStorage.setItem('userEmail', email);
         
-        // Redirect to admin page as requested
-        router.push('/admin');
+        // Redirect to user dashboard instead of admin
+        router.push('/dashboard');
       }
     } catch (err) {
       setError(err.message);
