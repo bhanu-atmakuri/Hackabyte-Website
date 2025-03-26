@@ -51,3 +51,27 @@ export async function ensureUserAuth() {
     return false;
   }
 }
+
+/**
+ * Verifies if the current user is a regular user (not an admin)
+ * @returns {Promise<boolean>} True if user is a regular user, false if admin or not logged in
+ */
+export async function ensureRegularUserAuth() {
+  // Only run this in the browser
+  if (typeof window === 'undefined') {
+    console.warn('Regular user auth check attempted during server-side rendering');
+    return false;
+  }
+  
+  try {
+    // Check if user is logged in but not as admin
+    const isUserLoggedIn = sessionStorage.getItem('userLoggedIn') === 'true';
+    const isAdminLoggedIn = sessionStorage.getItem('adminLoggedIn') === 'true';
+    
+    // Return true only if user is logged in but not as admin
+    return isUserLoggedIn && !isAdminLoggedIn;
+  } catch (error) {
+    console.error('Error in regular user auth check:', error);
+    return false;
+  }
+}

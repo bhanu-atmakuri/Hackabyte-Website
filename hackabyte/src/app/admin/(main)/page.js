@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import { db } from '../../firebaseConfig.js';
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import Head from 'next/head';
+import { ensureAdminAuth, ensureUserAuth } from '@/lib/auth/adminAuth';
 import useNoFlash from '@/lib/hooks/useNoFlash';
 
 const fadeIn = {
@@ -55,42 +56,57 @@ export default function AdminDashboard() {
   // Check if admin is logged in and fetch data
   useEffect(() => {
     const checkAdminAuth = async () => {
-      const isLoggedIn = sessionStorage.getItem('adminLoggedIn');
-      const adminId = sessionStorage.getItem('adminId');
-      
-      if (!isLoggedIn) {
-        router.push('/auth');
-        return;
-      }
-      
-      if (adminId) {
-        try {
-          setLoading(true);
-          const adminRef = doc(db, 'admins', adminId);
-          const adminSnap = await getDoc(adminRef);
-          
-          if (adminSnap.exists()) {
-            const adminData = adminSnap.data();
-            setAdmin(adminData);
-            setFormData({
-              name: adminData.name || '',
-              email: adminData.email || '',
-              currentPassword: '',
-              newPassword: '',
-              confirmPassword: '',
-            });
-          } else {
-            // Admin document not found, redirect to login
-            sessionStorage.removeItem('adminLoggedIn');
-            sessionStorage.removeItem('adminId');
-            router.push('/auth');
-          }
-        } catch (err) {
-          console.error('Error fetching admin data:', err);
-          setError('Failed to load your profile. Please try again.');
-        } finally {
-          setLoading(false);
+      try {
+        setLoading(true);
+        
+        // First check if user is logged in at all
+        const isUserLoggedIn = await ensureUserAuth();
+        if (!isUserLoggedIn) {
+          // Not logged in at all, redirect to auth
+          router.push('/auth');
+          return;
         }
+        
+        // Now check if user has admin privileges
+        const isAdmin = await ensureAdminAuth();
+        if (!isAdmin) {
+          console.log('Regular user detected, redirecting to user dashboard');
+          // User is logged in but not an admin
+          router.push('/dashboard');
+          return;
+        }
+        
+        // User is an admin, continue with admin dashboard logic
+        const adminId = sessionStorage.getItem('adminId');
+        
+        if (adminId) {
+          try {
+            const adminRef = doc(db, 'admins', adminId);
+            const adminSnap = await getDoc(adminRef);
+            
+            if (adminSnap.exists()) {
+              const adminData = adminSnap.data();
+              setAdmin(adminData);
+              setFormData({
+                name: adminData.name || '',
+                email: adminData.email || '',
+                currentPassword: '',
+                newPassword: '',
+                confirmPassword: '',
+              });
+            } else {
+              // Admin document not found, redirect to login
+              sessionStorage.removeItem('adminLoggedIn');
+              sessionStorage.removeItem('adminId');
+              router.push('/auth');
+            }
+          } catch (err) {
+            console.error('Error fetching admin data:', err);
+            setError('Failed to load your profile. Please try again.');
+          }
+        }
+      } finally {
+        setLoading(false);
       }
     };
 
