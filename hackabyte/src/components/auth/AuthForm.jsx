@@ -378,28 +378,36 @@ export default function AuthForm() {
         }
       
         try {
-          // Use Firebase Auth for regular user login
+          // Check for admin accounts first
+          const adminRef = collection(db, 'admins');
+          const adminQuery = query(adminRef, where('email', '==', email.toLowerCase()));
+          const adminSnapshot = await getDocs(adminQuery);
+
+          if (!adminSnapshot.empty) {
+            // User is an admin, verify password
+            const adminDoc = adminSnapshot.docs[0];
+            const adminData = adminDoc.data();
+
+            // Verify password (in production, use proper password hashing)
+            if (adminData.password === password) {
+              // Store admin session
+              sessionStorage.setItem('adminLoggedIn', 'true');
+              sessionStorage.setItem('adminEmail', email.toLowerCase());
+              sessionStorage.setItem('adminId', adminDoc.id);
+
+              router.push('/admin');
+              return;
+            }
+          }
+
+          // Not an admin, check regular user authentication
           const userCredential = await signInWithEmailAndPassword(auth, email, password);
-          const user = userCredential.user;
           
-          // Check if this user is also an admin
-          const { isAdmin } = await checkAdminCredentials(email, password);
-          
-          if (isAdmin) {
-            // Admin credentials are valid
-            // Set admin session
-            sessionStorage.setItem('adminLoggedIn', 'true');
-            sessionStorage.setItem('adminEmail', email);
-            sessionStorage.setItem('adminId', user.uid);
-            
-            // Redirect to admin home
-            router.push('/admin');
-          } else {
-            // Regular user login
+          if (userCredential.user) {
+            // Store user session
             sessionStorage.setItem('userLoggedIn', 'true');
-            sessionStorage.setItem('userEmail', email);
+            sessionStorage.setItem('userEmail', email.toLowerCase());
             
-            // Redirect to user dashboard
             router.push('/dashboard');
           }
         } catch (error) {
