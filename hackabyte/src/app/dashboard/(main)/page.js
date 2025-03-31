@@ -42,6 +42,23 @@ export default function UserDashboard() {
     phone: '',
     school: '',
     discordTag: '',
+    dateOfBirth: '',
+    isMinor: false,
+    parentName: '',
+    parentEmail: '',
+    parentPhone: '',
+    codingExperience: {
+      Beginner: false,
+      Intermediate: false,
+      Advanced: false
+    },
+    dietaryRestrictions: {
+      Vegetarian: false,
+      Vegan: false,
+      'Gluten-free': false,
+      Treenuts: false,
+      Details: ''
+    },
     currentPassword: '',
     newPassword: '',
     confirmPassword: '',
@@ -100,6 +117,15 @@ export default function UserDashboard() {
             
             // Format phone number from number back to string if needed
             const phoneStr = data.phone ? data.phone.toString() : '';
+            // Format parent phone if exists
+            const parentPhoneStr = data.parentPhone ? data.parentPhone.toString() : '';
+            
+            // Convert Firestore timestamp to date string format for input
+            let dateOfBirthStr = '';
+            if (data.birthday && data.birthday.toDate) {
+              const date = data.birthday.toDate();
+              dateOfBirthStr = date.toISOString().split('T')[0];
+            }
             
             // Set form data with the user's information
             setFormData({
@@ -108,6 +134,23 @@ export default function UserDashboard() {
               phone: phoneStr || '',
               school: data.school || '',
               discordTag: data.discordTag || '',
+              dateOfBirth: dateOfBirthStr || '',
+              isMinor: data.isMinor || false,
+              parentName: data.parentName || '',
+              parentEmail: data.parentEmail || '',
+              parentPhone: parentPhoneStr || '',
+              codingExperience: data.codingExperienceLevel || {
+                Beginner: false,
+                Intermediate: false,
+                Advanced: false
+              },
+              dietaryRestrictions: data.dietaryRestrictions || {
+                Vegetarian: false,
+                Vegan: false,
+                'Gluten-free': false,
+                Treenuts: false,
+                Details: ''
+              },
               currentPassword: '',
               newPassword: '',
               confirmPassword: '',
@@ -130,6 +173,25 @@ export default function UserDashboard() {
     }
   }, [isMounted, router]);
 
+  // Check if user is under 18 when date of birth changes
+  useEffect(() => {
+    if (!formData.dateOfBirth) {
+      setFormData(prev => ({ ...prev, isMinor: false }));
+      return;
+    }
+
+    const birthDate = new Date(formData.dateOfBirth);
+    const today = new Date();
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const monthDiff = today.getMonth() - birthDate.getMonth();
+    
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+      age--;
+    }
+    
+    setFormData(prev => ({ ...prev, isMinor: age < 18 }));
+  }, [formData.dateOfBirth]);
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({
@@ -140,6 +202,44 @@ export default function UserDashboard() {
     // Clear any previous messages
     setError('');
     setSuccess('');
+  };
+
+  // Handle coding experience selection
+  const handleCodingExperienceChange = (experience) => {
+    setFormData(prev => ({
+      ...prev,
+      codingExperience: {
+        Beginner: false,
+        Intermediate: false,
+        Advanced: false,
+        [experience]: true
+      }
+    }));
+    setUnsavedChanges(true);
+  };
+
+  // Handle dietary restriction checkbox changes
+  const handleDietaryRestrictionChange = (restriction) => {
+    setFormData(prev => ({
+      ...prev,
+      dietaryRestrictions: {
+        ...prev.dietaryRestrictions,
+        [restriction]: !prev.dietaryRestrictions[restriction]
+      }
+    }));
+    setUnsavedChanges(true);
+  };
+
+  // Handle dietary details change
+  const handleDietaryDetailsChange = (e) => {
+    setFormData(prev => ({
+      ...prev,
+      dietaryRestrictions: {
+        ...prev.dietaryRestrictions,
+        Details: e.target.value
+      }
+    }));
+    setUnsavedChanges(true);
   };
 
   const handleLogout = () => {
@@ -167,6 +267,39 @@ export default function UserDashboard() {
     if (formData.phone && !phoneRegex.test(formData.phone.replace(/\D/g, ''))) {
       setError('Please enter a valid phone number.');
       return false;
+    }
+
+    // Validate date of birth if provided
+    if (formData.dateOfBirth) {
+      const birthDate = new Date(formData.dateOfBirth);
+      if (isNaN(birthDate.getTime())) {
+        setError('Please enter a valid date of birth.');
+        return false;
+      }
+    }
+
+    // Validate parent/guardian information if user is a minor
+    if (formData.isMinor) {
+      if (!formData.parentName) {
+        setError('Parent/guardian name is required for minors.');
+        return false;
+      }
+      
+      if (!formData.parentEmail) {
+        setError('Parent/guardian email is required for minors.');
+        return false;
+      } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.parentEmail)) {
+        setError('Please enter a valid parent/guardian email address.');
+        return false;
+      }
+      
+      if (!formData.parentPhone) {
+        setError('Parent/guardian phone is required for minors.');
+        return false;
+      } else if (!/^[0-9]{10,}$/.test(formData.parentPhone.replace(/\D/g, ''))) {
+        setError('Please enter a valid parent/guardian phone number.');
+        return false;
+      }
     }
 
     // Password validation if user is changing password
@@ -234,6 +367,8 @@ export default function UserDashboard() {
       
       // Format phone as number for Firebase
       const phoneNumber = parseInt(formData.phone.replace(/\D/g, ''), 10) || 0;
+      // Format parent phone if provided
+      const parentPhoneNumber = parseInt(formData.parentPhone.replace(/\D/g, ''), 10) || 0;
       
       // Prepare data for update
       const updateData = {
@@ -242,6 +377,13 @@ export default function UserDashboard() {
         phone: phoneNumber,
         school: formData.school,
         discordTag: formData.discordTag,
+        birthday: formData.dateOfBirth ? new Date(formData.dateOfBirth) : null,
+        isMinor: formData.isMinor,
+        parentName: formData.isMinor ? formData.parentName : "",
+        parentEmail: formData.isMinor ? formData.parentEmail : "",
+        parentPhone: formData.isMinor ? parentPhoneNumber : 0,
+        codingExperienceLevel: formData.codingExperience,
+        dietaryRestrictions: formData.dietaryRestrictions,
         updatedAt: new Date()
       };
       
@@ -331,6 +473,7 @@ export default function UserDashboard() {
                   
                   <form onSubmit={handleSubmit}>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                      {/* Existing fields */}
                       <div>
                         <label htmlFor="name" className="block text-gray-300 text-sm font-medium mb-2">
                           Full Name
@@ -358,6 +501,20 @@ export default function UserDashboard() {
                           onChange={handleInputChange}
                           className="w-full p-3 bg-[#1A1A1E] border border-gray-700 text-white rounded-lg focus:ring-[#FF2247] focus:border-[#FF2247]"
                           placeholder="your.email@example.com"
+                        />
+                      </div>
+                      
+                      <div>
+                        <label htmlFor="dateOfBirth" className="block text-gray-300 text-sm font-medium mb-2">
+                          Date of Birth
+                        </label>
+                        <input
+                          type="date"
+                          id="dateOfBirth"
+                          name="dateOfBirth"
+                          value={formData.dateOfBirth}
+                          onChange={handleInputChange}
+                          className="w-full p-3 bg-[#1A1A1E] border border-gray-700 text-white rounded-lg focus:ring-[#FF2247] focus:border-[#FF2247]"
                         />
                       </div>
                       
@@ -406,9 +563,121 @@ export default function UserDashboard() {
                         />
                       </div>
                     </div>
+
+                    {/* Parent/Guardian Information (conditional) */}
+                    {formData.isMinor && (
+                      <div className="mb-8 border-t border-gray-800 pt-6">
+                        <h3 className="text-lg font-semibold text-white mb-4">Parent/Guardian Information</h3>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                          <div>
+                            <label htmlFor="parentName" className="block text-gray-300 text-sm font-medium mb-2">
+                              Parent/Guardian Full Name <span className="text-red-500">*</span>
+                            </label>
+                            <input
+                              type="text"
+                              id="parentName"
+                              name="parentName"
+                              value={formData.parentName}
+                              onChange={handleInputChange}
+                              required={formData.isMinor}
+                              className="w-full p-3 bg-[#1A1A1E] border border-gray-700 text-white rounded-lg focus:ring-[#FF2247] focus:border-[#FF2247]"
+                              placeholder="Jane Doe"
+                            />
+                          </div>
+                          
+                          <div>
+                            <label htmlFor="parentEmail" className="block text-gray-300 text-sm font-medium mb-2">
+                              Parent/Guardian Email <span className="text-red-500">*</span>
+                            </label>
+                            <input
+                              type="email"
+                              id="parentEmail"
+                              name="parentEmail"
+                              value={formData.parentEmail}
+                              onChange={handleInputChange}
+                              required={formData.isMinor}
+                              className="w-full p-3 bg-[#1A1A1E] border border-gray-700 text-white rounded-lg focus:ring-[#FF2247] focus:border-[#FF2247]"
+                              placeholder="parent@example.com"
+                            />
+                          </div>
+                          
+                          <div>
+                            <label htmlFor="parentPhone" className="block text-gray-300 text-sm font-medium mb-2">
+                              Parent/Guardian Phone <span className="text-red-500">*</span>
+                            </label>
+                            <input
+                              type="tel"
+                              id="parentPhone"
+                              name="parentPhone"
+                              value={formData.parentPhone}
+                              onChange={handleInputChange}
+                              required={formData.isMinor}
+                              className="w-full p-3 bg-[#1A1A1E] border border-gray-700 text-white rounded-lg focus:ring-[#FF2247] focus:border-[#FF2247]"
+                              placeholder="(123) 456-7890"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                    
+                    {/* Coding Experience Section */}
+                    <div className="mb-8 border-t border-gray-800 pt-6">
+                      <h3 className="text-lg font-semibold text-white mb-4">Coding Experience Level</h3>
+                      <div className="space-y-3">
+                        {["Beginner", "Intermediate", "Advanced"].map((level) => (
+                          <div key={level} className="flex items-center">
+                            <input
+                              type="radio"
+                              id={`coding-${level}`}
+                              name="codingExperience"
+                              checked={formData.codingExperience[level]}
+                              onChange={() => handleCodingExperienceChange(level)}
+                              className="h-4 w-4 bg-[#1A1A1E] border border-gray-700 rounded focus:ring-[#FF2247]"
+                            />
+                            <label htmlFor={`coding-${level}`} className="ml-3 block text-gray-300">
+                              {level}
+                            </label>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                    
+                    {/* Dietary Restrictions Section */}
+                    <div className="mb-8 border-t border-gray-800 pt-6">
+                      <h3 className="text-lg font-semibold text-white mb-4">Dietary Restrictions</h3>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
+                        {["Vegetarian", "Vegan", "Gluten-free", "Treenuts"].map((restriction) => (
+                          <div key={restriction} className="flex items-center">
+                            <input
+                              type="checkbox"
+                              id={`diet-${restriction}`}
+                              checked={formData.dietaryRestrictions[restriction]}
+                              onChange={() => handleDietaryRestrictionChange(restriction)}
+                              className="h-4 w-4 bg-[#1A1A1E] border border-gray-700 rounded focus:ring-[#FF2247]"
+                            />
+                            <label htmlFor={`diet-${restriction}`} className="ml-3 block text-gray-300">
+                              {restriction}
+                            </label>
+                          </div>
+                        ))}
+                      </div>
+                      <div>
+                        <label htmlFor="dietDetails" className="block text-gray-300 text-sm font-medium mb-2">
+                          Additional Dietary Information
+                        </label>
+                        <textarea
+                          id="dietDetails"
+                          value={formData.dietaryRestrictions.Details}
+                          onChange={handleDietaryDetailsChange}
+                          className="w-full p-3 bg-[#1A1A1E] border border-gray-700 text-white rounded-lg focus:ring-[#FF2247] focus:border-[#FF2247]"
+                          placeholder="Any additional dietary restrictions or allergies..."
+                          rows={2}
+                        />
+                      </div>
+                    </div>
                     
                     {/* Password Section Toggle */}
-                    <div className="mb-6">
+                    <div className="mb-6 border-t border-gray-800 pt-6">
                       <button
                         type="button"
                         onClick={() => setShowPasswordSection(!showPasswordSection)}
