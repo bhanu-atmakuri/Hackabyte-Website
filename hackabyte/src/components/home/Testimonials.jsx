@@ -15,6 +15,7 @@
 import { useState, useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
 import Container from '@/components/shared/Container';
+import { PLACEHOLDER_IMAGES, resolveImageSrc } from '@/lib/images/placeholders';
 
 export default function Testimonials() {
   // State to track which testimonial is currently displayed
@@ -129,7 +130,7 @@ export default function Testimonials() {
                         style={{
                           width: '100%',
                           height: '100%',
-                          backgroundImage: `url(${testimonials[activeIndex].image})`,
+                          backgroundImage: `url(${resolveImageSrc(testimonials[activeIndex].image, PLACEHOLDER_IMAGES.avatar)})`,
                           backgroundSize: 'cover',
                           backgroundPosition: 'center'
                         }}

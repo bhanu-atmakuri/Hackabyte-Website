@@ -15,11 +15,10 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import Container from '../shared/Container';
-import { db } from '../../app/firebaseConfig.js';
+import { auth, db, firebaseConfigError } from '../../app/firebaseConfig.js';
 import { collection, query, where, getDocs, addDoc } from 'firebase/firestore';
 import { useRouter } from 'next/navigation';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '../../app/firebaseConfig.js';
 
 // Helper function to get user-friendly error messages from Firebase error codes
 const getFirebaseErrorMessage = (errorCode) => {
@@ -42,6 +41,10 @@ const getFirebaseErrorMessage = (errorCode) => {
       return 'Too many unsuccessful login attempts. Please try again later or reset your password.';
     case 'auth/network-request-failed':
       return 'Network error. Please check your internet connection and try again.';
+    case 'auth/invalid-api-key':
+    case 'auth/app-not-authorized':
+    case 'auth/unauthorized-domain':
+      return firebaseConfigError || 'Firebase auth is misconfigured. Check NEXT_PUBLIC_FIREBASE_* values and authorized domains.';
     default:
       return 'An error occurred during authentication. Please try again.';
   }
@@ -376,6 +379,10 @@ export default function AuthForm() {
           setFieldErrors(prev => ({...prev, password: "Password is required"}));
           throw new Error("Please enter your password");
         }
+
+        if (firebaseConfigError) {
+          throw new Error(firebaseConfigError);
+        }
       
         try {
           // Check for admin accounts first
@@ -438,6 +445,10 @@ export default function AuthForm() {
         
         if (!isValid) {
           throw new Error("Please correct all errors before submitting the form.");
+        }
+
+        if (firebaseConfigError) {
+          throw new Error(firebaseConfigError);
         }
 
         try {

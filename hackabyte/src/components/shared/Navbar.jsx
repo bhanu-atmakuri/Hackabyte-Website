@@ -122,7 +122,6 @@ export default function Navbar() {
    * Defines all navigation links, their URLs, and dropdown subitems where applicable
    */
   const navItems = [
-    { name: 'LUMA', href: '/luma', hasDropdown: false },
     { 
       name: 'Events', 
       href: '/events', 
@@ -161,7 +160,7 @@ export default function Navbar() {
       initial={{ y: -100 }}
       animate={{ y: 0 }}
       transition={{ duration: 0.5 }}
-      className={`fixed w-full z-50 transition-all duration-50 ${
+      className={`fixed top-0 left-0 w-full z-50 transition-all duration-50 ${
         // Apply different styling based on scroll position
         isScrolled 
           ? 'bg-[#1A1A1E]/90 backdrop-blur-md shadow-md py-3' // Scrolled state
@@ -173,11 +172,11 @@ export default function Navbar() {
       }}
     >
       <Container>
-        <div className="flex items-center justify-between w-full px-1 sm:px-0">
+        <div className="relative flex items-center justify-between w-full px-1 sm:px-0">
           {/* Site Logo and Branding */}
           <Link 
             href="/" 
-            className="flex items-center space-x-1 sm:space-x-2 justify-start mr-auto safari-fix" 
+            className="flex items-center space-x-1 sm:space-x-2 justify-start safari-fix" 
             style={{
               display: '-webkit-box',
               display: 'flex',
@@ -220,7 +219,7 @@ export default function Navbar() {
           </Link>
 
           {/* Desktop Navigation - Hidden on mobile screens */}
-          <div className="hidden md:flex items-center space-x-6">
+          <div className="hidden md:flex items-center space-x-6 absolute left-1/2 -translate-x-1/2">
             {navItems.map((item, index) => (
               <div key={item.name} 
                 className={`relative ${item.hasDropdown ? 'group' : ''}`} 
@@ -278,6 +277,9 @@ export default function Navbar() {
                 )}
               </div>
             ))}
+          </div>
+
+          <div className="hidden md:flex items-center ml-auto">
             <motion.div
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}

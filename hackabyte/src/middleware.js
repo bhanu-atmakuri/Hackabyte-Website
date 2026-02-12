@@ -5,7 +5,7 @@ export function middleware(request) {
   const { pathname } = request.nextUrl;
   
   // Define paths that don't require authentication
-  const publicPaths = ['/', '/auth', '/about', '/contact', '/events', '/join-us', '/luma'];
+  const publicPaths = ['/', '/auth', '/about', '/contact', '/events', '/join-us'];
   
   // Check if the path starts with /admin
   if (pathname.startsWith('/admin')) {

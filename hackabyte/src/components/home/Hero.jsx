@@ -86,7 +86,7 @@ export default function Hero() {
   return (
     <section 
       ref={containerRef} 
-      className="min-h-screen pt-16 md:pt-8 pb-16 relative overflow-hidden bg-[#1A1A1E] flex items-center"
+      className="min-h-[75vh] md:min-h-[82vh] pt-20 md:pt-14 pb-12 md:pb-14 relative overflow-hidden bg-[#1A1A1E] flex items-center"
       id="home"
     >
       {/* Decorative background blur elements */}
@@ -106,18 +106,18 @@ export default function Hero() {
             animate="show"
           >
             <motion.div variants={item}>
-              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 md:mb-6">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-5xl font-bold mb-3 md:mb-5">
                 <span className="text-[#FF2247]">Hack. Build. Learn.</span>
               </h1>
             </motion.div>
 
             <motion.div variants={item}>
-              <h2 className="text-xl sm:text-2xl md:text-3xl font-semibold mb-3 md:mb-4">
+              <h2 className="text-lg sm:text-xl md:text-2xl font-semibold mb-3 md:mb-4">
                 Inspiring Innovation, Shaping Tomorrow
               </h2>
             </motion.div>
 
-            <motion.div variants={item} className="text-base sm:text-lg text-gray-300 mb-6 md:mb-8">
+            <motion.div variants={item} className="text-base sm:text-base md:text-lg text-gray-300 mb-5 md:mb-6">
               Hackabyte hosts immersive in-person hackathons for students of all ages, 
               from elementary to high school. Build technical skills, solve real-world problems, 
               and connect with mentors in a collaborative environment.

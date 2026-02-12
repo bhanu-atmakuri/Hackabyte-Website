@@ -1,7 +1,7 @@
 'use client';
 
 import { createContext, useContext, useEffect, useState } from 'react';
-import { auth } from '@/app/firebaseConfig';
+import { auth, firebaseConfigError } from '@/app/firebaseConfig';
 import { onAuthStateChanged, getIdToken } from 'firebase/auth';
 import { checkAdminStatus } from '@/lib/firebase/firebaseClient';
 import Cookies from 'js-cookie';
@@ -20,6 +20,14 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    if (!auth) {
+      if (firebaseConfigError) {
+        console.error(firebaseConfigError);
+      }
+      setLoading(false);
+      return;
+    }
+
     // Subscribe to auth state changes
     const unsubscribe = onAuthStateChanged(auth, async (authUser) => {
       if (authUser) {

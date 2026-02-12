@@ -2,7 +2,7 @@
  * Firebase client utilities
  * Helper functions for common Firebase operations
  */
-import { auth, db } from '@/app/firebaseConfig';
+import { auth, db, firebaseConfigError } from '@/app/firebaseConfig';
 import { 
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
@@ -22,6 +22,24 @@ import {
   serverTimestamp
 } from 'firebase/firestore';
 
+function getConfigError() {
+  return new Error(
+    firebaseConfigError || 'Firebase is not configured. Add NEXT_PUBLIC_FIREBASE_* values and restart the app.'
+  );
+}
+
+function requireAuthClient() {
+  if (!auth) {
+    throw getConfigError();
+  }
+}
+
+function requireFirestoreClient() {
+  if (!db) {
+    throw getConfigError();
+  }
+}
+
 /**
  * Sign in with email and password
  * @param {string} email - User email
@@ -30,6 +48,7 @@ import {
  */
 export async function signIn(email, password) {
   try {
+    requireAuthClient();
     const userCredential = await signInWithEmailAndPassword(auth, email, password);
     
     // Check if user is an admin
@@ -58,6 +77,9 @@ export async function signIn(email, password) {
  */
 export async function signUp(email, password, name) {
   try {
+    requireAuthClient();
+    requireFirestoreClient();
+
     // Create the user account
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
     
@@ -85,6 +107,7 @@ export async function signUp(email, password, name) {
  */
 export async function logOut() {
   try {
+    requireAuthClient();
     await signOut(auth);
     // Clear all session storage related to authentication
     sessionStorage.removeItem('userLoggedIn');
@@ -110,6 +133,7 @@ export async function logOut() {
  */
 export async function resetPassword(email) {
   try {
+    requireAuthClient();
     await sendPasswordResetEmail(auth, email);
   } catch (error) {
     console.error('Error resetting password:', error);
@@ -124,6 +148,9 @@ export async function resetPassword(email) {
  */
 export async function checkAdminStatus(uid) {
   try {
+    if (!db) {
+      return false;
+    }
     const adminDoc = await getDoc(doc(db, 'admins', uid));
     return adminDoc.exists();
   } catch (error) {
@@ -137,6 +164,10 @@ export async function checkAdminStatus(uid) {
  * @returns {Promise<Object|null>} User object with Firestore data
  */
 export async function getCurrentUser() {
+  if (!auth) {
+    return null;
+  }
+
   return new Promise((resolve, reject) => {
     const unsubscribe = onAuthStateChanged(
       auth,
@@ -177,5 +208,10 @@ export async function getCurrentUser() {
  * @returns {Function} Unsubscribe function
  */
 export function subscribeToAuthChanges(callback) {
+  if (!auth) {
+    callback(null);
+    return () => {};
+  }
+
   return onAuthStateChanged(auth, callback);
 }

@@ -7,6 +7,51 @@ import Container from '@/components/shared/Container';
 import { getAllEvents } from '@/lib/firebase/events';
 import useEventEmitter from '@/lib/hooks/useEventEmitter';
 import { EVENT_TYPES } from '@/lib/services/eventEmitterService';
+import { PLACEHOLDER_IMAGES, resolveImageSrc } from '@/lib/images/placeholders';
+
+function parseEventDate(value) {
+  if (!value) return null;
+
+  // Firestore Timestamp support
+  if (typeof value === 'object' && typeof value.toDate === 'function') {
+    return value.toDate();
+  }
+
+  if (value instanceof Date) {
+    return Number.isNaN(value.getTime()) ? null : value;
+  }
+
+  if (typeof value === 'string') {
+    // Avoid timezone shifting for date-only strings (YYYY-MM-DD)
+    const dateOnlyMatch = value.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+    if (dateOnlyMatch) {
+      const year = Number(dateOnlyMatch[1]);
+      const month = Number(dateOnlyMatch[2]);
+      const day = Number(dateOnlyMatch[3]);
+      return new Date(year, month - 1, day);
+    }
+  }
+
+  const parsed = new Date(value);
+  return Number.isNaN(parsed.getTime()) ? null : parsed;
+}
+
+function formatEventDate(startValue, endValue) {
+  const startDate = parseEventDate(startValue);
+  const endDate = parseEventDate(endValue);
+
+  if (!startDate) return 'TBD';
+
+  const dateOptions = { year: 'numeric', month: 'short', day: 'numeric' };
+  const startLabel = startDate.toLocaleDateString('en-US', dateOptions);
+
+  if (!endDate || startDate.toDateString() === endDate.toDateString()) {
+    return startLabel;
+  }
+
+  const endLabel = endDate.toLocaleDateString('en-US', dateOptions);
+  return `${startLabel} - ${endLabel}`;
+}
 
 export default function PastEventsList() {
   const [pastEvents, setPastEvents] = useState([]);
@@ -21,7 +66,7 @@ export default function PastEventsList() {
 
   // Listen for events data changes
   useEventEmitter(EVENT_TYPES.EVENTS_LOADED, (loadedEvents) => {
-    setPastEvents(loadedEvents.filter(event => event.hasPassed));
+    setPastEvents(loadedEvents.filter(event => event.hasPassed && event.showOnPastEventsPage));
     setLoading(false);
   });
 
@@ -93,7 +138,12 @@ export default function PastEventsList() {
 
             {/* Past events grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredEvents.map((event, index) => (
+              {filteredEvents.map((event, index) => {
+                const eventTitle = event.title || event.name || 'Untitled Event';
+                const eventDate = formatEventDate(event.startDate || event.date, event.endDate);
+                const eventImage = resolveImageSrc(event.image, PLACEHOLDER_IMAGES.event);
+
+                return (
                 <motion.div
                   key={event.id}
                   initial={{ opacity: 0, y: 20 }}
@@ -106,7 +156,7 @@ export default function PastEventsList() {
                     <div 
                       className="absolute inset-0 w-full h-full"
                       style={{
-                        backgroundImage: `url(${event.image || "/api/placeholder/600/400"})`,
+                        backgroundImage: `url(${eventImage})`,
                         backgroundSize: 'cover',
                         backgroundPosition: 'center'
                       }}
@@ -120,13 +170,13 @@ export default function PastEventsList() {
 
                   {/* Event Details */}
                   <div className="p-5">
-                    <h3 className="text-xl font-bold text-white mb-2 line-clamp-1">{event.title}</h3>
+                    <h3 className="text-xl font-bold text-white mb-2 line-clamp-1">{eventTitle}</h3>
                     
                     <div className="flex items-center text-gray-400 text-sm mb-2">
                       <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1 text-[#FF2247]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                       </svg>
-                      <span>{event.date}</span>
+                      <span>{eventDate}</span>
                     </div>
                     
                     <div className="flex items-center text-gray-400 text-sm mb-3">
@@ -147,7 +197,8 @@ export default function PastEventsList() {
                     </Link>
                   </div>
                 </motion.div>
-              ))}
+                );
+              })}
             </div>
           </>
         )}

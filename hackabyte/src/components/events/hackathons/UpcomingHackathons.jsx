@@ -16,6 +16,7 @@ import { useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
 import Link from 'next/link';
 import Container from '@/components/shared/Container';
+import { PLACEHOLDER_IMAGES, resolveImageSrc } from '@/lib/images/placeholders';
 
 export default function UpcomingHackathons() {
   // Reference for scroll-triggered animations
@@ -80,7 +81,7 @@ export default function UpcomingHackathons() {
                   <div 
                     className="absolute inset-0 w-full h-full"
                     style={{
-                      backgroundImage: `url(${hackathon.image})`,
+                      backgroundImage: `url(${resolveImageSrc(hackathon.image, PLACEHOLDER_IMAGES.event)})`,
                       backgroundSize: 'cover',
                       backgroundPosition: 'center'
                     }}

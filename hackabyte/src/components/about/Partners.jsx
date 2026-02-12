@@ -16,6 +16,7 @@
 import { useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
 import Container from '../shared/Container';
+import { PLACEHOLDER_IMAGES, resolveImageSrc } from '@/lib/images/placeholders';
 
 export default function Partners() {
   // Reference for scroll-triggered animations
@@ -110,7 +111,7 @@ export default function Partners() {
                       <div 
                         className="absolute inset-0 flex items-center justify-center"
                         style={{
-                          backgroundImage: `url(${partner.logo})`,
+                          backgroundImage: `url(${resolveImageSrc(partner.logo, PLACEHOLDER_IMAGES.logo)})`,
                           backgroundSize: 'contain',
                           backgroundPosition: 'center',
                           backgroundRepeat: 'no-repeat'

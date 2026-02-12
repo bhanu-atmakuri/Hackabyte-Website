@@ -203,6 +203,11 @@ export default function AdminEventsPage() {
                       {event.eventType}
                     </span>
                   )}
+                  {event.showOnPastEventsPage && (
+                    <span className="px-2 py-0.5 text-xs rounded-full bg-[#1A1A1E] text-gray-300 border border-gray-700">
+                      Visible on Past Events page
+                    </span>
+                  )}
                 </div>
 
                 {/* Details dropdown toggle button */}

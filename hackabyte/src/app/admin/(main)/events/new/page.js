@@ -3,11 +3,30 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { addEvent } from '@/lib/firebase/events';
+import { uploadEventThumbnail } from '@/lib/firebase/storage';
+import { PLACEHOLDER_IMAGES, resolveImageSrc } from '@/lib/images/placeholders';
 import Link from 'next/link';
+import { motion } from 'framer-motion';
+
+function parseEventDate(value) {
+  if (!value) return null;
+
+  const dateOnlyMatch = value.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  if (dateOnlyMatch) {
+    const year = Number(dateOnlyMatch[1]);
+    const month = Number(dateOnlyMatch[2]);
+    const day = Number(dateOnlyMatch[3]);
+    return new Date(year, month - 1, day);
+  }
+
+  const parsed = new Date(value);
+  return Number.isNaN(parsed.getTime()) ? null : parsed;
+}
 
 export default function NewEventPage() {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isUploadingImage, setIsUploadingImage] = useState(false);
   const [error, setError] = useState(null);
   
   const [formData, setFormData] = useState({
@@ -19,7 +38,8 @@ export default function NewEventPage() {
     endDate: '',
     registrationDeadline: '',
     eventType: 'Hackathon',
-    hasPassed: false,
+    showOnPastEventsPage: false,
+    image: '',
     ageGroups: {
       'middle school': false,
       'high school': false,
@@ -48,6 +68,40 @@ export default function NewEventPage() {
       }));
     }
   };
+
+  const handleThumbnailUpload = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (!file.type?.startsWith('image/')) {
+      setError('Please upload a valid image file for the thumbnail.');
+      return;
+    }
+
+    setIsUploadingImage(true);
+    setError(null);
+
+    try {
+      const uploadedImageUrl = await uploadEventThumbnail(file);
+      setFormData(prev => ({
+        ...prev,
+        image: uploadedImageUrl
+      }));
+    } catch (uploadError) {
+      console.error('Error uploading thumbnail:', uploadError);
+      setError('Failed to upload thumbnail. Please try again.');
+    } finally {
+      setIsUploadingImage(false);
+    }
+  };
+
+  const endDate = parseEventDate(formData.endDate);
+  const today = new Date();
+  const todayDateOnly = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+  const eventEndDateOnly = endDate
+    ? new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate())
+    : null;
+  const isAutomaticallyPassed = Boolean(eventEndDateOnly && todayDateOnly > eventEndDateOnly);
   
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -77,11 +131,11 @@ export default function NewEventPage() {
         </div>
       )}
       
-      <form onSubmit={handleSubmit} className="bg-gray-800 rounded-lg p-6 shadow-lg">
+      <form onSubmit={handleSubmit} className="bg-[#16161A] rounded-lg p-6 shadow-lg border border-gray-800">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Event Name */}
           <div className="col-span-full">
-            <label htmlFor="name" className="block text-sm font-medium mb-1">
+            <label htmlFor="name" className="block text-sm font-medium mb-1 text-gray-300">
               Event Name*
             </label>
             <input
@@ -91,13 +145,13 @@ export default function NewEventPage() {
               value={formData.name}
               onChange={handleChange}
               required
-              className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 bg-[#1A1A1E] border border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-[#FF2247] focus:border-[#FF2247] text-white"
             />
           </div>
           
           {/* Event Type */}
           <div>
-            <label htmlFor="eventType" className="block text-sm font-medium mb-1">
+            <label htmlFor="eventType" className="block text-sm font-medium mb-1 text-gray-300">
               Event Type*
             </label>
             <select
@@ -106,7 +160,7 @@ export default function NewEventPage() {
               value={formData.eventType}
               onChange={handleChange}
               required
-              className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 bg-[#1A1A1E] border border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-[#FF2247] focus:border-[#FF2247] text-white"
             >
               <option value="Hackathon">Hackathon</option>
               <option value="Workshop">Workshop</option>
@@ -118,7 +172,7 @@ export default function NewEventPage() {
           
           {/* Competition Level */}
           <div>
-            <label htmlFor="competitionLevel" className="block text-sm font-medium mb-1">
+            <label htmlFor="competitionLevel" className="block text-sm font-medium mb-1 text-gray-300">
               Competition Level*
             </label>
             <select
@@ -127,7 +181,7 @@ export default function NewEventPage() {
               value={formData.competitionLevel}
               onChange={handleChange}
               required
-              className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 bg-[#1A1A1E] border border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-[#FF2247] focus:border-[#FF2247] text-white"
             >
               <option value="">Select a level</option>
               <option value="Local">Local</option>
@@ -140,7 +194,7 @@ export default function NewEventPage() {
           
           {/* Location */}
           <div>
-            <label htmlFor="location" className="block text-sm font-medium mb-1">
+            <label htmlFor="location" className="block text-sm font-medium mb-1 text-gray-300">
               Location Address*
             </label>
             <input
@@ -150,13 +204,13 @@ export default function NewEventPage() {
               value={formData.location}
               onChange={handleChange}
               required
-              className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 bg-[#1A1A1E] border border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-[#FF2247] focus:border-[#FF2247] text-white"
             />
           </div>
           
           {/* State */}
           <div>
-            <label htmlFor="state" className="block text-sm font-medium mb-1">
+            <label htmlFor="state" className="block text-sm font-medium mb-1 text-gray-300">
               State*
             </label>
             <input
@@ -166,13 +220,13 @@ export default function NewEventPage() {
               value={formData.state}
               onChange={handleChange}
               required
-              className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 bg-[#1A1A1E] border border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-[#FF2247] focus:border-[#FF2247] text-white"
             />
           </div>
           
           {/* Start Date */}
           <div>
-            <label htmlFor="startDate" className="block text-sm font-medium mb-1">
+            <label htmlFor="startDate" className="block text-sm font-medium mb-1 text-gray-300">
               Start Date*
             </label>
             <input
@@ -182,13 +236,13 @@ export default function NewEventPage() {
               value={formData.startDate}
               onChange={handleChange}
               required
-              className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 bg-[#1A1A1E] border border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-[#FF2247] focus:border-[#FF2247] text-white"
             />
           </div>
           
           {/* End Date */}
           <div>
-            <label htmlFor="endDate" className="block text-sm font-medium mb-1">
+            <label htmlFor="endDate" className="block text-sm font-medium mb-1 text-gray-300">
               End Date*
             </label>
             <input
@@ -198,13 +252,13 @@ export default function NewEventPage() {
               value={formData.endDate}
               onChange={handleChange}
               required
-              className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 bg-[#1A1A1E] border border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-[#FF2247] focus:border-[#FF2247] text-white"
             />
           </div>
           
           {/* Registration Deadline */}
           <div>
-            <label htmlFor="registrationDeadline" className="block text-sm font-medium mb-1">
+            <label htmlFor="registrationDeadline" className="block text-sm font-medium mb-1 text-gray-300">
               Registration Deadline*
             </label>
             <input
@@ -214,28 +268,72 @@ export default function NewEventPage() {
               value={formData.registrationDeadline}
               onChange={handleChange}
               required
-              className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 bg-[#1A1A1E] border border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-[#FF2247] focus:border-[#FF2247] text-white"
             />
           </div>
           
-          {/* Has Passed */}
+          {/* Past events page visibility */}
           <div className="flex items-center">
             <input
               type="checkbox"
-              id="hasPassed"
-              name="hasPassed"
-              checked={formData.hasPassed}
+              id="showOnPastEventsPage"
+              name="showOnPastEventsPage"
+              checked={formData.showOnPastEventsPage}
               onChange={handleChange}
-              className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+              className="h-4 w-4 rounded border-gray-700 text-[#FF2247] focus:ring-[#FF2247] bg-[#1A1A1E]"
             />
-            <label htmlFor="hasPassed" className="ml-2 block text-sm">
-              Event has already passed
+            <label htmlFor="showOnPastEventsPage" className="ml-2 block text-sm text-gray-300">
+              Show on Past Events page
             </label>
+          </div>
+
+          {/* Auto passed status info */}
+          <div className="flex items-center text-sm text-gray-400">
+            {formData.endDate ? (
+              <span>{isAutomaticallyPassed ? 'Status: Past (auto by end date)' : 'Status: Upcoming (auto by end date)'}</span>
+            ) : (
+              <span>Status is set automatically once an end date is selected.</span>
+            )}
+          </div>
+
+          {/* Thumbnail Upload */}
+          <div className="col-span-full">
+            <label htmlFor="thumbnailUpload" className="block text-sm font-medium mb-2 text-gray-300">
+              Event Thumbnail
+            </label>
+            <div className="grid grid-cols-1 md:grid-cols-[220px_1fr] gap-4 items-start">
+              <div
+                className="h-36 rounded-md border border-gray-700 bg-[#1A1A1E] bg-cover bg-center"
+                style={{
+                  backgroundImage: `url(${resolveImageSrc(formData.image, PLACEHOLDER_IMAGES.event)})`
+                }}
+              />
+              <div className="space-y-3">
+                <input
+                  type="file"
+                  id="thumbnailUpload"
+                  accept="image/*"
+                  onChange={handleThumbnailUpload}
+                  className="w-full px-3 py-2 text-sm bg-[#1A1A1E] border border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-[#FF2247] focus:border-[#FF2247] text-gray-300 file:mr-3 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:bg-[#FF2247] file:text-white hover:file:bg-[#E01F3F]"
+                />
+                {isUploadingImage && (
+                  <p className="text-xs text-gray-400">Uploading thumbnail...</p>
+                )}
+                <input
+                  type="url"
+                  name="image"
+                  value={formData.image}
+                  onChange={handleChange}
+                  placeholder="Or paste a thumbnail URL"
+                  className="w-full px-3 py-2 text-sm bg-[#1A1A1E] border border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-[#FF2247] focus:border-[#FF2247] text-white"
+                />
+              </div>
+            </div>
           </div>
           
           {/* Age Groups */}
           <div className="col-span-full">
-            <span className="block text-sm font-medium mb-2">Age Groups*</span>
+            <span className="block text-sm font-medium mb-2 text-gray-300">Age Groups*</span>
             <div className="flex flex-wrap gap-4">
               <div className="flex items-center">
                 <input
@@ -244,9 +342,9 @@ export default function NewEventPage() {
                   name="ageGroups.middle school"
                   checked={formData.ageGroups['middle school']}
                   onChange={handleChange}
-                  className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                  className="h-4 w-4 rounded border-gray-700 text-[#FF2247] focus:ring-[#FF2247] bg-[#1A1A1E]"
                 />
-                <label htmlFor="ageGroup-middle" className="ml-2 block text-sm">
+                <label htmlFor="ageGroup-middle" className="ml-2 block text-sm text-gray-300">
                   Middle School
                 </label>
               </div>
@@ -257,9 +355,9 @@ export default function NewEventPage() {
                   name="ageGroups.high school"
                   checked={formData.ageGroups['high school']}
                   onChange={handleChange}
-                  className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                  className="h-4 w-4 rounded border-gray-700 text-[#FF2247] focus:ring-[#FF2247] bg-[#1A1A1E]"
                 />
-                <label htmlFor="ageGroup-high" className="ml-2 block text-sm">
+                <label htmlFor="ageGroup-high" className="ml-2 block text-sm text-gray-300">
                   High School
                 </label>
               </div>
@@ -270,9 +368,9 @@ export default function NewEventPage() {
                   name="ageGroups.college"
                   checked={formData.ageGroups['college']}
                   onChange={handleChange}
-                  className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                  className="h-4 w-4 rounded border-gray-700 text-[#FF2247] focus:ring-[#FF2247] bg-[#1A1A1E]"
                 />
-                <label htmlFor="ageGroup-college" className="ml-2 block text-sm">
+                <label htmlFor="ageGroup-college" className="ml-2 block text-sm text-gray-300">
                   College
                 </label>
               </div>
@@ -281,7 +379,7 @@ export default function NewEventPage() {
           
           {/* Description */}
           <div className="col-span-full">
-            <label htmlFor="description" className="block text-sm font-medium mb-1">
+            <label htmlFor="description" className="block text-sm font-medium mb-1 text-gray-300">
               Description*
             </label>
             <textarea
@@ -291,13 +389,13 @@ export default function NewEventPage() {
               value={formData.description}
               onChange={handleChange}
               required
-              className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 bg-[#1A1A1E] border border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-[#FF2247] focus:border-[#FF2247] text-white"
             ></textarea>
           </div>
           
           {/* Requirements */}
           <div className="col-span-full">
-            <label htmlFor="requirements" className="block text-sm font-medium mb-1">
+            <label htmlFor="requirements" className="block text-sm font-medium mb-1 text-gray-300">
               Requirements
             </label>
             <textarea
@@ -306,7 +404,7 @@ export default function NewEventPage() {
               rows="4"
               value={formData.requirements}
               onChange={handleChange}
-              className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 bg-[#1A1A1E] border border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-[#FF2247] focus:border-[#FF2247] text-white"
             ></textarea>
           </div>
         </div>
@@ -318,13 +416,15 @@ export default function NewEventPage() {
           >
             Cancel
           </Link>
-          <button
+          <motion.button
             type="submit"
-            disabled={isSubmitting}
-            className="btn-primary disabled:opacity-50"
+            disabled={isSubmitting || isUploadingImage}
+            className="btn-primary disabled:opacity-50 disabled:hover:bg-[#FF2247]"
+            whileHover={{ scale: isSubmitting || isUploadingImage ? 1 : 1.03 }}
+            whileTap={{ scale: isSubmitting || isUploadingImage ? 1 : 0.97 }}
           >
             {isSubmitting ? 'Creating...' : 'Create Event'}
-          </button>
+          </motion.button>
         </div>
       </form>
     </div>

@@ -3,15 +3,53 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { getEvent, updateEvent } from '@/lib/firebase/events';
+import { uploadEventThumbnail } from '@/lib/firebase/storage';
+import { PLACEHOLDER_IMAGES, resolveImageSrc } from '@/lib/images/placeholders';
 import Link from 'next/link';
 import useNoFlash from '@/lib/hooks/useNoFlash';
 import { motion } from 'framer-motion';
+
+function parseEventDate(value) {
+  if (!value) return null;
+
+  if (typeof value === 'object' && typeof value.toDate === 'function') {
+    return value.toDate();
+  }
+
+  if (value instanceof Date) {
+    return Number.isNaN(value.getTime()) ? null : value;
+  }
+
+  if (typeof value === 'string') {
+    const dateOnlyMatch = value.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+    if (dateOnlyMatch) {
+      const year = Number(dateOnlyMatch[1]);
+      const month = Number(dateOnlyMatch[2]);
+      const day = Number(dateOnlyMatch[3]);
+      return new Date(year, month - 1, day);
+    }
+  }
+
+  const parsed = new Date(value);
+  return Number.isNaN(parsed.getTime()) ? null : parsed;
+}
+
+function toDateInputValue(value) {
+  const parsedDate = parseEventDate(value);
+  if (!parsedDate) return '';
+
+  const year = parsedDate.getFullYear();
+  const month = String(parsedDate.getMonth() + 1).padStart(2, '0');
+  const day = String(parsedDate.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
 
 export default function EditEventPage({ params }) {
   const router = useRouter();
   const { id } = params;
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isUploadingImage, setIsUploadingImage] = useState(false);
   const [error, setError] = useState(null);
   const [isMounted, setIsMounted] = useState(false);
   
@@ -31,7 +69,8 @@ export default function EditEventPage({ params }) {
     endDate: '',
     registrationDeadline: '',
     eventType: '',
-    hasPassed: false,
+    showOnPastEventsPage: false,
+    image: '',
     ageGroups: {
       'middle school': false,
       'high school': false,
@@ -56,6 +95,18 @@ export default function EditEventPage({ params }) {
             'college': false
           };
         }
+
+        if (!Object.prototype.hasOwnProperty.call(eventData, 'showOnPastEventsPage')) {
+          eventData.showOnPastEventsPage = false;
+        }
+
+        if (!eventData.image) {
+          eventData.image = '';
+        }
+
+        eventData.startDate = toDateInputValue(eventData.startDate);
+        eventData.endDate = toDateInputValue(eventData.endDate);
+        eventData.registrationDeadline = toDateInputValue(eventData.registrationDeadline);
         
         setFormData(eventData);
         setIsLoading(false);
@@ -88,6 +139,40 @@ export default function EditEventPage({ params }) {
       }));
     }
   };
+
+  const handleThumbnailUpload = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (!file.type?.startsWith('image/')) {
+      setError('Please upload a valid image file for the thumbnail.');
+      return;
+    }
+
+    setIsUploadingImage(true);
+    setError(null);
+
+    try {
+      const uploadedImageUrl = await uploadEventThumbnail(file);
+      setFormData(prev => ({
+        ...prev,
+        image: uploadedImageUrl
+      }));
+    } catch (uploadError) {
+      console.error('Error uploading thumbnail:', uploadError);
+      setError('Failed to upload thumbnail. Please try again.');
+    } finally {
+      setIsUploadingImage(false);
+    }
+  };
+
+  const endDate = parseEventDate(formData.endDate);
+  const today = new Date();
+  const todayDateOnly = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+  const eventEndDateOnly = endDate
+    ? new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate())
+    : null;
+  const isAutomaticallyPassed = Boolean(eventEndDateOnly && todayDateOnly > eventEndDateOnly);
   
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -272,19 +357,63 @@ export default function EditEventPage({ params }) {
             />
           </div>
           
-          {/* Has Passed */}
+          {/* Past events page visibility */}
           <div className="flex items-center">
             <input
               type="checkbox"
-              id="hasPassed"
-              name="hasPassed"
-              checked={formData.hasPassed}
+              id="showOnPastEventsPage"
+              name="showOnPastEventsPage"
+              checked={formData.showOnPastEventsPage}
               onChange={handleChange}
               className="h-4 w-4 rounded border-gray-700 text-[#FF2247] focus:ring-[#FF2247] bg-[#1A1A1E]"
             />
-            <label htmlFor="hasPassed" className="ml-2 block text-sm text-gray-300">
-              Event has already passed
+            <label htmlFor="showOnPastEventsPage" className="ml-2 block text-sm text-gray-300">
+              Show on Past Events page
             </label>
+          </div>
+
+          {/* Auto passed status info */}
+          <div className="flex items-center text-sm text-gray-400">
+            {formData.endDate ? (
+              <span>{isAutomaticallyPassed ? 'Status: Past (auto by end date)' : 'Status: Upcoming (auto by end date)'}</span>
+            ) : (
+              <span>Status is set automatically once an end date is selected.</span>
+            )}
+          </div>
+
+          {/* Thumbnail Upload */}
+          <div className="col-span-full">
+            <label htmlFor="thumbnailUpload" className="block text-sm font-medium mb-2 text-gray-300">
+              Event Thumbnail
+            </label>
+            <div className="grid grid-cols-1 md:grid-cols-[220px_1fr] gap-4 items-start">
+              <div
+                className="h-36 rounded-md border border-gray-700 bg-[#1A1A1E] bg-cover bg-center"
+                style={{
+                  backgroundImage: `url(${resolveImageSrc(formData.image, PLACEHOLDER_IMAGES.event)})`
+                }}
+              />
+              <div className="space-y-3">
+                <input
+                  type="file"
+                  id="thumbnailUpload"
+                  accept="image/*"
+                  onChange={handleThumbnailUpload}
+                  className="w-full px-3 py-2 text-sm bg-[#1A1A1E] border border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-[#FF2247] focus:border-[#FF2247] text-gray-300 file:mr-3 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:bg-[#FF2247] file:text-white hover:file:bg-[#E01F3F]"
+                />
+                {isUploadingImage && (
+                  <p className="text-xs text-gray-400">Uploading thumbnail...</p>
+                )}
+                <input
+                  type="url"
+                  name="image"
+                  value={formData.image}
+                  onChange={handleChange}
+                  placeholder="Or paste a thumbnail URL"
+                  className="w-full px-3 py-2 text-sm bg-[#1A1A1E] border border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-[#FF2247] focus:border-[#FF2247] text-white"
+                />
+              </div>
+            </div>
           </div>
           
           {/* Age Groups */}
@@ -374,10 +503,10 @@ export default function EditEventPage({ params }) {
           </Link>
           <motion.button
             type="submit"
-            disabled={isSubmitting}
+            disabled={isSubmitting || isUploadingImage}
             className="btn-primary disabled:opacity-50 disabled:hover:bg-[#FF2247]"
-            whileHover={{ scale: isSubmitting ? 1 : 1.03 }}
-            whileTap={{ scale: isSubmitting ? 1 : 0.97 }}
+            whileHover={{ scale: isSubmitting || isUploadingImage ? 1 : 1.03 }}
+            whileTap={{ scale: isSubmitting || isUploadingImage ? 1 : 0.97 }}
           >
             {isSubmitting ? 'Saving...' : 'Save Changes'}
           </motion.button>

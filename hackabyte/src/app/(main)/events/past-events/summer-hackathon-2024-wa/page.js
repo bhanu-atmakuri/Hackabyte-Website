@@ -6,6 +6,7 @@ import Link from 'next/link';
 import BasePageLayout from '@/components/shared/BasePageLayout';
 import Container from '@/components/shared/Container';
 import useNoFlash from '@/lib/hooks/useNoFlash';
+import { PLACEHOLDER_IMAGES, resolveImageSrc } from '@/lib/images/placeholders';
 
 export default function SummerHackathon2024WA() {
   const [isMounted, setIsMounted] = useState(false);
@@ -159,7 +160,7 @@ export default function SummerHackathon2024WA() {
               <div 
                 className="absolute inset-0 w-full h-full"
                 style={{
-                  backgroundImage: `url(${event.image})`,
+                  backgroundImage: `url(${resolveImageSrc(event.image, PLACEHOLDER_IMAGES.event)})`,
                   backgroundSize: 'cover',
                   backgroundPosition: 'center'
                 }}

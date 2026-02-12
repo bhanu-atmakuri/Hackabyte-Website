@@ -16,6 +16,7 @@
 import { useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
 import Container from '../shared/Container';
+import { PLACEHOLDER_IMAGES, resolveImageSrc } from '@/lib/images/placeholders';
 
 export default function VolunteerLeadsSection() {
   // Reference for scroll-triggered animations
@@ -78,7 +79,7 @@ export default function VolunteerLeadsSection() {
                 <div 
                   className="w-full h-full bg-gray-800"
                   style={{
-                    backgroundImage: `url(${member.image})`,
+                    backgroundImage: `url(${resolveImageSrc(member.image, PLACEHOLDER_IMAGES.profile)})`,
                     backgroundSize: 'cover',
                     backgroundPosition: 'center'
                   }}

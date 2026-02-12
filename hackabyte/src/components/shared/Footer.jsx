@@ -32,8 +32,7 @@ export default function Footer() {
         { name: "Our Mission", href: "/about#mission" },
         { name: "Our Team", href: "/about#team" },
         { name: "Join Us", href: "/join-us" },
-        { name: "Contact", href: "/contact" },
-        { name: "LUMA Program", href: "/luma" }
+        { name: "Contact", href: "/contact" }
       ]
     },
     {

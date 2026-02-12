@@ -7,6 +7,51 @@ import Container from '@/components/shared/Container';
 import { getAllEvents } from '@/lib/firebase/events';
 import useEventEmitter from '@/lib/hooks/useEventEmitter';
 import { EVENT_TYPES } from '@/lib/services/eventEmitterService';
+import { PLACEHOLDER_IMAGES, resolveImageSrc } from '@/lib/images/placeholders';
+
+function parseEventDate(value) {
+  if (!value) return null;
+
+  // Firestore Timestamp support
+  if (typeof value === 'object' && typeof value.toDate === 'function') {
+    return value.toDate();
+  }
+
+  if (value instanceof Date) {
+    return Number.isNaN(value.getTime()) ? null : value;
+  }
+
+  if (typeof value === 'string') {
+    // Avoid timezone shifting for date-only strings (YYYY-MM-DD)
+    const dateOnlyMatch = value.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+    if (dateOnlyMatch) {
+      const year = Number(dateOnlyMatch[1]);
+      const month = Number(dateOnlyMatch[2]);
+      const day = Number(dateOnlyMatch[3]);
+      return new Date(year, month - 1, day);
+    }
+  }
+
+  const parsed = new Date(value);
+  return Number.isNaN(parsed.getTime()) ? null : parsed;
+}
+
+function formatEventDate(startValue, endValue) {
+  const startDate = parseEventDate(startValue);
+  const endDate = parseEventDate(endValue);
+
+  if (!startDate) return 'TBD';
+
+  const dateOptions = { year: 'numeric', month: 'short', day: 'numeric' };
+  const startLabel = startDate.toLocaleDateString('en-US', dateOptions);
+
+  if (!endDate || startDate.toDateString() === endDate.toDateString()) {
+    return startLabel;
+  }
+
+  const endLabel = endDate.toLocaleDateString('en-US', dateOptions);
+  return `${startLabel} - ${endLabel}`;
+}
 
 export default function UpcomingEventsList() {
   const [events, setEvents] = useState([]);
@@ -106,7 +151,12 @@ export default function UpcomingEventsList() {
             )}
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              {filteredEvents.map((event, index) => (
+              {filteredEvents.map((event, index) => {
+                const eventTitle = event.title || event.name || 'Untitled Event';
+                const eventDate = formatEventDate(event.startDate || event.date, event.endDate);
+                const eventImage = resolveImageSrc(event.image, PLACEHOLDER_IMAGES.event);
+
+                return (
                 <motion.div
                   key={event.id}
                   initial={{ opacity: 0, y: 30 }}
@@ -120,7 +170,7 @@ export default function UpcomingEventsList() {
                       <div 
                         className="absolute inset-0 w-full h-full"
                         style={{
-                          backgroundImage: `url(${event.image || "/api/placeholder/600/400"})`,
+                          backgroundImage: `url(${eventImage})`,
                           backgroundSize: 'cover',
                           backgroundPosition: 'center'
                         }}
@@ -137,13 +187,13 @@ export default function UpcomingEventsList() {
 
                     {/* Event Details */}
                     <div className="md:col-span-3 p-6">
-                      <h3 className="text-2xl font-bold text-white mb-2">{event.title}</h3>
+                      <h3 className="text-2xl font-bold text-white mb-2">{eventTitle}</h3>
                     
                     <div className="flex items-center text-gray-400 mb-3">
                       <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 text-[#FF2247]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                       </svg>
-                      <span>{event.date}</span>
+                      <span>{eventDate}</span>
                     </div>
                     
                     <div className="flex items-start text-gray-400 mb-4">
@@ -181,7 +231,8 @@ export default function UpcomingEventsList() {
                     </div>
                   </div>
                 </motion.div>
-              ))}
+                );
+              })}
             </div>
           </>
         )}

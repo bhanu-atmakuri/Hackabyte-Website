@@ -1,14 +1,6 @@
 // hackabyte/src/app/layout.js
-import { Inter } from 'next/font/google';
-import '../globals.css';
 import Navbar from '@/components/shared/Navbar';
 import Footer from '@/components/shared/Footer';
-
-// Load Inter font once and use it throughout the app
-const inter = Inter({ 
-  subsets: ['latin'],
-  display: 'swap', // Ensures text remains visible during font loading
-});
 
 export const metadata = {
   title: 'Hackabyte - Hackathons for Students',

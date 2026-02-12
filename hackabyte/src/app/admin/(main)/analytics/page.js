@@ -1,124 +1,114 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, LineElement, PointElement } from 'chart.js';
-import { Bar, Line } from 'react-chartjs-2';
+import { useEffect, useMemo, useState } from 'react';
+import {
+  CartesianGrid,
+  Legend,
+  Line,
+  LineChart,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from 'recharts';
 import useNoFlash from '@/lib/hooks/useNoFlash';
 import { fetchAnalyticsData } from '@/lib/firebase/analytics';
 import { trackPageView } from '@/lib/firebase/analyticsService';
 
-// Register ChartJS components
-ChartJS.register(CategoryScale, LinearScale, BarElement, LineElement, PointElement, Title, Tooltip, Legend);
+const TIME_RANGE_OPTIONS = [
+  { value: 'day', label: 'Today' },
+  { value: 'week', label: 'Last 7 Days' },
+  { value: 'month', label: 'Last 30 Days' },
+  { value: 'year', label: 'Last 12 Months' },
+];
+
+const EMPTY_ANALYTICS = {
+  summary: {
+    totalUsers: 0,
+    activeEvents: 0,
+    registrations: 0,
+    pageViews: 0,
+    uniqueVisitors: 0,
+    userGrowth: 0,
+    eventGrowth: 0,
+    registrationGrowth: 0,
+    pageViewGrowth: 0,
+  },
+  trafficSeries: [],
+  topPages: [],
+  users: {
+    demographics: [],
+    sources: [],
+    devices: [],
+  },
+  events: {
+    events: [],
+    mostPopularEvent: null,
+    highestCompletionRate: null,
+    upcomingEvents: 0,
+    avgRegistrations: 0,
+    totalTrackedEvents: 0,
+  },
+  meta: {
+    rangeLabel: '',
+    currentStart: '',
+    currentEnd: '',
+    registrationSource: 'none',
+    error: '',
+  },
+};
 
 export default function AnalyticsPage() {
   const [isMounted, setIsMounted] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
   const [timeRange, setTimeRange] = useState('week');
-  const [analyticsData, setAnalyticsData] = useState({
-    summary: {
-      totalUsers: 0,
-      activeEvents: 0,
-      registrations: 0,
-      pageViews: 0,
-      userGrowth: 0,
-      eventGrowth: 0,
-      registrationGrowth: 0,
-      pageViewGrowth: 0
-    },
-    pageViews: [],
-    users: {
-      demographics: [],
-      sources: [],
-      devices: []
-    },
-    events: {
-      events: [],
-      mostPopularEvent: null,
-      highestCompletionRate: null
-    }
-  });
+  const [error, setError] = useState('');
+  const [analyticsData, setAnalyticsData] = useState(EMPTY_ANALYTICS);
 
-  // Prevent flash of unstyled content during hydration
   useNoFlash();
-  
-  // Only render content after client-side hydration
+
+  const loadAnalytics = async (manualRefresh = false) => {
+    if (manualRefresh) setRefreshing(true);
+    else setLoading(true);
+
+    try {
+      setError('');
+      const data = await fetchAnalyticsData(timeRange);
+      setAnalyticsData(data || EMPTY_ANALYTICS);
+
+      if (data?.meta?.error) {
+        setError(data.meta.error);
+      }
+    } catch (fetchError) {
+      console.error('Failed to fetch analytics data:', fetchError);
+      setAnalyticsData(EMPTY_ANALYTICS);
+      setError('Failed to load analytics data. Check Firebase config and Firestore permissions.');
+    } finally {
+      setLoading(false);
+      setRefreshing(false);
+    }
+  };
+
   useEffect(() => {
     setIsMounted(true);
+
     if (typeof window !== 'undefined') {
-      trackPageView('Admin Analytics Dashboard');
+      trackPageView('Admin Analytics Dashboard', { section: 'analytics' });
     }
   }, []);
 
-  // Fetch real analytics data
   useEffect(() => {
     if (!isMounted) return;
-    
-    const getAnalyticsData = async () => {
-      setLoading(true);
-      try {
-        const data = await fetchAnalyticsData(timeRange);
-        setAnalyticsData(data);
-      } catch (error) {
-        console.error('Error fetching analytics data:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    getAnalyticsData();
+    loadAnalytics();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isMounted, timeRange]);
 
-  // Format chart data from real analytics data
-  const pageViewsChartData = {
-    labels: analyticsData.pageViews.map(item => item.name),
-    datasets: [
-      {
-        label: 'Page Views',
-        data: analyticsData.pageViews.map(item => item.views),
-        backgroundColor: 'rgba(255, 34, 71, 0.7)',
-        borderColor: 'rgba(255, 34, 71, 1)',
-        borderWidth: 1
-      },
-      {
-        label: 'Unique Visitors',
-        data: analyticsData.pageViews.map(item => item.uniqueVisitors),
-        backgroundColor: 'rgba(53, 162, 235, 0.7)',
-        borderColor: 'rgba(53, 162, 235, 1)',
-        borderWidth: 1
-      }
-    ],
-  };
+  const trafficData = useMemo(
+    () => analyticsData?.trafficSeries || [],
+    [analyticsData?.trafficSeries]
+  );
 
-  // Chart options
-  const chartOptions = {
-    responsive: true,
-    maintainAspectRatio: false,
-    plugins: {
-      legend: {
-        position: 'top',
-        labels: {
-          color: '#e5e5e5'
-        }
-      },
-      title: {
-        display: true,
-        text: 'Website Traffic',
-        color: '#e5e5e5'
-      },
-    },
-    scales: {
-      y: {
-        ticks: { color: '#e5e5e5' },
-        grid: { color: 'rgba(255, 255, 255, 0.1)' }
-      },
-      x: {
-        ticks: { color: '#e5e5e5' },
-        grid: { color: 'rgba(255, 255, 255, 0.1)' }
-      }
-    }
-  };
-
-  // Show loading state before hydration is complete
   if (!isMounted || loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -128,132 +118,316 @@ export default function AnalyticsPage() {
   }
 
   return (
-    <div className="p-6 max-w-7xl mx-auto">
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold text-white">Analytics Dashboard</h1>
-        
-        <div className="flex space-x-2">
-          <select 
+    <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+      <div className="mb-8 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+        <div>
+          <h1 className="text-3xl font-bold text-white">Analytics Dashboard</h1>
+          <p className="mt-1 text-sm text-gray-400">
+            {analyticsData.meta.rangeLabel || 'Analytics'}{' '}
+            {analyticsData.meta.currentStart && analyticsData.meta.currentEnd
+              ? `(${formatDate(analyticsData.meta.currentStart)} - ${formatDate(
+                  analyticsData.meta.currentEnd
+                )})`
+              : ''}
+          </p>
+        </div>
+
+        <div className="flex flex-wrap items-center gap-2">
+          <select
             value={timeRange}
-            onChange={(e) => setTimeRange(e.target.value)}
-            className="bg-[#16161A] text-white border border-gray-700 rounded px-3 py-2"
+            onChange={(event) => setTimeRange(event.target.value)}
+            className="rounded-md border border-gray-700 bg-[#16161A] px-3 py-2 text-sm text-white"
           >
-            <option value="day">Today</option>
-            <option value="week">This Week</option>
-            <option value="month">This Month</option>
-            <option value="year">This Year</option>
-          </select>
-        </div>
-      </div>
-      
-      {/* Stat Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        <div className="bg-[#16161A] rounded-lg shadow-lg p-6">
-          <h2 className="text-xl font-semibold text-gray-300 mb-2">Total Users</h2>
-          <p className="text-4xl font-bold text-[#FF2247]">{analyticsData.summary.totalUsers.toLocaleString()}</p>
-          <div className={`mt-2 text-sm ${analyticsData.summary.userGrowth >= 0 ? 'text-green-500' : 'text-red-500'}`}>
-            {analyticsData.summary.userGrowth >= 0 ? '↑' : '↓'} {Math.abs(analyticsData.summary.userGrowth)}%
-          </div>
-        </div>
-        
-        <div className="bg-[#16161A] rounded-lg shadow-lg p-6">
-          <h2 className="text-xl font-semibold text-gray-300 mb-2">Page Views</h2>
-          <p className="text-4xl font-bold text-[#FF2247]">{analyticsData.summary.pageViews.toLocaleString()}</p>
-          <div className={`mt-2 text-sm ${analyticsData.summary.pageViewGrowth >= 0 ? 'text-green-500' : 'text-red-500'}`}>
-            {analyticsData.summary.pageViewGrowth >= 0 ? '↑' : '↓'} {Math.abs(analyticsData.summary.pageViewGrowth)}%
-          </div>
-        </div>
-        
-        <div className="bg-[#16161A] rounded-lg shadow-lg p-6">
-          <h2 className="text-xl font-semibold text-gray-300 mb-2">Active Events</h2>
-          <p className="text-4xl font-bold text-[#FF2247]">{analyticsData.summary.activeEvents}</p>
-          <div className={`mt-2 text-sm ${analyticsData.summary.eventGrowth >= 0 ? 'text-green-500' : 'text-red-500'}`}>
-            {analyticsData.summary.eventGrowth >= 0 ? '↑' : '↓'} {Math.abs(analyticsData.summary.eventGrowth)}%
-          </div>
-        </div>
-        
-        <div className="bg-[#16161A] rounded-lg shadow-lg p-6">
-          <h2 className="text-xl font-semibold text-gray-300 mb-2">Event Registrations</h2>
-          <p className="text-4xl font-bold text-[#FF2247]">{analyticsData.summary.registrations.toLocaleString()}</p>
-          <div className={`mt-2 text-sm ${analyticsData.summary.registrationGrowth >= 0 ? 'text-green-500' : 'text-red-500'}`}>
-            {analyticsData.summary.registrationGrowth >= 0 ? '↑' : '↓'} {Math.abs(analyticsData.summary.registrationGrowth)}%
-          </div>
-        </div>
-      </div>
-      
-      {/* Charts */}
-      <div className="bg-[#16161A] rounded-lg shadow-lg p-6 mb-8">
-        <h2 className="text-xl font-semibold text-gray-300 mb-4">Traffic Overview</h2>
-        <div className="h-80">
-          <Bar options={chartOptions} data={pageViewsChartData} />
-        </div>
-      </div>
-      
-      {/* Additional Analytics Content */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="bg-[#16161A] rounded-lg shadow-lg p-6">
-          <h2 className="text-xl font-semibold text-gray-300 mb-2">Popular Events</h2>
-          <div className="space-y-4 mt-4">
-            {analyticsData.events.events.slice(0, 5).map((event, index) => (
-              <div key={index} className="flex justify-between items-center border-b border-gray-800 pb-2">
-                <span className="text-gray-300">{event.name}</span>
-                <span className="text-[#FF2247] font-medium">{event.registrations} registrations</span>
-              </div>
+            {TIME_RANGE_OPTIONS.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
             ))}
-          </div>
-          
-          {analyticsData.events.mostPopularEvent && (
-            <div className="mt-6 p-4 bg-[#1E1E24] rounded-lg">
-              <h3 className="font-semibold text-gray-300">Most Popular Event</h3>
-              <p className="text-xl mt-1 text-[#FF2247]">{analyticsData.events.mostPopularEvent.name}</p>
-              <p className="text-sm text-gray-400 mt-1">
-                {analyticsData.events.mostPopularEvent.registrations} registrations
-                {analyticsData.events.mostPopularEvent.trend > 0 && 
-                  <span className="text-green-500 ml-2">↑ {analyticsData.events.mostPopularEvent.trend}%</span>
-                }
-              </p>
-            </div>
-          )}
+          </select>
+
+          <button
+            type="button"
+            onClick={() => loadAnalytics(true)}
+            disabled={refreshing}
+            className="rounded-md border border-[#FF2247]/40 bg-[#FF2247]/10 px-3 py-2 text-sm font-medium text-[#FF2247] hover:bg-[#FF2247]/20 disabled:opacity-60"
+          >
+            {refreshing ? 'Refreshing...' : 'Refresh'}
+          </button>
         </div>
-        
-        <div className="bg-[#16161A] rounded-lg shadow-lg p-6">
-          <h2 className="text-xl font-semibold text-gray-300 mb-2">User Demographics</h2>
-          
-          <div className="mt-4 grid grid-cols-2 gap-4">
-            <div>
-              <h3 className="text-sm font-medium text-gray-400 mb-2">User Types</h3>
-              {analyticsData.users.demographics.map((item, index) => (
-                <div key={index} className="flex justify-between items-center mb-1">
-                  <span className="text-gray-300 text-sm">{item.name}</span>
-                  <span className="text-[#FF2247]">{item.value}</span>
-                </div>
-              ))}
-            </div>
-            
-            <div>
-              <h3 className="text-sm font-medium text-gray-400 mb-2">Devices</h3>
-              {analyticsData.users.devices.map((item, index) => (
-                <div key={index} className="flex justify-between items-center mb-1">
-                  <span className="text-gray-300 text-sm">{item.name}</span>
-                  <span className="text-[#FF2247]">{item.value}</span>
-                </div>
-              ))}
-            </div>
+      </div>
+
+      {error && (
+        <div className="mb-6 rounded-lg border border-amber-500/40 bg-amber-500/10 px-4 py-3 text-sm text-amber-300">
+          {error}
+        </div>
+      )}
+
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-5">
+        <SummaryCard
+          title="Total Users"
+          value={analyticsData.summary.totalUsers}
+          growth={analyticsData.summary.userGrowth}
+        />
+        <SummaryCard
+          title="Page Views"
+          value={analyticsData.summary.pageViews}
+          growth={analyticsData.summary.pageViewGrowth}
+        />
+        <SummaryCard
+          title="Unique Visitors"
+          value={analyticsData.summary.uniqueVisitors}
+          growth={null}
+        />
+        <SummaryCard
+          title="Registrations"
+          value={analyticsData.summary.registrations}
+          growth={analyticsData.summary.registrationGrowth}
+          subtext={`Source: ${analyticsData.meta.registrationSource}`}
+        />
+        <SummaryCard
+          title="Active Events"
+          value={analyticsData.summary.activeEvents}
+          growth={analyticsData.summary.eventGrowth}
+        />
+      </div>
+
+      <div className="mt-8 grid grid-cols-1 gap-6 xl:grid-cols-3">
+        <section className="rounded-xl border border-gray-800 bg-[#16161A] p-5 xl:col-span-2">
+          <h2 className="text-lg font-semibold text-white">Traffic Trend</h2>
+          <p className="mt-1 text-sm text-gray-400">
+            Page views and unique visitors over the selected period.
+          </p>
+
+          <div className="mt-5 h-80">
+            {trafficData.length > 0 ? (
+              <ResponsiveContainer width="100%" height="100%">
+                <LineChart data={trafficData}>
+                  <CartesianGrid stroke="#2D2D39" strokeDasharray="3 3" />
+                  <XAxis dataKey="label" stroke="#9CA3AF" tick={{ fontSize: 12 }} />
+                  <YAxis stroke="#9CA3AF" tick={{ fontSize: 12 }} />
+                  <Tooltip
+                    contentStyle={{
+                      backgroundColor: '#1A1A1E',
+                      border: '1px solid #374151',
+                      color: '#FFFFFF',
+                    }}
+                  />
+                  <Legend />
+                  <Line
+                    type="monotone"
+                    dataKey="pageViews"
+                    stroke="#FF2247"
+                    strokeWidth={2}
+                    name="Page Views"
+                    dot={false}
+                  />
+                  <Line
+                    type="monotone"
+                    dataKey="uniqueVisitors"
+                    stroke="#3B82F6"
+                    strokeWidth={2}
+                    name="Unique Visitors"
+                    dot={false}
+                  />
+                </LineChart>
+              </ResponsiveContainer>
+            ) : (
+              <EmptyPanel message="No page view data available for this time range." />
+            )}
           </div>
-          
-          <div className="mt-6">
-            <h3 className="text-sm font-medium text-gray-400 mb-2">Traffic Sources</h3>
-            <div className="grid grid-cols-2 gap-4">
-              {analyticsData.users.sources.slice(0, 4).map((item, index) => (
-                <div key={index} className="flex justify-between items-center mb-1">
-                  <span className="text-gray-300 text-sm">{item.name}</span>
-                  <span className="text-[#FF2247]">{item.value}</span>
+        </section>
+
+        <section className="rounded-xl border border-gray-800 bg-[#16161A] p-5">
+          <h2 className="text-lg font-semibold text-white">Top Pages</h2>
+          <p className="mt-1 text-sm text-gray-400">Most viewed routes.</p>
+
+          <div className="mt-5 space-y-3">
+            {analyticsData.topPages.length > 0 ? (
+              analyticsData.topPages.slice(0, 8).map((page) => (
+                <div key={page.name} className="rounded-lg border border-gray-800 bg-[#1A1A1E] p-3">
+                  <p className="truncate text-sm font-medium text-white">{page.name}</p>
+                  <div className="mt-1 flex items-center justify-between text-xs text-gray-400">
+                    <span>{formatNumber(page.views)} views</span>
+                    <span>{formatNumber(page.uniqueVisitors)} visitors</span>
+                  </div>
                 </div>
-              ))}
-            </div>
+              ))
+            ) : (
+              <EmptyPanel message="No page-level traffic captured yet." />
+            )}
+          </div>
+        </section>
+      </div>
+
+      <div className="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-3">
+        <BreakdownCard title="User Demographics" items={analyticsData.users.demographics} />
+        <BreakdownCard title="Traffic Sources" items={analyticsData.users.sources} />
+        <BreakdownCard title="Devices" items={analyticsData.users.devices} />
+      </div>
+
+      <section className="mt-8 rounded-xl border border-gray-800 bg-[#16161A] p-5">
+        <div className="flex flex-wrap items-center justify-between gap-4">
+          <h2 className="text-lg font-semibold text-white">Event Performance</h2>
+          <div className="flex gap-2 text-xs text-gray-400">
+            <span className="rounded-md bg-[#1A1A1E] px-2 py-1">
+              Upcoming: {analyticsData.events.upcomingEvents}
+            </span>
+            <span className="rounded-md bg-[#1A1A1E] px-2 py-1">
+              Avg Registrations: {analyticsData.events.avgRegistrations}
+            </span>
+            <span className="rounded-md bg-[#1A1A1E] px-2 py-1">
+              Tracked Events: {analyticsData.events.totalTrackedEvents}
+            </span>
           </div>
         </div>
+
+        <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
+          <HighlightCard
+            label="Most Popular Event"
+            value={analyticsData.events.mostPopularEvent?.name || 'No tracked events'}
+            detail={
+              analyticsData.events.mostPopularEvent
+                ? `${formatNumber(analyticsData.events.mostPopularEvent.registrations)} registrations`
+                : ''
+            }
+          />
+          <HighlightCard
+            label="Highest Completion Rate"
+            value={analyticsData.events.highestCompletionRate?.name || 'No tracked events'}
+            detail={
+              analyticsData.events.highestCompletionRate
+                ? `${formatNumber(analyticsData.events.highestCompletionRate.completionRate)}% completion`
+                : ''
+            }
+          />
+        </div>
+
+        <div className="mt-5 overflow-x-auto">
+          <table className="min-w-full divide-y divide-gray-800 text-sm">
+            <thead>
+              <tr className="text-left text-xs uppercase tracking-wide text-gray-400">
+                <th className="px-3 py-2">Event</th>
+                <th className="px-3 py-2">Registrations</th>
+                <th className="px-3 py-2">Attendance</th>
+                <th className="px-3 py-2">Completion</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-800">
+              {analyticsData.events.events.length > 0 ? (
+                analyticsData.events.events.slice(0, 12).map((event) => (
+                  <tr key={event.id}>
+                    <td className="px-3 py-2 text-white">{event.name}</td>
+                    <td className="px-3 py-2 text-gray-300">{formatNumber(event.registrations)}</td>
+                    <td className="px-3 py-2 text-gray-300">{formatNumber(event.attendance)}</td>
+                    <td className="px-3 py-2 text-gray-300">
+                      {formatNumber(event.completionRate)}%
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td className="px-3 py-4 text-gray-400" colSpan={4}>
+                    No event analytics data available.
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  );
+}
+
+function SummaryCard({ title, value, growth, subtext = '' }) {
+  return (
+    <div className="rounded-xl border border-gray-800 bg-[#16161A] p-4">
+      <p className="text-xs uppercase tracking-wide text-gray-400">{title}</p>
+      <p className="mt-2 text-3xl font-bold text-[#FF2247]">{formatNumber(value)}</p>
+      <div className="mt-2 flex items-center gap-2">
+        {typeof growth === 'number' ? (
+          <span
+            className={`rounded-md px-2 py-1 text-xs font-medium ${
+              growth >= 0 ? 'bg-green-500/15 text-green-400' : 'bg-red-500/15 text-red-400'
+            }`}
+          >
+            {growth >= 0 ? '+' : ''}
+            {growth.toFixed(1)}%
+          </span>
+        ) : (
+          <span className="rounded-md bg-gray-800 px-2 py-1 text-xs text-gray-400">No trend</span>
+        )}
+        {subtext ? <span className="text-xs text-gray-400">{subtext}</span> : null}
       </div>
     </div>
   );
+}
+
+function BreakdownCard({ title, items }) {
+  const total = items.reduce((sum, item) => sum + item.value, 0);
+
+  return (
+    <section className="rounded-xl border border-gray-800 bg-[#16161A] p-5">
+      <h3 className="text-lg font-semibold text-white">{title}</h3>
+      <div className="mt-4 space-y-3">
+        {items.length > 0 ? (
+          items.map((item) => {
+            const width = total > 0 ? Math.round((item.value / total) * 100) : 0;
+            return (
+              <div key={item.name}>
+                <div className="mb-1 flex items-center justify-between text-sm">
+                  <span className="text-gray-300">{item.name}</span>
+                  <span className="text-gray-400">
+                    {formatNumber(item.value)} ({width}%)
+                  </span>
+                </div>
+                <div className="h-1.5 rounded-full bg-[#1A1A1E]">
+                  <div
+                    className="h-1.5 rounded-full bg-[#FF2247]"
+                    style={{ width: `${Math.max(width, 2)}%` }}
+                  />
+                </div>
+              </div>
+            );
+          })
+        ) : (
+          <EmptyPanel message="No data available." />
+        )}
+      </div>
+    </section>
+  );
+}
+
+function HighlightCard({ label, value, detail }) {
+  return (
+    <div className="rounded-lg border border-gray-800 bg-[#1A1A1E] p-4">
+      <p className="text-xs uppercase tracking-wide text-gray-500">{label}</p>
+      <p className="mt-1 text-base font-semibold text-white">{value}</p>
+      {detail ? <p className="mt-1 text-sm text-gray-400">{detail}</p> : null}
+    </div>
+  );
+}
+
+function EmptyPanel({ message }) {
+  return (
+    <div className="rounded-lg border border-dashed border-gray-700 bg-[#1A1A1E] p-4 text-sm text-gray-400">
+      {message}
+    </div>
+  );
+}
+
+function formatNumber(value) {
+  return Number(value || 0).toLocaleString('en-US');
+}
+
+function formatDate(value) {
+  try {
+    return new Date(value).toLocaleDateString('en-US', {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric',
+    });
+  } catch (error) {
+    return value;
+  }
 }
