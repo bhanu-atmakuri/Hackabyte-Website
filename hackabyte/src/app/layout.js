@@ -22,7 +22,7 @@ export const viewport = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en" suppressHydrationWarning className="scroll-smooth">
-      <body className={`${inter.className} antialiased text-white bg-[#1A1A1E]`} suppressHydrationWarning>
+      <body className={`${inter.className} antialiased text-white bg-[#0A0A0C]`} suppressHydrationWarning>
         {children}
       </body>
     </html>

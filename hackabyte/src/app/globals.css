@@ -24,6 +24,10 @@ html.hydrated body {
   transition: opacity 0.15s ease-in;
 }
 
+html {
+  background: #0A0A0C;
+}
+
 body {
   color: rgb(255, 255, 255);
   background: #0A0A0C;
@@ -210,56 +214,4 @@ section + section {
   @apply mt-0;
 }
 
-/* Media query to handle ultrawide monitors by adding side margins on very large screens */
-@media (min-width: 2000px) {
-  body {
-    max-width: 2000px;
-    margin-left: auto;
-    margin-right: auto;
-  }
-}
-
-@media screen and (min-width: 1440px) {
-  html {
-    font-size: 20px;
-  }
-
-  .btn-primary, .btn-secondary {
-    @apply text-sm py-3 px-8;
-  }
-}
-
-@media screen and (min-width: 2000px) {
-  html {
-    font-size: 22px;
-  }
-
-  body {
-    max-width: 2000px;
-    margin-left: auto;
-    margin-right: auto;
-  }
-}
-
-/* Ensure proper text scaling for all screen sizes */
-@media screen and (max-width: 1200px) {
-  html {
-    font-size: 20px;
-  }
-}
-
-html {
-  font-size: 20px;
-}
-
-@media (min-width: 1536px) {
-  html {
-    font-size: 22px;
-  }
-}
-
-@media (min-width: 2560px) {
-  html {
-    font-size: 22px;
-  }
-}
+/* Ultrawide: keep backgrounds full-width, content constrained by Container */

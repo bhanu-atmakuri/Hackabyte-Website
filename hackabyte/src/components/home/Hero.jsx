@@ -47,7 +47,7 @@ export default function Hero() {
   return (
     <section
       ref={containerRef}
-      className="min-h-screen pt-20 md:pt-14 pb-12 md:pb-14 relative overflow-hidden bg-[#0A0A0C] flex items-center"
+      className="min-h-screen pt-28 md:pt-32 pb-16 md:pb-20 relative overflow-hidden bg-[#0A0A0C] flex items-center"
       id="home"
     >
       {/* Grid background pattern */}
