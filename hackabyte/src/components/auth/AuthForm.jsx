@@ -164,40 +164,6 @@ export default function AuthForm() {
   };
 
   /**
-   * Check if user is an admin
-   * @param {string} email - User email
-   * @param {string} password - User password
-   * @returns {Promise<{isAdmin: boolean, adminId: string|null}>}
-   */
-  const checkAdminCredentials = async (email, password) => {
-    try {
-      // Query Firestore for admin user with matching email
-      const adminRef = collection(db, 'admins');
-      const q = query(adminRef, where('email', '==', email));
-      const querySnapshot = await getDocs(q);
-
-      if (querySnapshot.empty) {
-        return { isAdmin: false, adminId: null };
-      }
-
-      // Check password
-      const adminDoc = querySnapshot.docs[0];
-      const adminData = adminDoc.data();
-
-      // In a real app, you should never store plain passwords
-      // This is just for demonstration - you should use proper authentication
-      if (adminData.password !== password) {
-        return { isAdmin: false, adminId: null };
-      }
-
-      return { isAdmin: true, adminId: adminDoc.id };
-    } catch (error) {
-      console.error("Error checking admin credentials:", error);
-      return { isAdmin: false, adminId: null };
-    }
-  };
-
-  /**
    * Validate fields for step 1 (Account Info)
    * @returns {boolean} Whether all fields are valid
    */
@@ -385,36 +351,33 @@ export default function AuthForm() {
         }
       
         try {
-          // Check for admin accounts first
-          const adminRef = collection(db, 'admins');
-          const adminQuery = query(adminRef, where('email', '==', email.toLowerCase()));
-          const adminSnapshot = await getDocs(adminQuery);
+          const userCredential = await signInWithEmailAndPassword(auth, email, password);
+          
+          if (userCredential.user) {
+            const normalizedEmail = userCredential.user.email?.toLowerCase() || email.toLowerCase();
+            const adminRef = collection(db, 'admins');
+            const adminQuery = query(adminRef, where('email', '==', normalizedEmail));
+            const adminSnapshot = await getDocs(adminQuery);
 
-          if (!adminSnapshot.empty) {
-            // User is an admin, verify password
-            const adminDoc = adminSnapshot.docs[0];
-            const adminData = adminDoc.data();
+            if (!adminSnapshot.empty) {
+              const adminDoc = adminSnapshot.docs[0];
 
-            // Verify password (in production, use proper password hashing)
-            if (adminData.password === password) {
-              // Store admin session
               sessionStorage.setItem('adminLoggedIn', 'true');
-              sessionStorage.setItem('adminEmail', email.toLowerCase());
+              sessionStorage.setItem('adminEmail', normalizedEmail);
               sessionStorage.setItem('adminId', adminDoc.id);
+              sessionStorage.removeItem('userLoggedIn');
+              sessionStorage.removeItem('userEmail');
 
               router.push('/admin');
               return;
             }
-          }
 
-          // Not an admin, check regular user authentication
-          const userCredential = await signInWithEmailAndPassword(auth, email, password);
-          
-          if (userCredential.user) {
-            // Store user session
             sessionStorage.setItem('userLoggedIn', 'true');
-            sessionStorage.setItem('userEmail', email.toLowerCase());
-            
+            sessionStorage.setItem('userEmail', normalizedEmail);
+            sessionStorage.removeItem('adminLoggedIn');
+            sessionStorage.removeItem('adminEmail');
+            sessionStorage.removeItem('adminId');
+
             router.push('/dashboard');
           }
         } catch (error) {
