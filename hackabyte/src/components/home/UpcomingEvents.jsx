@@ -6,31 +6,7 @@ import { motion, useInView } from 'framer-motion';
 import Container from '@/components/shared/Container';
 import { getAllEvents } from '@/lib/firebase/events';
 import { PLACEHOLDER_IMAGES, resolveImageSrc } from '@/lib/images/placeholders';
-
-function parseEventDate(value) {
-  if (!value) return null;
-  if (typeof value === 'object' && typeof value.toDate === 'function') return value.toDate();
-  if (value instanceof Date) return Number.isNaN(value.getTime()) ? null : value;
-  if (typeof value === 'string') {
-    const dateOnlyMatch = value.match(/^(\d{4})-(\d{2})-(\d{2})$/);
-    if (dateOnlyMatch) {
-      return new Date(Number(dateOnlyMatch[1]), Number(dateOnlyMatch[2]) - 1, Number(dateOnlyMatch[3]));
-    }
-  }
-  const parsed = new Date(value);
-  return Number.isNaN(parsed.getTime()) ? null : parsed;
-}
-
-function formatEventDate(startValue, endValue) {
-  const startDate = parseEventDate(startValue);
-  const endDate = parseEventDate(endValue);
-  if (!startDate) return 'TBD';
-  const dateOptions = { year: 'numeric', month: 'short', day: 'numeric' };
-  const startLabel = startDate.toLocaleDateString('en-US', dateOptions);
-  if (!endDate || startDate.toDateString() === endDate.toDateString()) return startLabel;
-  const endLabel = endDate.toLocaleDateString('en-US', dateOptions);
-  return `${startLabel} - ${endLabel}`;
-}
+import { formatEventDateRange, parseEventDate } from '@/lib/dates/eventDates';
 
 function toAgeGroupList(ageGroups) {
   if (!ageGroups) return [];
@@ -111,7 +87,7 @@ export default function UpcomingEvents() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-6 px-4 sm:px-0">
             {events.map((event, index) => {
               const eventTitle = event.title || event.name || 'Untitled Event';
-              const eventDate = formatEventDate(event.startDate || event.date, event.endDate);
+              const eventDate = formatEventDateRange(event.startDate || event.date, event.endDate);
               const ageGroups = toAgeGroupList(event.ageGroups);
               const eventLocation = [event.location, event.state].filter(Boolean).join(', ');
               const eventImage = resolveImageSrc(event.image, PLACEHOLDER_IMAGES.event);

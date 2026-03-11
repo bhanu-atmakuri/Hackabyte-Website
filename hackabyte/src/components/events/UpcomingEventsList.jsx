@@ -8,50 +8,7 @@ import { getAllEvents } from '@/lib/firebase/events';
 import useEventEmitter from '@/lib/hooks/useEventEmitter';
 import { EVENT_TYPES } from '@/lib/services/eventEmitterService';
 import { PLACEHOLDER_IMAGES, resolveImageSrc } from '@/lib/images/placeholders';
-
-function parseEventDate(value) {
-  if (!value) return null;
-
-  // Firestore Timestamp support
-  if (typeof value === 'object' && typeof value.toDate === 'function') {
-    return value.toDate();
-  }
-
-  if (value instanceof Date) {
-    return Number.isNaN(value.getTime()) ? null : value;
-  }
-
-  if (typeof value === 'string') {
-    // Avoid timezone shifting for date-only strings (YYYY-MM-DD)
-    const dateOnlyMatch = value.match(/^(\d{4})-(\d{2})-(\d{2})$/);
-    if (dateOnlyMatch) {
-      const year = Number(dateOnlyMatch[1]);
-      const month = Number(dateOnlyMatch[2]);
-      const day = Number(dateOnlyMatch[3]);
-      return new Date(year, month - 1, day);
-    }
-  }
-
-  const parsed = new Date(value);
-  return Number.isNaN(parsed.getTime()) ? null : parsed;
-}
-
-function formatEventDate(startValue, endValue) {
-  const startDate = parseEventDate(startValue);
-  const endDate = parseEventDate(endValue);
-
-  if (!startDate) return 'TBD';
-
-  const dateOptions = { year: 'numeric', month: 'short', day: 'numeric' };
-  const startLabel = startDate.toLocaleDateString('en-US', dateOptions);
-
-  if (!endDate || startDate.toDateString() === endDate.toDateString()) {
-    return startLabel;
-  }
-
-  const endLabel = endDate.toLocaleDateString('en-US', dateOptions);
-  return `${startLabel} - ${endLabel}`;
-}
+import { formatEventDateRange } from '@/lib/dates/eventDates';
 
 export default function UpcomingEventsList() {
   const [events, setEvents] = useState([]);
@@ -150,7 +107,7 @@ export default function UpcomingEventsList() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {filteredEvents.map((event, index) => {
                 const eventTitle = event.title || event.name || 'Untitled Event';
-                const eventDate = formatEventDate(event.startDate || event.date, event.endDate);
+                const eventDate = formatEventDateRange(event.startDate || event.date, event.endDate);
                 const eventImage = resolveImageSrc(event.image, PLACEHOLDER_IMAGES.event);
 
                 return (

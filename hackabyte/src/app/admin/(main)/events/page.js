@@ -3,10 +3,10 @@
 import { useState, useEffect } from 'react';
 import { getAllEvents, deleteEvent } from '@/lib/firebase/events';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import useNoFlash from '@/lib/hooks/useNoFlash';
 import ExpandableContent from '@/components/shared/ExpandableContent';
 import { motion, AnimatePresence } from 'framer-motion';
+import { formatEventDate } from '@/lib/dates/eventDates';
 
 export default function AdminEventsPage() {
   const [events, setEvents] = useState([]);
@@ -16,7 +16,6 @@ export default function AdminEventsPage() {
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
   const [expandedEventId, setExpandedEventId] = useState(null);
-  const router = useRouter();
   
   // Prevent flash during hydration
   useNoFlash();
@@ -68,16 +67,6 @@ export default function AdminEventsPage() {
     setDeleteId(null);
   };
   
-  const formatDate = (dateString) => {
-    if (!dateString) return 'N/A';
-    const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', { 
-      year: 'numeric', 
-      month: 'short', 
-      day: 'numeric' 
-    });
-  };
-
   const toggleEventDetails = (eventId) => {
     setExpandedEventId(prevId => prevId === eventId ? null : eventId);
   };
@@ -150,8 +139,8 @@ export default function AdminEventsPage() {
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                         </svg>
-                        {formatDate(event.startDate)}
-                        {event.endDate && event.endDate !== event.startDate && ` - ${formatDate(event.endDate)}`}
+                        {formatEventDate(event.startDate)}
+                        {event.endDate && event.endDate !== event.startDate && ` - ${formatEventDate(event.endDate)}`}
                       </div>
                       <div className="flex items-center">
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -269,7 +258,7 @@ export default function AdminEventsPage() {
                           <div className="mb-2">
                             <div className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-1">Registration Deadline</div>
                             <div className="text-gray-300 text-sm">
-                              {formatDate(event.registrationDeadline)}
+                              {formatEventDate(event.registrationDeadline)}
                             </div>
                           </div>
                         )}

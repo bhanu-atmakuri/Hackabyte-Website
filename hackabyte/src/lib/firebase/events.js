@@ -1,5 +1,5 @@
 import { db } from '@/app/firebaseConfig';
-import { 
+import {
   collection, 
   getDocs, 
   getDoc, 
@@ -12,39 +12,9 @@ import {
   writeBatch
 } from 'firebase/firestore';
 import { eventService, EVENT_TYPES } from '@/lib/services/eventEmitterService';
+import { toDateOnly } from '@/lib/dates/eventDates';
 
 const eventsCollection = 'events';
-
-function parseEventDate(value) {
-  if (!value) return null;
-
-  if (typeof value === 'object' && typeof value.toDate === 'function') {
-    return value.toDate();
-  }
-
-  if (value instanceof Date) {
-    return Number.isNaN(value.getTime()) ? null : value;
-  }
-
-  if (typeof value === 'string') {
-    const dateOnlyMatch = value.match(/^(\d{4})-(\d{2})-(\d{2})$/);
-    if (dateOnlyMatch) {
-      const year = Number(dateOnlyMatch[1]);
-      const month = Number(dateOnlyMatch[2]);
-      const day = Number(dateOnlyMatch[3]);
-      return new Date(year, month - 1, day);
-    }
-  }
-
-  const parsed = new Date(value);
-  return Number.isNaN(parsed.getTime()) ? null : parsed;
-}
-
-function toDateOnly(value) {
-  const parsedDate = parseEventDate(value);
-  if (!parsedDate) return null;
-  return new Date(parsedDate.getFullYear(), parsedDate.getMonth(), parsedDate.getDate());
-}
 
 function calculateHasPassed(eventData) {
   const endDate = toDateOnly(eventData?.endDate || eventData?.startDate);

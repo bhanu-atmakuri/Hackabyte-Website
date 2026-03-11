@@ -14,6 +14,7 @@ import {
 import useNoFlash from '@/lib/hooks/useNoFlash';
 import { fetchAnalyticsData } from '@/lib/firebase/analytics';
 import { trackPageView } from '@/lib/firebase/analyticsService';
+import { formatEventDate } from '@/lib/dates/eventDates';
 
 const TIME_RANGE_OPTIONS = [
   { value: 'day', label: 'Today' },
@@ -422,7 +423,7 @@ function formatNumber(value) {
 
 function formatDate(value) {
   try {
-    return new Date(value).toLocaleDateString('en-US', {
+    return formatEventDate(value, 'en-US', {
       month: 'short',
       day: 'numeric',
       year: 'numeric',
