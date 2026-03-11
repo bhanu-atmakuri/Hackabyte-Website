@@ -1,17 +1,3 @@
-/**
- * Hackathon Info Component
- * 
- * Displays comprehensive information about hackathon events, covering:
- * - Event logistics and duration details
- * - Team formation rules and options
- * - Required items and provided resources
- * - Project themes and submission guidelines
- * - Workshop information and educational resources
- * - Presentation formats and judging criteria
- * 
- * Features a responsive card grid layout with animated entry and hover effects.
- */
-
 'use client';
 
 import { useRef } from 'react';
@@ -19,20 +5,14 @@ import { motion, useInView } from 'framer-motion';
 import Container from '@/components/shared/Container';
 
 export default function HackathonInfo() {
-  // Reference for scroll-triggered animations
   const ref = useRef(null);
-  // Detect when section enters viewport (20% visibility triggers animation)
   const isInView = useInView(ref, { once: true, amount: 0.2 });
 
-  /**
-   * Information sections data structure
-   * Each section contains a title, icon, and descriptive content
-   */
   const infoSections = [
     {
       title: "Duration & Logistics",
       icon: (
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
       ),
@@ -41,7 +21,7 @@ export default function HackathonInfo() {
     {
       title: "Team Formation",
       icon: (
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
         </svg>
       ),
@@ -50,7 +30,7 @@ export default function HackathonInfo() {
     {
       title: "What to Bring",
       icon: (
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m8 0a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
       ),
@@ -59,7 +39,7 @@ export default function HackathonInfo() {
     {
       title: "Theme & Projects",
       icon: (
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
         </svg>
       ),
@@ -68,7 +48,7 @@ export default function HackathonInfo() {
     {
       title: "Workshops",
       icon: (
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
         </svg>
       ),
@@ -77,7 +57,7 @@ export default function HackathonInfo() {
     {
       title: "Submissions & Presentations",
       icon: (
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
         </svg>
       ),
@@ -85,75 +65,62 @@ export default function HackathonInfo() {
     }
   ];
 
-  /**
-   * Animation variants for information cards
-   * Defines entry animations with fade-in and slide-up effects
-   */
-  const cardVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { 
-      opacity: 1, 
-      y: 0,
-      transition: { duration: 0.5 }
-    }
-  };
-
   return (
-    <section className="py-20 bg-[#16161A]" ref={ref}>
-      <Container>
-        {/* Section heading with fade-in and slide-up animation */}
+    <section className="py-24 md:py-32 bg-[#0E0E11] relative" ref={ref}>
+      <div className="absolute inset-0 bg-dots opacity-20 pointer-events-none"></div>
+      <Container className="relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
-          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-[#FF2247]">
-            Key Information
+          <span className="label-uppercase mb-4 block">Essential Details</span>
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight text-white mb-4">
+            Key <span className="heading-gradient">Information</span>
           </h2>
-          <p className="text-xl text-white max-w-3xl mx-auto">
+          <p className="text-lg text-gray-400 max-w-3xl mx-auto">
             Everything you need to know about participating in our hackathons
           </p>
         </motion.div>
 
-        {/* Information cards grid - 1 column on mobile, 2 columns on larger screens */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* Map through each info section to create cards with staggered animations */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           {infoSections.map((section, index) => (
             <motion.div
               key={section.title}
-              variants={cardVariants}
-              initial="hidden"
-              animate={isInView ? "visible" : "hidden"}
-              transition={{ delay: index * 0.1 }}
-              className="bg-[#1A1A1E] p-6 rounded-xl border border-gray-800 hover:border-[#FF2247]/30 transition-all duration-300"
+              initial={{ opacity: 0, y: 30 }}
+              animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
+              className="card-glass rounded-xl p-6 hover:border-white/[0.12] transition-all duration-300"
             >
               <div className="flex items-start">
-                <div className="flex-shrink-0 text-[#FF2247] mr-4">
+                <div className="flex-shrink-0 w-10 h-10 flex items-center justify-center bg-[#F93236]/10 border border-[#F93236]/20 rounded-lg text-[#FF2247] mr-4">
                   {section.icon}
                 </div>
                 <div>
-                  <h3 className="text-xl font-bold text-white mb-3">{section.title}</h3>
-                  <p className="text-gray-300">{section.content}</p>
+                  <h3 className="text-lg font-bold tracking-tight text-white mb-2">{section.title}</h3>
+                  <p className="text-gray-500 text-sm leading-relaxed">{section.content}</p>
                 </div>
               </div>
             </motion.div>
           ))}
         </div>
 
-        {/* Judging and scoring section - appears with delayed animation */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
           transition={{ duration: 0.5, delay: 0.6 }}
-          className="mt-12 bg-[#1A1A1E] p-8 rounded-xl border border-gray-800"
+          className="mt-10 card-glass rounded-xl p-8 relative overflow-hidden"
         >
-          <h3 className="text-2xl font-bold text-white mb-4">Judging & Scoring</h3>
-          <p className="text-gray-300">
-            After all groups have presented in the first round, judges will rank groups from a set of criteria (will be given during event). 
-            After 6 finalists are chosen, the process will be repeated but will be more subjective (dependent on what the judges think about the projects). 
-            The teams with the highest scores will be given prizes. More information about this will be provided during the hackathon.
-          </p>
+          <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-[#F93236] to-[#FF2247]"></div>
+          <div className="pl-4">
+            <h3 className="text-xl font-black tracking-tight text-white mb-3">Judging & Scoring</h3>
+            <p className="text-gray-400 leading-relaxed">
+              After all groups have presented in the first round, judges will rank groups from a set of criteria (will be given during event).
+              After 6 finalists are chosen, the process will be repeated but will be more subjective (dependent on what the judges think about the projects).
+              The teams with the highest scores will be given prizes. More information about this will be provided during the hackathon.
+            </p>
+          </div>
         </motion.div>
       </Container>
     </section>

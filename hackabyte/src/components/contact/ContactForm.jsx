@@ -1,186 +1,89 @@
-/**
- * Contact Form Component
- * 
- * Interactive form that allows users to send messages to Hackabyte with:
- * - Real-time form validation with error messaging
- * - Visual feedback for form submission states (loading, success, error)
- * - Animated form elements and status messages
- * - Responsive design that adapts to screen sizes
- * - Clean form reset after successful submission
- */
-
 'use client';
 
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 
 export default function ContactForm() {
-  // Form field state management
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     subject: '',
     message: ''
   });
-  
-  // Error state for form validation feedback
   const [errors, setErrors] = useState({});
-  
-  // Form submission status - can be 'loading', 'success', 'error', or null
   const [formStatus, setFormStatus] = useState(null);
 
-  /**
-   * Form validation function
-   * Checks all form fields for required values and proper formatting
-   * Sets error messages for invalid fields
-   * @returns {boolean} - Returns true if form is valid, false otherwise
-   */
   const validateForm = () => {
     const newErrors = {};
-    
-    // Name validation
-    if (!formData.name.trim()) {
-      newErrors.name = 'Name is required';
-    }
-    
-    // Email validation
+    if (!formData.name.trim()) newErrors.name = 'Name is required';
     if (!formData.email.trim()) {
       newErrors.email = 'Email is required';
     } else if (!/^\S+@\S+\.\S+$/.test(formData.email)) {
       newErrors.email = 'Email is invalid';
     }
-    
-    // Subject validation
-    if (!formData.subject.trim()) {
-      newErrors.subject = 'Subject is required';
-    }
-    
-    // Message validation
-    if (!formData.message.trim()) {
-      newErrors.message = 'Message is required';
-    }
-    
+    if (!formData.subject.trim()) newErrors.subject = 'Subject is required';
+    if (!formData.message.trim()) newErrors.message = 'Message is required';
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
-  /**
-   * Input change handler
-   * Updates form state and clears related error messages when user types
-   * @param {Event} e - Input change event
-   */
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value
-    });
-    
-    // Clear error when typing
+    setFormData({ ...formData, [name]: value });
     if (errors[name]) {
-      setErrors({
-        ...errors,
-        [name]: null
-      });
+      setErrors({ ...errors, [name]: null });
     }
   };
 
-  /**
-   * Form submission handler
-   * Validates form, shows loading state, and simulates API submission
-   * In production, this would connect to a real backend endpoint
-   * @param {Event} e - Form submission event
-   */
   const handleSubmit = (e) => {
     e.preventDefault();
-    
     if (validateForm()) {
-      // Show loading state while form processes
       setFormStatus('loading');
-      
-      // Simulate API delay with timeout (would be a real API call in production)
       setTimeout(() => {
         setFormStatus('success');
-        
-        // Reset form after success
-        setFormData({
-          name: '',
-          email: '',
-          subject: '',
-          message: ''
-        });
-        
-        // Clear success message after 5 seconds
-        setTimeout(() => {
-          setFormStatus(null);
-        }, 5000);
+        setFormData({ name: '', email: '', subject: '', message: '' });
+        setTimeout(() => setFormStatus(null), 5000);
       }, 1000);
-      
-      // TODO: Replace simulation with actual backend API integration
-      // Production implementation example:
-      /*
-        try {
-          const response = await fetch('/api/contact', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(formData),
-          });
-          
-          if (response.ok) {
-            setFormStatus('success');
-            setFormData({ name: '', email: '', subject: '', message: '' });
-          } else {
-            setFormStatus('error');
-          }
-        } catch (error) {
-          setFormStatus('error');
-          console.error('Error submitting form:', error);
-        }
-      */
     }
   };
+
+  const inputClasses = (fieldName) =>
+    `w-full px-4 py-3 bg-white/[0.03] border ${
+      errors[fieldName] ? 'border-[#FF2247]' : 'border-white/[0.08] focus:border-[#FF2247]/50'
+    } text-white placeholder-gray-600 focus:ring-1 focus:ring-[#FF2247]/30 focus:outline-none transition-colors`;
 
   return (
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
-      className="bg-[#1E1E24] p-6 md:p-10 rounded-lg shadow-xl"
+      className="card-glass rounded-xl p-6 md:p-10"
     >
-      <h2 className="text-3xl font-bold mb-6 text-white">Send Us a Message</h2>
-      
-      {/* Success message notification - appears after successful form submission */}
+      <h2 className="text-2xl font-black tracking-tight text-white mb-6">Send Us a Message</h2>
+
       {formStatus === 'success' && (
         <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-green-800/20 border border-green-800 text-green-300 rounded-md p-4 mb-6"
+          className="card-glass rounded-lg p-4 mb-6 border-green-800/50"
         >
-          Thanks for reaching out! We'll get back to you soon.
+          <p className="text-green-400 text-sm">Thanks for reaching out! We'll get back to you soon.</p>
         </motion.div>
       )}
-      
-      {/* Error message notification - appears if form submission fails */}
+
       {formStatus === 'error' && (
         <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-red-800/20 border border-red-800 text-red-300 rounded-md p-4 mb-6"
+          className="card-glass rounded-lg p-4 mb-6 border-red-800/50"
         >
-          There was an error sending your message. Please try again later.
+          <p className="text-red-400 text-sm">There was an error sending your message. Please try again later.</p>
         </motion.div>
       )}
-      
-      {/* Contact form with validation and animated feedback */}
-      <form onSubmit={handleSubmit} className="space-y-6">
-        {/* Name input field with validation */}
+
+      <form onSubmit={handleSubmit} className="space-y-5">
         <div>
-          <label 
-            htmlFor="name" 
-            className="block text-gray-300 mb-2 text-lg"
-          >
+          <label htmlFor="name" className="block text-xs font-bold uppercase tracking-wider text-gray-500 mb-2">
             Your Name
           </label>
           <input
@@ -190,21 +93,13 @@ export default function ContactForm() {
             value={formData.name}
             onChange={handleChange}
             placeholder="Enter your name"
-            className={`w-full px-4 py-3 rounded-md bg-[#26262C] border focus:ring-2 focus:outline-none text-white ${
-              errors.name ? 'border-[#FF2247]' : 'border-gray-700 focus:ring-[#FF2247]/50'
-            }`}
+            className={inputClasses('name')}
           />
-          {errors.name && (
-            <p className="mt-2 text-[#FF2247]">{errors.name}</p>
-          )}
+          {errors.name && <p className="mt-1.5 text-[#FF2247] text-xs">{errors.name}</p>}
         </div>
-        
-        {/* Email input field with validation */}
+
         <div>
-          <label 
-            htmlFor="email" 
-            className="block text-gray-300 mb-2 text-lg"
-          >
+          <label htmlFor="email" className="block text-xs font-bold uppercase tracking-wider text-gray-500 mb-2">
             Your Email
           </label>
           <input
@@ -214,21 +109,13 @@ export default function ContactForm() {
             value={formData.email}
             onChange={handleChange}
             placeholder="Enter your email"
-            className={`w-full px-4 py-3 rounded-md bg-[#26262C] border focus:ring-2 focus:outline-none text-white ${
-              errors.email ? 'border-[#FF2247]' : 'border-gray-700 focus:ring-[#FF2247]/50'
-            }`}
+            className={inputClasses('email')}
           />
-          {errors.email && (
-            <p className="mt-2 text-[#FF2247]">{errors.email}</p>
-          )}
+          {errors.email && <p className="mt-1.5 text-[#FF2247] text-xs">{errors.email}</p>}
         </div>
-        
-        {/* Subject input field with validation */}
+
         <div>
-          <label 
-            htmlFor="subject" 
-            className="block text-gray-300 mb-2 text-lg"
-          >
+          <label htmlFor="subject" className="block text-xs font-bold uppercase tracking-wider text-gray-500 mb-2">
             Subject
           </label>
           <input
@@ -238,21 +125,13 @@ export default function ContactForm() {
             value={formData.subject}
             onChange={handleChange}
             placeholder="What is this regarding?"
-            className={`w-full px-4 py-3 rounded-md bg-[#26262C] border focus:ring-2 focus:outline-none text-white ${
-              errors.subject ? 'border-[#FF2247]' : 'border-gray-700 focus:ring-[#FF2247]/50'
-            }`}
+            className={inputClasses('subject')}
           />
-          {errors.subject && (
-            <p className="mt-2 text-[#FF2247]">{errors.subject}</p>
-          )}
+          {errors.subject && <p className="mt-1.5 text-[#FF2247] text-xs">{errors.subject}</p>}
         </div>
-        
-        {/* Message textarea with validation */}
+
         <div>
-          <label 
-            htmlFor="message" 
-            className="block text-gray-300 mb-2 text-lg"
-          >
+          <label htmlFor="message" className="block text-xs font-bold uppercase tracking-wider text-gray-500 mb-2">
             Your Message
           </label>
           <textarea
@@ -262,21 +141,16 @@ export default function ContactForm() {
             onChange={handleChange}
             placeholder="Type your message here..."
             rows="5"
-            className={`w-full px-4 py-3 rounded-md bg-[#26262C] border focus:ring-2 focus:outline-none text-white resize-none ${
-              errors.message ? 'border-[#FF2247]' : 'border-gray-700 focus:ring-[#FF2247]/50'
-            }`}
+            className={`${inputClasses('message')} resize-none`}
           ></textarea>
-          {errors.message && (
-            <p className="mt-2 text-[#FF2247]">{errors.message}</p>
-          )}
+          {errors.message && <p className="mt-1.5 text-[#FF2247] text-xs">{errors.message}</p>}
         </div>
-        
-        {/* Submit button with loading state and animations */}
+
         <motion.button
           type="submit"
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
-          className={`btn-primary w-full py-3 text-xl flex items-center justify-center ${
+          className={`btn-primary w-full py-3 flex items-center justify-center ${
             formStatus === 'loading' ? 'opacity-75 cursor-not-allowed' : ''
           }`}
           disabled={formStatus === 'loading'}

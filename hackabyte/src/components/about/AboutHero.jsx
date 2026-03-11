@@ -1,61 +1,54 @@
-/**
- * About Hero Component
- * 
- * Hero section for the About page featuring:
- * - Main headline and mission statement
- * - Key statistics about Hackabyte's impact
- * - Fade-in animations for visual engagement
- * - Responsive layout for all screen sizes
- * - Decorative background blur elements
- */
-
 'use client';
 
 import { motion } from 'framer-motion';
 import Container from '../shared/Container';
 
 export default function AboutHero() {
+  const stats = [
+    { value: "5,000+", label: "Students Impacted" },
+    { value: "75+", label: "Events Hosted" },
+    { value: "30+", label: "Partner Schools" }
+  ];
+
   return (
-    <section className="relative pt-16 md:pt-32 pb-20 bg-[#1A1A1E] flex items-center">
-      {/* Decorative background blur elements */}
-      <div className="absolute inset-0 -z-10 opacity-10">
-        <div className="absolute top-20 right-20 w-64 h-64 bg-[#F93236] rounded-full blur-3xl"></div>
-        <div className="absolute bottom-20 left-20 w-72 h-72 bg-[#FF2247] rounded-full blur-3xl"></div>
+    <section className="relative pt-24 md:pt-40 pb-24 md:pb-32 bg-[#0A0A0C] flex items-center overflow-hidden">
+      <div className="absolute inset-0 bg-grid opacity-30 pointer-events-none"></div>
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute top-20 right-20 w-96 h-96 bg-[#F93236]/8 rounded-full blur-[120px]"></div>
+        <div className="absolute bottom-20 left-20 w-72 h-72 bg-[#FF2247]/6 rounded-full blur-[100px]"></div>
       </div>
-      
-      <Container>
+
+      <Container className="relative z-10">
         <div className="text-center">
-          {/* Main content with fade-in and slide-up animation */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
-            <h1 className="text-4xl md:text-5xl font-bold text-[#FF2247] mb-6">
-              About Hackabyte
+            <span className="label-uppercase mb-6 block">About Us</span>
+            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black tracking-tight text-white mb-6">
+              About <span className="heading-gradient">Hackabyte</span>
             </h1>
-            
-            <p className="text-xl text-white mb-8 max-w-3xl mx-auto">
-              Empowering the next generation of innovators through immersive coding experiences, 
+
+            <p className="text-xl text-gray-400 mb-12 max-w-3xl mx-auto leading-relaxed">
+              Empowering the next generation of innovators through immersive coding experiences,
               community building, and real-world problem solving.
             </p>
-            
-            {/* Impact statistics - Key metrics displayed in a row */}
-            <div className="flex justify-center space-x-4 mt-8">
-              <div className="flex flex-col items-center p-4">
-                <span className="text-4xl font-bold text-[#FF2247] mb-2">5,000+</span>
-                <span className="text-gray-300">Students Impacted</span>
-              </div>
-              
-              <div className="flex flex-col items-center p-4">
-                <span className="text-4xl font-bold text-[#FF2247] mb-2">75+</span>
-                <span className="text-gray-300">Events Hosted</span>
-              </div>
-              
-              <div className="flex flex-col items-center p-4">
-                <span className="text-4xl font-bold text-[#FF2247] mb-2">30+</span>
-                <span className="text-gray-300">Partner Schools</span>
-              </div>
+
+            {/* Stats in glass cards */}
+            <div className="flex flex-wrap justify-center gap-4 md:gap-6 mt-8">
+              {stats.map((stat, index) => (
+                <motion.div
+                  key={stat.label}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 0.3 + index * 0.1 }}
+                  className="card-glass rounded-xl px-8 py-6 min-w-[160px]"
+                >
+                  <span className="text-3xl md:text-4xl font-black tracking-tight heading-gradient block mb-1">{stat.value}</span>
+                  <span className="text-gray-500 text-sm">{stat.label}</span>
+                </motion.div>
+              ))}
             </div>
           </motion.div>
         </div>

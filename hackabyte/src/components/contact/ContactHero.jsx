@@ -1,14 +1,3 @@
-/**
- * Contact Hero Component
- * 
- * Hero section for the Contact page featuring:
- * - Main headline and descriptive text
- * - Fade-in animations for visual engagement
- * - Responsive layout that adapts to screen size
- * - Serves as an introduction to the contact form and info below
- * - Consistent styling with other hero sections across the site
- */
-
 'use client';
 
 import { motion } from 'framer-motion';
@@ -16,28 +5,28 @@ import Container from '../shared/Container';
 
 export default function ContactHero() {
   return (
-    <section className="relative pt-16 md:pt-32 pb-20 bg-[#1A1A1E] flex items-center">
-      {/* Decorative background blur elements */}
+    <section className="relative pt-32 md:pt-40 pb-24 bg-[#0A0A0C] flex items-center overflow-hidden">
+      <div className="absolute inset-0 bg-grid opacity-20 pointer-events-none"></div>
       <div className="absolute inset-0 -z-10 opacity-10">
         <div className="absolute top-20 right-20 w-64 h-64 bg-[#F93236] rounded-full blur-3xl"></div>
         <div className="absolute bottom-20 left-20 w-72 h-72 bg-[#FF2247] rounded-full blur-3xl"></div>
       </div>
-      
-      <Container>
+
+      <Container className="relative z-10">
         <div className="text-center">
-          {/* Main content with fade-in and slide-up animation */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
-            <h1 className="text-4xl md:text-5xl font-bold text-[#FF2247] mb-6">
-              Contact Us
+            <span className="label-uppercase mb-6 block">Reach Out</span>
+            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black tracking-tight text-white mb-6">
+              Contact <span className="heading-gradient">Us</span>
             </h1>
-            
-            <p className="text-xl text-white mb-8 max-w-3xl mx-auto">
-              Have questions or want to get involved? We'd love to hear from you. 
-              Reach out to our team for inquiries about events, mentorship, 
+
+            <p className="text-lg text-gray-400 max-w-3xl mx-auto">
+              Have questions or want to get involved? We'd love to hear from you.
+              Reach out to our team for inquiries about events, mentorship,
               partnerships, or anything else.
             </p>
           </motion.div>

@@ -507,8 +507,8 @@ export default function AuthForm() {
     <>
       {/* Email field */}
       <div className="mb-6">
-        <label htmlFor="email" className="block text-gray-300 text-sm font-medium mb-2">
-          Email Address <span className="text-red-500">*</span>
+        <label htmlFor="email" className="block text-xs font-bold uppercase tracking-wider text-gray-500 mb-2">
+          Email Address <span className="text-[#FF2247]">*</span>
         </label>
         <input
           type="email"
@@ -519,18 +519,18 @@ export default function AuthForm() {
             setFieldErrors(prev => ({...prev, email: null}));
           }}
           required
-          className={`bg-[#1A1A1E] border ${fieldErrors.email ? 'border-red-500' : 'border-gray-700'} text-white rounded-lg p-3 w-full focus:ring-[#FF2247] focus:border-[#FF2247]`}
+          className={`bg-white/[0.03] border ${fieldErrors.email ? 'border-[#FF2247]' : 'border-white/[0.08] focus:border-[#FF2247]/50'} text-white p-3 w-full focus:ring-1 focus:ring-[#FF2247]/30 focus:outline-none transition-colors placeholder-gray-600`}
           placeholder="name@example.com"
         />
         {fieldErrors.email && (
-          <p className="mt-1 text-sm text-red-500">{fieldErrors.email}</p>
+          <p className="mt-1 text-sm text-[#FF2247]">{fieldErrors.email}</p>
         )}
       </div>
 
       {/* Password field */}
       <div className="mb-6">
-        <label htmlFor="password" className="block text-gray-300 text-sm font-medium mb-2">
-          Password <span className="text-red-500">*</span>
+        <label htmlFor="password" className="block text-xs font-bold uppercase tracking-wider text-gray-500 mb-2">
+          Password <span className="text-[#FF2247]">*</span>
         </label>
         <input
           type="password"
@@ -541,11 +541,11 @@ export default function AuthForm() {
             setFieldErrors(prev => ({...prev, password: null}));
           }}
           required
-          className={`bg-[#1A1A1E] border ${fieldErrors.password ? 'border-red-500' : 'border-gray-700'} text-white rounded-lg p-3 w-full focus:ring-[#FF2247] focus:border-[#FF2247]`}
+          className={`bg-white/[0.03] border ${fieldErrors.password ? 'border-[#FF2247]' : 'border-white/[0.08] focus:border-[#FF2247]/50'} text-white p-3 w-full focus:ring-1 focus:ring-[#FF2247]/30 focus:outline-none transition-colors placeholder-gray-600`}
           placeholder="••••••••"
         />
         {fieldErrors.password && (
-          <p className="mt-1 text-sm text-red-500">{fieldErrors.password}</p>
+          <p className="mt-1 text-sm text-[#FF2247]">{fieldErrors.password}</p>
         )}
       </div>
 
@@ -557,7 +557,7 @@ export default function AuthForm() {
             type="checkbox"
             checked={rememberMe}
             onChange={(e) => setRememberMe(e.target.checked)}
-            className="h-4 w-4 bg-[#1A1A1E] border border-gray-700 rounded focus:ring-[#FF2247]"
+            className="h-4 w-4 bg-white/[0.03] border border-white/[0.08] rounded focus:ring-[#FF2247]"
           />
           <label htmlFor="remember" className="ml-2 block text-sm text-gray-300">
             Remember me
@@ -575,8 +575,8 @@ export default function AuthForm() {
     <>
       {/* Name field */}
       <div className="mb-6">
-        <label htmlFor="name" className="block text-gray-300 text-sm font-medium mb-2">
-          Full Name <span className="text-red-500">*</span>
+        <label htmlFor="name" className="block text-xs font-bold uppercase tracking-wider text-gray-500 mb-2">
+          Full Name <span className="text-[#FF2247]">*</span>
         </label>
         <input
           type="text"
@@ -587,18 +587,18 @@ export default function AuthForm() {
             setFieldErrors(prev => ({...prev, name: null}));
           }}
           required
-          className={`bg-[#1A1A1E] border ${fieldErrors.name ? 'border-red-500' : 'border-gray-700'} text-white rounded-lg p-3 w-full focus:ring-[#FF2247] focus:border-[#FF2247]`}
+          className={`bg-white/[0.03] border ${fieldErrors.name ? 'border-[#FF2247]' : 'border-white/[0.08] focus:border-[#FF2247]/50'} text-white p-3 w-full focus:ring-1 focus:ring-[#FF2247]/30 focus:outline-none transition-colors placeholder-gray-600`}
           placeholder="John Doe"
         />
         {fieldErrors.name && (
-          <p className="mt-1 text-sm text-red-500">{fieldErrors.name}</p>
+          <p className="mt-1 text-sm text-[#FF2247]">{fieldErrors.name}</p>
         )}
       </div>
       
       {/* Email field */}
       <div className="mb-6">
-        <label htmlFor="regEmail" className="block text-gray-300 text-sm font-medium mb-2">
-          Email Address <span className="text-red-500">*</span>
+        <label htmlFor="regEmail" className="block text-xs font-bold uppercase tracking-wider text-gray-500 mb-2">
+          Email Address <span className="text-[#FF2247]">*</span>
         </label>
         <input
           type="email"
@@ -609,18 +609,18 @@ export default function AuthForm() {
             setFieldErrors(prev => ({...prev, email: null}));
           }}
           required
-          className={`bg-[#1A1A1E] border ${fieldErrors.email ? 'border-red-500' : 'border-gray-700'} text-white rounded-lg p-3 w-full focus:ring-[#FF2247] focus:border-[#FF2247]`}
+          className={`bg-white/[0.03] border ${fieldErrors.email ? 'border-[#FF2247]' : 'border-white/[0.08] focus:border-[#FF2247]/50'} text-white p-3 w-full focus:ring-1 focus:ring-[#FF2247]/30 focus:outline-none transition-colors placeholder-gray-600`}
           placeholder="name@example.com"
         />
         {fieldErrors.email && (
-          <p className="mt-1 text-sm text-red-500">{fieldErrors.email}</p>
+          <p className="mt-1 text-sm text-[#FF2247]">{fieldErrors.email}</p>
         )}
       </div>
       
       {/* Password field */}
       <div className="mb-6">
-        <label htmlFor="regPassword" className="block text-gray-300 text-sm font-medium mb-2">
-          Password <span className="text-red-500">*</span>
+        <label htmlFor="regPassword" className="block text-xs font-bold uppercase tracking-wider text-gray-500 mb-2">
+          Password <span className="text-[#FF2247]">*</span>
         </label>
         <input
           type="password"
@@ -631,18 +631,18 @@ export default function AuthForm() {
             setFieldErrors(prev => ({...prev, password: null}));
           }}
           required
-          className={`bg-[#1A1A1E] border ${fieldErrors.password ? 'border-red-500' : 'border-gray-700'} text-white rounded-lg p-3 w-full focus:ring-[#FF2247] focus:border-[#FF2247]`}
+          className={`bg-white/[0.03] border ${fieldErrors.password ? 'border-[#FF2247]' : 'border-white/[0.08] focus:border-[#FF2247]/50'} text-white p-3 w-full focus:ring-1 focus:ring-[#FF2247]/30 focus:outline-none transition-colors placeholder-gray-600`}
           placeholder="••••••••"
         />
         {fieldErrors.password && (
-          <p className="mt-1 text-sm text-red-500">{fieldErrors.password}</p>
+          <p className="mt-1 text-sm text-[#FF2247]">{fieldErrors.password}</p>
         )}
       </div>
       
       {/* Confirm Password field */}
       <div className="mb-6">
-        <label htmlFor="confirmPassword" className="block text-gray-300 text-sm font-medium mb-2">
-          Confirm Password <span className="text-red-500">*</span>
+        <label htmlFor="confirmPassword" className="block text-xs font-bold uppercase tracking-wider text-gray-500 mb-2">
+          Confirm Password <span className="text-[#FF2247]">*</span>
         </label>
         <input
           type="password"
@@ -653,11 +653,11 @@ export default function AuthForm() {
             setFieldErrors(prev => ({...prev, confirmPassword: null}));
           }}
           required
-          className={`bg-[#1A1A1E] border ${fieldErrors.confirmPassword ? 'border-red-500' : 'border-gray-700'} text-white rounded-lg p-3 w-full focus:ring-[#FF2247] focus:border-[#FF2247]`}
+          className={`bg-white/[0.03] border ${fieldErrors.confirmPassword ? 'border-[#FF2247]' : 'border-white/[0.08] focus:border-[#FF2247]/50'} text-white p-3 w-full focus:ring-1 focus:ring-[#FF2247]/30 focus:outline-none transition-colors placeholder-gray-600`}
           placeholder="••••••••"
         />
         {fieldErrors.confirmPassword && (
-          <p className="mt-1 text-sm text-red-500">{fieldErrors.confirmPassword}</p>
+          <p className="mt-1 text-sm text-[#FF2247]">{fieldErrors.confirmPassword}</p>
         )}
       </div>
     </>
@@ -668,8 +668,8 @@ export default function AuthForm() {
     <>
       {/* Date of Birth field */}
       <div className="mb-6">
-        <label htmlFor="dateOfBirth" className="block text-gray-300 text-sm font-medium mb-2">
-          Date of Birth <span className="text-red-500">*</span>
+        <label htmlFor="dateOfBirth" className="block text-xs font-bold uppercase tracking-wider text-gray-500 mb-2">
+          Date of Birth <span className="text-[#FF2247]">*</span>
         </label>
         <input
           type="date"
@@ -680,17 +680,17 @@ export default function AuthForm() {
             setFieldErrors(prev => ({...prev, dateOfBirth: null}));
           }}
           required
-          className={`bg-[#1A1A1E] border ${fieldErrors.dateOfBirth ? 'border-red-500' : 'border-gray-700'} text-white rounded-lg p-3 w-full focus:ring-[#FF2247] focus:border-[#FF2247]`}
+          className={`bg-white/[0.03] border ${fieldErrors.dateOfBirth ? 'border-[#FF2247]' : 'border-white/[0.08] focus:border-[#FF2247]/50'} text-white p-3 w-full focus:ring-1 focus:ring-[#FF2247]/30 focus:outline-none transition-colors placeholder-gray-600`}
         />
         {fieldErrors.dateOfBirth && (
-          <p className="mt-1 text-sm text-red-500">{fieldErrors.dateOfBirth}</p>
+          <p className="mt-1 text-sm text-[#FF2247]">{fieldErrors.dateOfBirth}</p>
         )}
       </div>
       
       {/* Phone Number field */}
       <div className="mb-6">
-        <label htmlFor="phone" className="block text-gray-300 text-sm font-medium mb-2">
-          Phone Number <span className="text-red-500">*</span>
+        <label htmlFor="phone" className="block text-xs font-bold uppercase tracking-wider text-gray-500 mb-2">
+          Phone Number <span className="text-[#FF2247]">*</span>
         </label>
         <input
           type="tel"
@@ -701,17 +701,17 @@ export default function AuthForm() {
             setFieldErrors(prev => ({...prev, phone: null}));
           }}
           required
-          className={`bg-[#1A1A1E] border ${fieldErrors.phone ? 'border-red-500' : 'border-gray-700'} text-white rounded-lg p-3 w-full focus:ring-[#FF2247] focus:border-[#FF2247]`}
+          className={`bg-white/[0.03] border ${fieldErrors.phone ? 'border-[#FF2247]' : 'border-white/[0.08] focus:border-[#FF2247]/50'} text-white p-3 w-full focus:ring-1 focus:ring-[#FF2247]/30 focus:outline-none transition-colors placeholder-gray-600`}
           placeholder="(123) 456-7890"
         />
         {fieldErrors.phone && (
-          <p className="mt-1 text-sm text-red-500">{fieldErrors.phone}</p>
+          <p className="mt-1 text-sm text-[#FF2247]">{fieldErrors.phone}</p>
         )}
       </div>
       
       {/* School field */}
       <div className="mb-6">
-        <label htmlFor="school" className="block text-gray-300 text-sm font-medium mb-2">
+        <label htmlFor="school" className="block text-xs font-bold uppercase tracking-wider text-gray-500 mb-2">
           School
         </label>
         <input
@@ -719,14 +719,14 @@ export default function AuthForm() {
           id="school"
           value={school}
           onChange={(e) => setSchool(e.target.value)}
-          className="bg-[#1A1A1E] border border-gray-700 text-white rounded-lg p-3 w-full focus:ring-[#FF2247] focus:border-[#FF2247]"
+          className="bg-white/[0.03] border border-white/[0.08] text-white p-3 w-full focus:ring-1 focus:ring-[#FF2247]/30 focus:border-[#FF2247]/50 focus:outline-none transition-colors placeholder-gray-600"
           placeholder="Enter your school name"
         />
       </div>
       
       {/* Discord Tag field */}
       <div className="mb-6">
-        <label htmlFor="discordTag" className="block text-gray-300 text-sm font-medium mb-2">
+        <label htmlFor="discordTag" className="block text-xs font-bold uppercase tracking-wider text-gray-500 mb-2">
           Discord Username
         </label>
         <input
@@ -734,7 +734,7 @@ export default function AuthForm() {
           id="discordTag"
           value={discordTag}
           onChange={(e) => setDiscordTag(e.target.value)}
-          className="bg-[#1A1A1E] border border-gray-700 text-white rounded-lg p-3 w-full focus:ring-[#FF2247] focus:border-[#FF2247]"
+          className="bg-white/[0.03] border border-white/[0.08] text-white p-3 w-full focus:ring-1 focus:ring-[#FF2247]/30 focus:border-[#FF2247]/50 focus:outline-none transition-colors placeholder-gray-600"
           placeholder="username#0000"
         />
       </div>
@@ -743,13 +743,13 @@ export default function AuthForm() {
       {isMinor && (
         <>
           <div className="mt-8 mb-4">
-            <h3 className="text-lg font-semibold text-white">Parent/Guardian Information</h3>
+            <h3 className="text-lg font-bold tracking-tight text-white">Parent/Guardian Information</h3>
             <p className="text-gray-400 text-sm">Required for users under 18 years old.</p>
           </div>
 
           <div className="mb-6">
-            <label htmlFor="parentName" className="block text-gray-300 text-sm font-medium mb-2">
-              Parent/Guardian Full Name <span className="text-red-500">*</span>
+            <label htmlFor="parentName" className="block text-xs font-bold uppercase tracking-wider text-gray-500 mb-2">
+              Parent/Guardian Full Name <span className="text-[#FF2247]">*</span>
             </label>
             <input
               type="text"
@@ -760,17 +760,17 @@ export default function AuthForm() {
                 setFieldErrors(prev => ({...prev, parentName: null}));
               }}
               required={isMinor}
-              className={`bg-[#1A1A1E] border ${fieldErrors.parentName ? 'border-red-500' : 'border-gray-700'} text-white rounded-lg p-3 w-full focus:ring-[#FF2247] focus:border-[#FF2247]`}
+              className={`bg-white/[0.03] border ${fieldErrors.parentName ? 'border-[#FF2247]' : 'border-white/[0.08] focus:border-[#FF2247]/50'} text-white p-3 w-full focus:ring-1 focus:ring-[#FF2247]/30 focus:outline-none transition-colors placeholder-gray-600`}
               placeholder="Jane Doe"
             />
             {fieldErrors.parentName && (
-              <p className="mt-1 text-sm text-red-500">{fieldErrors.parentName}</p>
+              <p className="mt-1 text-sm text-[#FF2247]">{fieldErrors.parentName}</p>
             )}
           </div>
 
           <div className="mb-6">
-            <label htmlFor="parentEmail" className="block text-gray-300 text-sm font-medium mb-2">
-              Parent/Guardian Email <span className="text-red-500">*</span>
+            <label htmlFor="parentEmail" className="block text-xs font-bold uppercase tracking-wider text-gray-500 mb-2">
+              Parent/Guardian Email <span className="text-[#FF2247]">*</span>
             </label>
             <input
               type="email"
@@ -781,17 +781,17 @@ export default function AuthForm() {
                 setFieldErrors(prev => ({...prev, parentEmail: null}));
               }}
               required={isMinor}
-              className={`bg-[#1A1A1E] border ${fieldErrors.parentEmail ? 'border-red-500' : 'border-gray-700'} text-white rounded-lg p-3 w-full focus:ring-[#FF2247] focus:border-[#FF2247]`}
+              className={`bg-white/[0.03] border ${fieldErrors.parentEmail ? 'border-[#FF2247]' : 'border-white/[0.08] focus:border-[#FF2247]/50'} text-white p-3 w-full focus:ring-1 focus:ring-[#FF2247]/30 focus:outline-none transition-colors placeholder-gray-600`}
               placeholder="parent@example.com"
             />
             {fieldErrors.parentEmail && (
-              <p className="mt-1 text-sm text-red-500">{fieldErrors.parentEmail}</p>
+              <p className="mt-1 text-sm text-[#FF2247]">{fieldErrors.parentEmail}</p>
             )}
           </div>
 
           <div className="mb-6">
-            <label htmlFor="parentPhone" className="block text-gray-300 text-sm font-medium mb-2">
-              Parent/Guardian Phone <span className="text-red-500">*</span>
+            <label htmlFor="parentPhone" className="block text-xs font-bold uppercase tracking-wider text-gray-500 mb-2">
+              Parent/Guardian Phone <span className="text-[#FF2247]">*</span>
             </label>
             <input
               type="tel"
@@ -802,11 +802,11 @@ export default function AuthForm() {
                 setFieldErrors(prev => ({...prev, parentPhone: null}));
               }}
               required={isMinor}
-              className={`bg-[#1A1A1E] border ${fieldErrors.parentPhone ? 'border-red-500' : 'border-gray-700'} text-white rounded-lg p-3 w-full focus:ring-[#FF2247] focus:border-[#FF2247]`}
+              className={`bg-white/[0.03] border ${fieldErrors.parentPhone ? 'border-[#FF2247]' : 'border-white/[0.08] focus:border-[#FF2247]/50'} text-white p-3 w-full focus:ring-1 focus:ring-[#FF2247]/30 focus:outline-none transition-colors placeholder-gray-600`}
               placeholder="(123) 456-7890"
             />
             {fieldErrors.parentPhone && (
-              <p className="mt-1 text-sm text-red-500">{fieldErrors.parentPhone}</p>
+              <p className="mt-1 text-sm text-[#FF2247]">{fieldErrors.parentPhone}</p>
             )}
           </div>
         </>
@@ -819,7 +819,7 @@ export default function AuthForm() {
     <>
       {/* Coding Experience Level section */}
       <div className="mb-8">
-        <h3 className="text-lg font-semibold text-white mb-2">Coding Experience Level <span className="text-red-500">*</span></h3>
+        <h3 className="text-lg font-bold tracking-tight text-white mb-2">Coding Experience Level <span className="text-[#FF2247]">*</span></h3>
         <p className="text-gray-400 text-sm mb-4">Please select your level of programming experience:</p>
         
         <div className="space-y-4">
@@ -831,7 +831,7 @@ export default function AuthForm() {
                 name="codingExperience"
                 checked={codingExperience[level]}
                 onChange={() => handleCodingExperienceChange(level)}
-                className={`h-4 w-4 bg-[#1A1A1E] border ${fieldErrors.codingExperience ? 'border-red-500' : 'border-gray-700'} rounded focus:ring-[#FF2247]`}
+                className={`h-4 w-4 bg-white/[0.03] border ${fieldErrors.codingExperience ? 'border-[#FF2247]' : 'border-white/[0.08]'} rounded focus:ring-[#FF2247]`}
               />
               <label htmlFor={`coding-${level}`} className="ml-3 block text-gray-300">
                 {level}
@@ -841,13 +841,13 @@ export default function AuthForm() {
         </div>
         
         {fieldErrors.codingExperience && (
-          <p className="mt-1 text-sm text-red-500">{fieldErrors.codingExperience}</p>
+          <p className="mt-1 text-sm text-[#FF2247]">{fieldErrors.codingExperience}</p>
         )}
       </div>
       
       {/* Dietary Restrictions section */}
       <div className="mb-6">
-        <h3 className="text-lg font-semibold text-white mb-4">Dietary Restrictions</h3>
+        <h3 className="text-lg font-bold tracking-tight text-white mb-4">Dietary Restrictions</h3>
         <p className="text-gray-400 text-sm mb-4">Select any dietary restrictions you have:</p>
         
         <div className="space-y-4 mb-6">
@@ -858,7 +858,7 @@ export default function AuthForm() {
                 id={`diet-${restriction}`}
                 checked={dietaryRestrictions[restriction]}
                 onChange={() => handleDietaryRestrictionChange(restriction)}
-                className="h-4 w-4 bg-[#1A1A1E] border border-gray-700 rounded focus:ring-[#FF2247]"
+                className="h-4 w-4 bg-white/[0.03] border border-white/[0.08] rounded focus:ring-[#FF2247]"
               />
               <label htmlFor={`diet-${restriction}`} className="ml-3 block text-gray-300">
                 {restriction}
@@ -868,14 +868,14 @@ export default function AuthForm() {
         </div>
         
         <div className="mb-6">
-          <label htmlFor="dietDetails" className="block text-gray-300 text-sm font-medium mb-2">
+          <label htmlFor="dietDetails" className="block text-xs font-bold uppercase tracking-wider text-gray-500 mb-2">
             Additional Dietary Information
           </label>
           <textarea
             id="dietDetails"
             value={dietaryRestrictions.Details}
             onChange={(e) => setDietaryRestrictions(prev => ({...prev, Details: e.target.value}))}
-            className="bg-[#1A1A1E] border border-gray-700 text-white rounded-lg p-3 w-full focus:ring-[#FF2247] focus:border-[#FF2247]"
+            className="bg-white/[0.03] border border-white/[0.08] text-white p-3 w-full focus:ring-1 focus:ring-[#FF2247]/30 focus:border-[#FF2247]/50 focus:outline-none transition-colors placeholder-gray-600"
             placeholder="Any additional dietary restrictions or allergies..."
             rows={3}
           />
@@ -907,7 +907,7 @@ export default function AuthForm() {
           whileTap={{ scale: 0.98 }}
           type="button"
           onClick={goToPreviousStep}
-          className="px-5 py-2 border border-gray-700 rounded-lg text-gray-300 hover:bg-gray-800"
+          className="btn-secondary px-5 py-2"
         >
           Back
         </motion.button>
@@ -921,7 +921,7 @@ export default function AuthForm() {
           whileTap={{ scale: 0.98 }}
           type="button"
           onClick={goToNextStep}
-          className="px-5 py-2 bg-[#FF2247] rounded-lg text-white hover:bg-opacity-90"
+          className="btn-primary px-5 py-2"
         >
           Continue
         </motion.button>
@@ -931,7 +931,7 @@ export default function AuthForm() {
           whileTap={{ scale: 0.98 }}
           type="submit"
           disabled={loading}
-          className="px-5 py-2 bg-[#FF2247] rounded-lg text-white hover:bg-opacity-90 disabled:opacity-70"
+          className="btn-primary px-5 py-2 disabled:opacity-70"
         >
           {loading ? 'Creating account...' : 'Complete Registration'}
         </motion.button>
@@ -941,7 +941,7 @@ export default function AuthForm() {
 
   // Render Firebase help instructions when needed
   const renderFirebaseHelp = () => (
-    <div className="mt-4 p-4 bg-blue-900/30 text-blue-400 rounded-lg text-sm border border-blue-800">
+    <div className="mt-4 p-4 bg-white/[0.03] text-gray-400 text-sm border border-white/[0.08]">
       <h4 className="font-semibold mb-2">How to enable Email/Password authentication:</h4>
       <ol className="list-decimal pl-5 space-y-1">
         <li>Go to the <a href="https://console.firebase.google.com/" target="_blank" rel="noopener noreferrer" className="underline">Firebase Console</a></li>
@@ -957,10 +957,10 @@ export default function AuthForm() {
 
   return (
     <Container size='half'>
-      <div className="bg-[#16161A] rounded-xl shadow-xl overflow-hidden border border-gray-800">
+      <div className="card-glass rounded-xl shadow-xl overflow-hidden">
         <div className="p-8">
           {/* Authentication mode toggle tabs */}
-          <div className="flex mb-8 border-b border-gray-800">
+          <div className="flex mb-8 border-b border-white/[0.06]">
             <button
               className={`pb-4 px-4 text-lg font-medium border-b-2 ${
                 isLogin
@@ -991,15 +991,15 @@ export default function AuthForm() {
             onSubmit={handleSubmit}
           >
             {/* Form Title */}
-            <h2 className="text-2xl font-bold text-white mb-6">
+            <h2 className="text-2xl font-black tracking-tight text-white mb-6">
               {isLogin ? 'Sign in to your account' : `Create a new account - Step ${registrationStep} of 3`}
             </h2>
 
             {/* Registration Progress Bar */}
             {!isLogin && (
-              <div className="w-full bg-gray-800 rounded-full h-2 mb-6">
-                <div 
-                  className="bg-[#FF2247] h-2 rounded-full transition-all duration-300"
+              <div className="w-full bg-white/[0.05] h-1.5 mb-6">
+                <div
+                  className="bg-gradient-to-r from-[#F93236] to-[#FF2247] h-1.5 transition-all duration-300"
                   style={{ width: `${(registrationStep / 3) * 100}%` }}
                 ></div>
               </div>
@@ -1007,7 +1007,7 @@ export default function AuthForm() {
 
             {/* Error message */}
             {error && (
-              <div className="mb-4 p-3 bg-red-900/30 text-red-400 rounded-lg text-sm border border-red-800">
+              <div className="mb-4 p-3 bg-[#FF2247]/10 text-[#FF2247] text-sm border border-[#FF2247]/20">
                 {error}
               </div>
             )}

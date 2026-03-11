@@ -57,27 +57,22 @@ export default function UpcomingEventsList() {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [filter, setFilter] = useState('All'); // Add filter state
-  
-  // Reference for scroll-triggered animations
+  const [filter, setFilter] = useState('All');
+
   const ref = useRef(null);
-  // Detect when section enters viewport (20% visibility triggers animation)
   const isInView = useInView(ref, { once: true, amount: 0.2 });
 
-  // Listen for events data changes
   useEventEmitter(EVENT_TYPES.EVENTS_LOADED, (loadedEvents) => {
     setEvents(loadedEvents.filter(event => !event.hasPassed));
     setLoading(false);
   });
 
-  // Listen for errors
   useEventEmitter(EVENT_TYPES.EVENT_ERROR, (err) => {
     console.error('Error loading events:', err);
     setError('Failed to load events. Please try again later.');
     setLoading(false);
   });
 
-  // Fetch events on component mount
   useEffect(() => {
     const fetchEvents = async () => {
       try {
@@ -92,65 +87,67 @@ export default function UpcomingEventsList() {
     fetchEvents();
   }, []);
 
-  // Get unique event types for filtering
   const eventTypes = ['All', ...new Set(events.map(event => event.eventType).filter(Boolean))];
 
-  // Filter events based on selected type
-  const filteredEvents = filter === 'All' 
-    ? events 
+  const filteredEvents = filter === 'All'
+    ? events
     : events.filter(event => event.eventType === filter);
 
   return (
-    <section className="py-20 bg-[#16161A]" ref={ref} id="upcoming-events">
-      <Container>
+    <section className="py-24 md:py-32 bg-[#0E0E11] relative" ref={ref} id="upcoming-events">
+      <div className="absolute inset-0 bg-dots opacity-20 pointer-events-none"></div>
+      <Container className="relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
-          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-[#FF2247]">
-            Upcoming Events
+          <span className="label-uppercase mb-4 block">What's Next</span>
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight text-white mb-4">
+            Upcoming <span className="heading-gradient">Events</span>
           </h2>
-          <p className="text-xl text-white max-w-3xl mx-auto">
+          <p className="text-lg text-gray-400 max-w-3xl mx-auto">
             Register now for our next events and start your journey of innovation and collaboration.
           </p>
         </motion.div>
 
         {loading ? (
           <div className="flex justify-center items-center h-64">
-            <div className="animate-pulse text-white">Loading events...</div>
+            <div className="animate-pulse text-gray-500">Loading events...</div>
           </div>
         ) : error ? (
-          <div className="text-center text-red-400 p-8 bg-[#1A1A1E] rounded-xl">
+          <div className="text-center text-red-400 p-8 card-glass rounded-xl">
             {error}
           </div>
         ) : events.length === 0 ? (
-          <div className="text-center text-gray-400 p-8 bg-[#1A1A1E] rounded-xl">
+          <div className="text-center text-gray-500 p-8 card-glass rounded-xl">
             No upcoming events found. Check back soon!
           </div>
         ) : (
           <>
-            {/* Filter controls - only show if there are multiple event types */}
             {eventTypes.length > 1 && (
               <div className="flex flex-wrap justify-center gap-3 mb-10">
                 {eventTypes.map((type) => (
                   <button
                     key={type}
                     onClick={() => setFilter(type)}
-                    className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                    className={`px-5 py-2 text-xs font-bold uppercase tracking-widest transition-all ${
                       filter === type
-                        ? 'bg-[#FF2247] text-white'
-                        : 'bg-[#1A1A1E] text-gray-400 hover:bg-[#252529]'
+                        ? 'bg-gradient-to-r from-[#F93236] to-[#FF2247] text-white'
+                        : 'bg-white/[0.03] border border-white/[0.08] text-gray-400 hover:bg-white/[0.06] hover:text-white'
                     }`}
+                    style={{
+                      clipPath: 'polygon(0 0, calc(100% - 8px) 0, 100% 100%, 8px 100%)'
+                    }}
                   >
                     {type}
                   </button>
                 ))}
               </div>
             )}
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {filteredEvents.map((event, index) => {
                 const eventTitle = event.title || event.name || 'Untitled Event';
                 const eventDate = formatEventDate(event.startDate || event.date, event.endDate);
@@ -161,72 +158,58 @@ export default function UpcomingEventsList() {
                   key={event.id}
                   initial={{ opacity: 0, y: 30 }}
                   animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
-                  transition={{ duration: 0.5, delay: index * 0.2 }}
-                  className="bg-[#1A1A1E] rounded-xl overflow-hidden border border-gray-800 hover:border-[#FF2247]/30 transition-all duration-300"
+                  transition={{ duration: 0.5, delay: index * 0.15 }}
+                  className="card-glass rounded-xl overflow-hidden group"
                 >
                   <div className="grid md:grid-cols-5 gap-0">
-                    {/* Event Image */}
-                    <div className="md:col-span-2 relative h-48 md:h-full min-h-[200px]">
-                      <div 
-                        className="absolute inset-0 w-full h-full"
+                    <div className="md:col-span-2 relative h-48 md:h-full min-h-[200px] overflow-hidden">
+                      <div
+                        className="absolute inset-0 w-full h-full transition-transform duration-700 group-hover:scale-110"
                         style={{
                           backgroundImage: `url(${eventImage})`,
                           backgroundSize: 'cover',
                           backgroundPosition: 'center'
                         }}
                       ></div>
-                      <div className="absolute inset-0 bg-gradient-to-r from-[#1A1A1E]/80 to-transparent md:bg-gradient-to-l"></div>
-                      
-                      {/* Event Type Badge */}
+                      <div className="absolute inset-0 bg-gradient-to-r from-[#0E0E11]/80 to-transparent md:bg-gradient-to-l"></div>
+
                       {event.eventType && (
-                        <div className="absolute top-3 right-3 bg-black/70 text-white text-xs px-2 py-1 rounded">
+                        <div className="absolute top-3 right-3 bg-white/[0.1] backdrop-blur-sm border border-white/[0.1] text-white text-xs px-3 py-1 font-bold uppercase tracking-wider">
                           {event.eventType}
                         </div>
                       )}
                     </div>
 
-                    {/* Event Details */}
                     <div className="md:col-span-3 p-6">
-                      <h3 className="text-2xl font-bold text-white mb-2">{eventTitle}</h3>
-                    
-                    <div className="flex items-center text-gray-400 mb-3">
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 text-[#FF2247]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <h3 className="text-xl font-black tracking-tight text-white mb-2">{eventTitle}</h3>
+
+                    <div className="flex items-center text-gray-400 mb-3 text-sm">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2 text-[#FF2247]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                       </svg>
                       <span>{eventDate}</span>
                     </div>
-                    
-                    <div className="flex items-start text-gray-400 mb-4">
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 mt-0.5 text-[#FF2247]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+
+                    <div className="flex items-start text-gray-400 mb-4 text-sm">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2 mt-0.5 text-[#FF2247]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                       </svg>
                       <div>
                         <div>{event.location}</div>
-                        {event.city && <div className="text-sm text-gray-500">{event.city}</div>}
+                        {event.city && <div className="text-gray-600">{event.city}</div>}
                       </div>
                     </div>
-                    
-                    <p className="text-gray-300 mb-6">{event.description}</p>
-                    
+
+                    <p className="text-gray-500 text-sm mb-6 leading-relaxed">{event.description}</p>
+
                     <div className="flex flex-wrap gap-3">
-                      <motion.div
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                      >
-                        <Link href={event.registrationLink || "/events#registration"} className="btn-primary inline-block">
-                          Sign Up
-                        </Link>
-                      </motion.div>
-                      
-                      <motion.div
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                      >
-                        <Link href={`/events/${event.id}`} className="btn-secondary inline-block">
-                          Learn More
-                        </Link>
-                      </motion.div>
+                      <Link href={event.registrationLink || "/events#registration"} className="btn-primary inline-block text-sm">
+                        Sign Up
+                      </Link>
+                      <Link href={`/events/${event.id}`} className="btn-secondary inline-block text-sm">
+                        Learn More
+                      </Link>
                     </div>
                     </div>
                   </div>

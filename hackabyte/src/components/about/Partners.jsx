@@ -1,16 +1,3 @@
-/**
- * Partners Component
- * 
- * Displays Hackabyte's partner organizations by category with:
- * - Categorized partner logos grouped by partnership type
- * - Descriptive text explaining each partnership category
- * - Visual card layout with logo grid for each partner group
- * - Hover effects for interactive engagement
- * - Responsive grid layout that adapts to different screen sizes
- * - Scroll-triggered animations with staggered timing
- * - Call-to-action for potential new partnerships
- */
-
 'use client';
 
 import { useRef } from 'react';
@@ -19,15 +6,9 @@ import Container from '../shared/Container';
 import { PLACEHOLDER_IMAGES, resolveImageSrc } from '@/lib/images/placeholders';
 
 export default function Partners() {
-  // Reference for scroll-triggered animations
   const ref = useRef(null);
-  // Detect when section enters viewport (20% visibility triggers animation)
   const isInView = useInView(ref, { once: true, amount: 0.2 });
 
-  /**
-   * Partner data structure
-   * Organized by category with description and array of partner organizations
-   */
   const partnerTypes = [
     {
       category: "Corporate Partners",
@@ -65,50 +46,49 @@ export default function Partners() {
   ];
 
   return (
-    <section className="py-20 bg-[#1A1A1E]" ref={ref}>
-      <Container>
-        {/* Section heading with fade-in and slide-up animation */}
+    <section className="py-24 md:py-32 bg-[#0E0E11] relative" ref={ref}>
+      <div className="absolute inset-0 bg-dots opacity-20 pointer-events-none"></div>
+      <Container className="relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
-          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-[#FF2247]">
-            Our Partners
+          <span className="label-uppercase mb-4 block">Partnerships</span>
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight text-white mb-4">
+            Our <span className="heading-gradient">Partners</span>
           </h2>
-          <p className="text-xl text-white max-w-3xl mx-auto">
-            We collaborate with organizations that share our vision of empowering the next generation 
+          <p className="text-lg text-gray-400 max-w-3xl mx-auto">
+            We collaborate with organizations that share our vision of empowering the next generation
             of technologists and innovators.
           </p>
         </motion.div>
 
-        {/* Partner categories with vertical spacing between them */}
-        <div className="space-y-16">
+        <div className="space-y-8">
           {partnerTypes.map((type, typeIndex) => (
-            <motion.div 
+            <motion.div
               key={type.category}
               initial={{ opacity: 0, y: 30 }}
               animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
               transition={{ duration: 0.5, delay: 0.2 * typeIndex }}
-              className="bg-[#16161A] p-8 rounded-xl border border-gray-800"
+              className="card-glass rounded-xl p-8"
             >
-              <h3 className="text-2xl font-bold text-[#FF2247] mb-4">{type.category}</h3>
-              <p className="text-gray-300 mb-8">{type.description}</p>
-              
-              {/* Responsive logo grid - adapts from 2 to 5 columns based on screen size */}
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+              <h3 className="text-xl font-black tracking-tight text-white mb-2">{type.category}</h3>
+              <p className="text-gray-500 mb-8 text-sm">{type.description}</p>
+
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
                 {type.logos.map((partner, index) => (
-                  <motion.div 
+                  <motion.div
                     key={partner.name}
                     initial={{ opacity: 0 }}
                     animate={isInView ? { opacity: 1 } : { opacity: 0 }}
                     transition={{ duration: 0.3, delay: 0.1 * index + 0.3 * typeIndex }}
-                    className="bg-[#1A1A1E] p-4 rounded-lg flex items-center justify-center h-24 border border-gray-800 hover:border-[#FF2247]/30 transition-all duration-300"
+                    whileHover={{ scale: 1.05 }}
+                    className="bg-white/[0.02] border border-white/[0.06] hover:border-white/[0.12] p-4 flex items-center justify-center h-20 transition-all duration-300"
                   >
-                    {/* Logo container with background image positioning */}
                     <div className="relative w-full h-full">
-                      <div 
+                      <div
                         className="absolute inset-0 flex items-center justify-center"
                         style={{
                           backgroundImage: `url(${resolveImageSrc(partner.logo, PLACEHOLDER_IMAGES.logo)})`,
@@ -124,18 +104,21 @@ export default function Partners() {
             </motion.div>
           ))}
         </div>
-        
-        {/* Partnership call-to-action section */}
+
+        {/* CTA section with gradient border */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
           transition={{ duration: 0.5, delay: 0.6 }}
           className="mt-16 text-center"
         >
-          <h3 className="text-2xl font-bold text-white mb-6">Interested in partnering with us?</h3>
-          <a href="/contact" className="btn-primary inline-block">
-            Get in Touch
-          </a>
+          <div className="card-gradient-border rounded-xl p-10 max-w-xl mx-auto">
+            <h3 className="text-2xl font-black tracking-tight text-white mb-4">Interested in partnering with us?</h3>
+            <p className="text-gray-500 mb-6">Join our network of organizations making a difference in tech education.</p>
+            <a href="/contact" className="btn-primary inline-block">
+              Get in Touch
+            </a>
+          </div>
         </motion.div>
       </Container>
     </section>

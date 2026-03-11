@@ -1,15 +1,3 @@
-/**
- * Hackathon Rules Component
- * 
- * Displays the competition guidelines and code of conduct for Hackabyte events:
- * - Numbered rule cards with clear titles and descriptions
- * - Visual emphasis through color and layout to highlight importance
- * - Sequential animation for each rule to improve readability
- * - Background decorative elements to maintain visual consistency
- * - Responsive design that adapts to different screen sizes
- * - Scroll-triggered animations for gradual content reveal
- */
-
 'use client';
 
 import { useRef } from 'react';
@@ -17,15 +5,9 @@ import { motion, useInView } from 'framer-motion';
 import Container from '@/components/shared/Container';
 
 export default function HackathonRules() {
-  // Reference for scroll-triggered animations
   const ref = useRef(null);
-  // Detect when section enters viewport (20% visibility triggers animation)
   const isInView = useInView(ref, { once: true, amount: 0.2 });
 
-  /**
-   * Rules data structure
-   * Contains all hackathon competition guidelines with titles and descriptions
-   */
   const rules = [
     {
       title: "No Cheating or Plagiarism",
@@ -50,48 +32,57 @@ export default function HackathonRules() {
   ];
 
   return (
-    <section className="py-20 bg-[#1A1A1E] relative overflow-hidden" ref={ref}>
-      {/* Background Elements */}
+    <section className="py-24 md:py-32 bg-[#0A0A0C] relative overflow-hidden" ref={ref}>
+      <div className="absolute inset-0 bg-grid opacity-20 pointer-events-none"></div>
       <div className="absolute inset-0 -z-10 opacity-5">
         <div className="absolute top-20 right-20 w-64 h-64 bg-[#F93236] rounded-full blur-3xl"></div>
         <div className="absolute bottom-20 left-20 w-72 h-72 bg-[#FF2247] rounded-full blur-3xl"></div>
       </div>
-      
-      <Container size = "wide">
+
+      <Container size="wide" className="relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
-          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-[#FF2247]">
-            Rules
+          <span className="label-uppercase mb-4 block">Guidelines</span>
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight text-white mb-4">
+            Competition <span className="heading-gradient">Rules</span>
           </h2>
-          <p className="text-xl text-white max-w-3xl mx-auto">
+          <p className="text-lg text-gray-400 max-w-3xl mx-auto">
             Please review and follow these guidelines to ensure a positive experience for everyone
           </p>
         </motion.div>
 
-        <div className="space-y-6">
-          {rules.map((rule, index) => (
-            <motion.div
-              key={rule.title}
-              initial={{ opacity: 0, x: -30 }}
-              animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -30 }}
-              transition={{ duration: 0.5, delay: 0.1 * index }}
-              className="bg-[#16161A] p-6 rounded-xl border border-gray-800"
-            >
-              <div className="flex">
-                <div className="flex-shrink-0 w-10 h-10 rounded-full bg-[#FF2247] flex items-center justify-center mr-4">
-                  <span className="text-white font-bold">{index + 1}</span>
+        <div className="relative max-w-3xl mx-auto">
+          {/* Vertical timeline line */}
+          <div className="absolute left-5 top-0 bottom-0 w-px bg-gradient-to-b from-[#F93236] via-[#FF2247] to-transparent"></div>
+
+          <div className="space-y-6">
+            {rules.map((rule, index) => (
+              <motion.div
+                key={rule.title}
+                initial={{ opacity: 0, x: -30 }}
+                animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -30 }}
+                transition={{ duration: 0.5, delay: 0.1 * index }}
+                className="card-glass rounded-xl p-6 ml-12 relative"
+              >
+                {/* Timeline dot */}
+                <div className="absolute -left-[calc(3rem+7px)] top-6 w-3.5 h-3.5 rounded-full bg-gradient-to-r from-[#F93236] to-[#FF2247] ring-4 ring-[#0A0A0C]"></div>
+
+                <div className="flex items-start">
+                  <div className="flex-shrink-0 w-8 h-8 flex items-center justify-center bg-gradient-to-r from-[#F93236] to-[#FF2247] rounded-lg mr-4">
+                    <span className="text-white text-sm font-black">{index + 1}</span>
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-bold tracking-tight text-white mb-2">{rule.title}</h3>
+                    <p className="text-gray-500 text-sm leading-relaxed">{rule.description}</p>
+                  </div>
                 </div>
-                <div>
-                  <h3 className="text-xl font-bold text-white mb-2">{rule.title}</h3>
-                  <p className="text-gray-300">{rule.description}</p>
-                </div>
-              </div>
-            </motion.div>
-          ))}
+              </motion.div>
+            ))}
+          </div>
         </div>
       </Container>
     </section>

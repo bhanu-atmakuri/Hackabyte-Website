@@ -7,7 +7,14 @@ export default function LoadingSpinner({ size = "default" }) {
 
   return (
     <div className="flex justify-center">
-      <div className={`animate-spin rounded-full border-t-2 border-b-2 border-[#FF2247] ${sizeClass}`}></div>
+      <div
+        className={`animate-spin rounded-full ${sizeClass}`}
+        style={{
+          background: 'conic-gradient(from 0deg, transparent, #F93236, #FF2247)',
+          mask: 'radial-gradient(farthest-side, transparent calc(100% - 2px), #000 calc(100% - 2px))',
+          WebkitMask: 'radial-gradient(farthest-side, transparent calc(100% - 2px), #000 calc(100% - 2px))'
+        }}
+      ></div>
     </div>
   );
 }
