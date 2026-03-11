@@ -98,20 +98,14 @@ export default function SummerHackathon2024WA() {
             >
               <div className="flex flex-wrap gap-2 mb-3">
                 {event.ageGroups.map((group, idx) => (
-                  <span 
-                    key={idx} 
-                    className={`px-2 py-1 text-xs font-semibold rounded-full text-white ${
-                      group === "High School" 
-                        ? "bg-[#F93236]" 
-                        : group === "Middle School" 
-                        ? "bg-[#FF2247]" 
-                        : "bg-[#333333]"
-                    }`}
+                  <span
+                    key={idx}
+                    className="px-3 py-1 text-xs font-bold uppercase tracking-wider text-[#FF2247] bg-[#FF2247]/10"
                   >
                     {group}
                   </span>
                 ))}
-                <span className="px-2 py-1 text-xs font-semibold rounded-full text-white bg-[#444444]">
+                <span className="px-3 py-1 text-xs font-bold uppercase tracking-wider text-gray-400 bg-white/[0.05]">
                   {event.competitionLevel}
                 </span>
               </div>
@@ -303,7 +297,7 @@ export default function SummerHackathon2024WA() {
               whileTap={{ scale: 0.95 }}
               className="inline-block"
             >
-              <Link href="/events" className="px-6 py-3 bg-white text-[#FF2247] font-bold rounded-lg hover:bg-gray-100 transition-colors">
+              <Link href="/events" className="btn-secondary">
                 View Upcoming Events
               </Link>
             </motion.div>

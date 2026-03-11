@@ -70,21 +70,21 @@ export default function UserAnalytics({ data }) {
   
   return (
     <div className="bg-[#16161A] rounded-xl p-6 border border-gray-800 shadow-lg h-full">
-      <div className="flex border-b border-gray-800 mb-6">
+      <div className="flex border-b border-white/[0.06] mb-6">
         <button
-          className={`pb-3 mr-6 ${activeTab === 'demographics' ? 'text-[#FF2247] border-b-2 border-[#FF2247]' : 'text-gray-400'}`}
+          className={`pb-3 mr-6 text-sm font-bold uppercase tracking-wider transition-colors ${activeTab === 'demographics' ? 'text-[#FF2247] border-b-2 border-[#FF2247]' : 'text-gray-500 hover:text-white'}`}
           onClick={() => setActiveTab('demographics')}
         >
           Demographics
         </button>
         <button
-          className={`pb-3 mr-6 ${activeTab === 'sources' ? 'text-[#FF2247] border-b-2 border-[#FF2247]' : 'text-gray-400'}`}
+          className={`pb-3 mr-6 text-sm font-bold uppercase tracking-wider transition-colors ${activeTab === 'sources' ? 'text-[#FF2247] border-b-2 border-[#FF2247]' : 'text-gray-500 hover:text-white'}`}
           onClick={() => setActiveTab('sources')}
         >
           Sources
         </button>
         <button
-          className={`pb-3 ${activeTab === 'devices' ? 'text-[#FF2247] border-b-2 border-[#FF2247]' : 'text-gray-400'}`}
+          className={`pb-3 text-sm font-bold uppercase tracking-wider transition-colors ${activeTab === 'devices' ? 'text-[#FF2247] border-b-2 border-[#FF2247]' : 'text-gray-500 hover:text-white'}`}
           onClick={() => setActiveTab('devices')}
         >
           Devices

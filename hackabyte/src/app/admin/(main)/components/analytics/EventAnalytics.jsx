@@ -95,22 +95,22 @@ export default function EventAnalytics({ data }) {
     <div className="bg-[#16161A] rounded-xl p-6 border border-gray-800 shadow-lg">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6">
         <h3 className="text-xl font-semibold text-white mb-4 sm:mb-0">Event Analytics</h3>
-        <div className="flex space-x-2 bg-[#1A1A1E] rounded-lg p-1">
+        <div className="flex space-x-2 bg-white/[0.03] border border-white/[0.06] p-1">
           <button
-            className={`px-4 py-1.5 text-sm rounded-md transition ${
+            className={`px-4 py-1.5 text-sm font-bold uppercase tracking-wider transition-colors ${
               activeView === 'registrations'
                 ? 'bg-[#FF2247] text-white'
-                : 'text-gray-400 hover:text-white'
+                : 'text-gray-500 hover:text-white'
             }`}
             onClick={() => setActiveView('registrations')}
           >
             Registrations
           </button>
           <button
-            className={`px-4 py-1.5 text-sm rounded-md transition ${
+            className={`px-4 py-1.5 text-sm font-bold uppercase tracking-wider transition-colors ${
               activeView === 'attendance'
                 ? 'bg-[#FF2247] text-white'
-                : 'text-gray-400 hover:text-white'
+                : 'text-gray-500 hover:text-white'
             }`}
             onClick={() => setActiveView('attendance')}
           >

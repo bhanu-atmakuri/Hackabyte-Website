@@ -426,7 +426,7 @@ export default function AdminDashboard() {
                           whileTap="tap"
                           variants={buttonHover}
                           disabled={isSaving}
-                          className="bg-[#FF2247] hover:bg-[#e01f41] text-white py-2 px-6 rounded-lg disabled:opacity-50"
+                          className="btn-primary disabled:opacity-50"
                         >
                           {isSaving ? 'Saving Changes...' : 'Save Changes'}
                         </motion.button>

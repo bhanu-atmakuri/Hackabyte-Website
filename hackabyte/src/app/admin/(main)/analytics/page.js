@@ -136,7 +136,7 @@ export default function AnalyticsPage() {
           <select
             value={timeRange}
             onChange={(event) => setTimeRange(event.target.value)}
-            className="rounded-md border border-gray-700 bg-[#16161A] px-3 py-2 text-sm text-white"
+            className="border border-white/[0.08] bg-white/[0.03] px-3 py-2 text-sm text-white"
           >
             {TIME_RANGE_OPTIONS.map((option) => (
               <option key={option.value} value={option.value}>
@@ -149,7 +149,7 @@ export default function AnalyticsPage() {
             type="button"
             onClick={() => loadAnalytics(true)}
             disabled={refreshing}
-            className="rounded-md border border-[#FF2247]/40 bg-[#FF2247]/10 px-3 py-2 text-sm font-medium text-[#FF2247] hover:bg-[#FF2247]/20 disabled:opacity-60"
+            className="border border-[#FF2247]/40 bg-[#FF2247]/10 px-3 py-2 text-sm font-bold uppercase tracking-wider text-[#FF2247] hover:bg-[#FF2247]/20 disabled:opacity-60 transition-colors"
           >
             {refreshing ? 'Refreshing...' : 'Refresh'}
           </button>

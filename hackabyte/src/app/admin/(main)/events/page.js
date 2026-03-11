@@ -167,7 +167,7 @@ export default function AdminEventsPage() {
                   <div className="flex space-x-4 mt-3 sm:mt-0">
                     <Link
                       href={`/admin/events/edit/${event.id}`}
-                      className="text-blue-500 hover:text-blue-400 text-sm"
+                      className="text-[#FF2247] hover:text-white text-sm transition-colors"
                     >
                       Edit
                     </Link>
@@ -187,24 +187,24 @@ export default function AdminEventsPage() {
                     .map(([group]) => (
                       <span 
                         key={group} 
-                        className="px-2 py-0.5 text-xs rounded-full bg-[#1A1A1E] text-gray-300 border border-gray-700"
+                        className="px-2 py-0.5 text-xs font-bold uppercase tracking-wider bg-white/[0.05] text-gray-400 border border-white/[0.08]"
                       >
                         {group.charAt(0).toUpperCase() + group.slice(1)}
                       </span>
                     ))
                   }
                   {event.competitionLevel && (
-                    <span className="px-2 py-0.5 text-xs rounded-full bg-[#1A1A1E] text-gray-300 border border-gray-700">
+                    <span className="px-2 py-0.5 text-xs font-bold uppercase tracking-wider bg-white/[0.05] text-gray-400 border border-white/[0.08]">
                       {event.competitionLevel}
                     </span>
                   )}
                   {event.eventType && (
-                    <span className="px-2 py-0.5 text-xs rounded-full bg-[#1A1A1E] text-gray-300 border border-gray-700">
+                    <span className="px-2 py-0.5 text-xs font-bold uppercase tracking-wider bg-white/[0.05] text-gray-400 border border-white/[0.08]">
                       {event.eventType}
                     </span>
                   )}
                   {event.showOnPastEventsPage && (
-                    <span className="px-2 py-0.5 text-xs rounded-full bg-[#1A1A1E] text-gray-300 border border-gray-700">
+                    <span className="px-2 py-0.5 text-xs font-bold uppercase tracking-wider bg-white/[0.05] text-gray-400 border border-white/[0.08]">
                       Visible on Past Events page
                     </span>
                   )}
@@ -213,7 +213,7 @@ export default function AdminEventsPage() {
                 {/* Details dropdown toggle button */}
                 <button 
                   onClick={() => toggleEventDetails(event.id)} 
-                  className="mt-3 w-full flex items-center justify-between px-3 py-2 text-sm bg-[#1A1A1E] text-gray-300 rounded-md hover:bg-[#1E1E22] transition-colors border border-gray-700"
+                  className="mt-3 w-full flex items-center justify-between px-3 py-2 text-sm bg-white/[0.03] text-gray-400 hover:bg-white/[0.06] hover:text-white transition-colors border border-white/[0.08]"
                 >
                   <span>{expandedEventId === event.id ? 'Hide Details' : 'Show Details'}</span>
                   <motion.svg 
@@ -287,7 +287,7 @@ export default function AdminEventsPage() {
       {showConfirmation && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
           <motion.div 
-            className="bg-[#16161A] rounded-lg p-6 max-w-md w-full border border-gray-800"
+            className="card-glass rounded-xl p-6 max-w-md w-full"
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.9, opacity: 0 }}
@@ -297,13 +297,13 @@ export default function AdminEventsPage() {
             <div className="flex justify-end space-x-4">
               <button
                 onClick={cancelDelete}
-                className="px-4 py-2 bg-gray-700 text-white rounded-md hover:bg-gray-600 transition-colors"
+                className="btn-secondary"
               >
                 Cancel
               </button>
               <button
                 onClick={confirmDelete}
-                className="px-4 py-2 bg-[#FF2247] text-white rounded-md hover:bg-[#E01F3F] transition-colors"
+                className="btn-primary"
               >
                 Delete
               </button>
