@@ -1,14 +1,3 @@
-/**
- * Upcoming Events Component
- * 
- * Displays featured upcoming events on the home page with:
- * - Section title and description
- * - Event cards with images, dates, locations, and descriptions
- * - Age group and competition level badges
- * - Animation effects that trigger when scrolled into view
- * - Call-to-action buttons to learn more about each event
- */
-
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
@@ -20,25 +9,14 @@ import { PLACEHOLDER_IMAGES, resolveImageSrc } from '@/lib/images/placeholders';
 
 function parseEventDate(value) {
   if (!value) return null;
-
-  if (typeof value === 'object' && typeof value.toDate === 'function') {
-    return value.toDate();
-  }
-
-  if (value instanceof Date) {
-    return Number.isNaN(value.getTime()) ? null : value;
-  }
-
+  if (typeof value === 'object' && typeof value.toDate === 'function') return value.toDate();
+  if (value instanceof Date) return Number.isNaN(value.getTime()) ? null : value;
   if (typeof value === 'string') {
     const dateOnlyMatch = value.match(/^(\d{4})-(\d{2})-(\d{2})$/);
     if (dateOnlyMatch) {
-      const year = Number(dateOnlyMatch[1]);
-      const month = Number(dateOnlyMatch[2]);
-      const day = Number(dateOnlyMatch[3]);
-      return new Date(year, month - 1, day);
+      return new Date(Number(dateOnlyMatch[1]), Number(dateOnlyMatch[2]) - 1, Number(dateOnlyMatch[3]));
     }
   }
-
   const parsed = new Date(value);
   return Number.isNaN(parsed.getTime()) ? null : parsed;
 }
@@ -46,38 +24,24 @@ function parseEventDate(value) {
 function formatEventDate(startValue, endValue) {
   const startDate = parseEventDate(startValue);
   const endDate = parseEventDate(endValue);
-
   if (!startDate) return 'TBD';
-
   const dateOptions = { year: 'numeric', month: 'short', day: 'numeric' };
   const startLabel = startDate.toLocaleDateString('en-US', dateOptions);
-
-  if (!endDate || startDate.toDateString() === endDate.toDateString()) {
-    return startLabel;
-  }
-
+  if (!endDate || startDate.toDateString() === endDate.toDateString()) return startLabel;
   const endLabel = endDate.toLocaleDateString('en-US', dateOptions);
   return `${startLabel} - ${endLabel}`;
 }
 
 function toAgeGroupList(ageGroups) {
   if (!ageGroups) return [];
-
-  if (Array.isArray(ageGroups)) {
-    return ageGroups;
-  }
-
+  if (Array.isArray(ageGroups)) return ageGroups;
   if (typeof ageGroups === 'object') {
     return Object.entries(ageGroups)
       .filter(([, isSelected]) => Boolean(isSelected))
       .map(([group]) =>
-        group
-          .split(' ')
-          .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
-          .join(' ')
+        group.split(' ').map((part) => part.charAt(0).toUpperCase() + part.slice(1)).join(' ')
       );
   }
-
   return [];
 }
 
@@ -86,18 +50,13 @@ export default function UpcomingEvents() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Reference for triggering animations when section scrolls into view
   const ref = useRef(null);
-  // useInView hook to detect when section enters viewport
-  // once: true ensures animation only happens once
-  // amount: 0.2 means animation triggers when 20% of the element is visible
   const isInView = useInView(ref, { once: true, amount: 0.2 });
 
   useEffect(() => {
     const fetchUpcomingEvents = async () => {
       try {
         const allEvents = await getAllEvents();
-
         const displayedEvents = allEvents
           .filter((event) => !event.hasPassed)
           .sort((a, b) => {
@@ -106,7 +65,6 @@ export default function UpcomingEvents() {
             return aDate - bDate;
           })
           .slice(0, 2);
-
         setEvents(displayedEvents);
       } catch (fetchError) {
         console.error('Error loading home upcoming events:', fetchError);
@@ -115,43 +73,42 @@ export default function UpcomingEvents() {
         setLoading(false);
       }
     };
-
     fetchUpcomingEvents();
   }, []);
 
-  // Animation variants for the event cards
   const cardVariants = {
     hidden: { opacity: 0, y: 50 },
     visible: { opacity: 1, y: 0, transition: { duration: 0.5 } }
   };
 
   return (
-    <section className="py-16 md:py-20 bg-[#1A1A1E]" id="events" ref={ref}>
-      <Container>
-        {/* Section heading with animation that triggers when scrolled into view */}
+    <section className="py-24 md:py-32 bg-[#0E0E11] relative" id="events" ref={ref}>
+      <div className="absolute inset-0 bg-grid opacity-20 pointer-events-none"></div>
+
+      <Container className="relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
           transition={{ duration: 0.6 }}
-          className="text-center mb-10 md:mb-16 px-4 sm:px-0"
+          className="text-center mb-16 px-4 sm:px-0"
         >
-          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-[#FF2247]">
-            Upcoming Events
+          <span className="label-uppercase mb-4 block">Events</span>
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight text-white mb-4">
+            Upcoming <span className="heading-gradient">Events</span>
           </h2>
-          <div className="text-xl text-gray-300 max-w-3xl mx-auto">
+          <p className="text-lg text-gray-500 max-w-3xl mx-auto">
             Join us at our next hackathon and be part of an exciting community of young innovators.
-          </div>
+          </p>
         </motion.div>
 
-        {/* Event cards grid - 1 column on mobile, 2 columns on larger screens */}
         {loading ? (
-          <div className="text-center text-gray-400 px-4 sm:px-0">Loading events...</div>
+          <div className="text-center text-gray-600 px-4 sm:px-0">Loading events...</div>
         ) : error ? (
           <div className="text-center text-red-400 px-4 sm:px-0">{error}</div>
         ) : events.length === 0 ? (
-          <div className="text-center text-gray-400 px-4 sm:px-0">No upcoming events found.</div>
+          <div className="text-center text-gray-600 px-4 sm:px-0">No upcoming events found.</div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 px-4 sm:px-0">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-6 px-4 sm:px-0">
             {events.map((event, index) => {
               const eventTitle = event.title || event.name || 'Untitled Event';
               const eventDate = formatEventDate(event.startDate || event.date, event.endDate);
@@ -166,13 +123,12 @@ export default function UpcomingEvents() {
                   initial="hidden"
                   animate={isInView ? "visible" : "hidden"}
                   transition={{ delay: index * 0.2 }}
-                  className="bg-[#16161A] rounded-xl shadow-lg overflow-hidden border border-gray-800 hover:border-[#F93236]/30 transition-all duration-300"
+                  className="card-glass rounded-xl overflow-hidden group"
                 >
-                  {/* Event image with overlay gradient and hover zoom effect */}
+                  {/* Event image with hover zoom */}
                   <div className="relative h-48 overflow-hidden">
-                    {/* Using div with background image instead of img to avoid Next.js hydration issues */}
-                    <div 
-                      className="absolute inset-0 transition-transform duration-500 hover:scale-110"
+                    <div
+                      className="absolute inset-0 transition-transform duration-700 group-hover:scale-110"
                       style={{
                         backgroundImage: `url(${eventImage})`,
                         backgroundSize: 'cover',
@@ -180,74 +136,69 @@ export default function UpcomingEvents() {
                       }}
                       aria-label={eventTitle}
                     ></div>
-                    {/* Gradient overlay to improve text readability over image */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
-                    
-                    {/* Event title and tags positioned at bottom of image */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#0A0A0C] via-transparent to-transparent"></div>
+
                     <div className="absolute bottom-0 left-0 right-0 p-4">
-                      {/* Age group and competition level badges */}
                       <div className="flex flex-wrap gap-2 mb-2">
                         {ageGroups.map((group) => (
-                          <span 
+                          <span
                             key={`${event.id}-${group}`}
-                            className={`px-2 py-1 text-xs font-semibold rounded-full text-white ${
-                              group === "High School" 
-                                ? "bg-[#F93236]" 
-                                : group === "Middle School" 
-                                ? "bg-[#FF2247]" 
-                                : "bg-[#333333]"
-                            }`}
+                            className="px-2 py-1 text-xs font-bold uppercase tracking-wider text-white bg-white/[0.1] backdrop-blur-sm border border-white/[0.1]"
                           >
                             {group}
                           </span>
                         ))}
                         {event.competitionLevel && (
-                          <span className="px-2 py-1 text-xs font-semibold rounded-full text-white bg-[#444444]">
+                          <span className="px-2 py-1 text-xs font-bold uppercase tracking-wider text-white bg-white/[0.1] backdrop-blur-sm border border-white/[0.1]">
                             {event.competitionLevel}
                           </span>
                         )}
                       </div>
-                      <h3 className="text-xl font-bold text-white">{eventTitle}</h3>
+                      <h3 className="text-xl font-black tracking-tight text-white">{eventTitle}</h3>
                     </div>
                   </div>
-                  
-                  {/* Event details section */}
-                  <div className="p-4 sm:p-6">
-                    {/* Event date with calendar icon */}
-                    <div className="flex items-center text-gray-400 mb-3 sm:mb-4">
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 mr-2">
+
+                  <div className="p-5 sm:p-6">
+                    <div className="flex items-center text-gray-500 mb-3">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4 mr-2 text-[#FF2247]">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
                       </svg>
-                      {eventDate}
+                      <span className="text-sm">{eventDate}</span>
                     </div>
-                    {/* Event location with map pin icon */}
-                    <div className="flex items-start text-gray-400 mb-3 sm:mb-4">
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 mr-2 mt-0.5">
+                    <div className="flex items-start text-gray-500 mb-4">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4 mr-2 mt-0.5 text-[#FF2247]">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
                         <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
                       </svg>
-                      <span>{eventLocation || 'Location TBD'}</span>
+                      <span className="text-sm">{eventLocation || 'Location TBD'}</span>
                     </div>
-                    
-                    {/* Event description */}
-                    <p className="text-gray-300 mb-5 sm:mb-6">{event.description}</p>
-                    
-                    {/* CTA button with hover animation */}
-                    <motion.div
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                      className="mt-auto"
-                    >
-                      <Link href="/events" className="btn-primary w-full block text-center">
-                        Learn More
-                      </Link>
-                    </motion.div>
+
+                    <p className="text-gray-500 text-sm mb-6 leading-relaxed">{event.description}</p>
+
+                    <Link href="/events" className="btn-primary w-full block text-center text-sm">
+                      Learn More
+                    </Link>
                   </div>
                 </motion.div>
               );
             })}
           </div>
         )}
+
+        {/* View All Events link */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={isInView ? { opacity: 1 } : { opacity: 0 }}
+          transition={{ delay: 0.6 }}
+          className="text-center mt-12"
+        >
+          <Link href="/events" className="text-[#FF2247] font-bold text-sm uppercase tracking-wider hover:text-white transition-colors inline-flex items-center gap-2">
+            View All Events
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+            </svg>
+          </Link>
+        </motion.div>
       </Container>
     </section>
   );

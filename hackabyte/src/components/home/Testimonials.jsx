@@ -1,34 +1,15 @@
-/**
- * Testimonials Component
- * 
- * Displays success stories from past participants with:
- * - Interactive carousel/slider to navigate between testimonials
- * - Animated transitions when switching between stories
- * - Navigation controls (dots and arrow buttons)
- * - Responsive layout that adapts to mobile and desktop screens
- * - Visual separation between quote content and controls
- * - Scroll-triggered animations for initial reveal
- */
-
 'use client';
 
 import { useState, useRef } from 'react';
-import { motion, useInView } from 'framer-motion';
+import { motion, useInView, AnimatePresence } from 'framer-motion';
 import Container from '@/components/shared/Container';
 import { PLACEHOLDER_IMAGES, resolveImageSrc } from '@/lib/images/placeholders';
 
 export default function Testimonials() {
-  // State to track which testimonial is currently displayed
   const [activeIndex, setActiveIndex] = useState(0);
-  // Reference for scroll-triggered animations
   const ref = useRef(null);
-  // Detect when section enters viewport (30% visibility triggers animation)
   const isInView = useInView(ref, { once: true, amount: 0.3 });
 
-  /**
-   * Testimonial data structure
-   * Collection of student and educator experiences with profile information
-   */
   const testimonials = [
     {
       name: "Alex Chen",
@@ -60,73 +41,64 @@ export default function Testimonials() {
     }
   ];
 
-  /**
-   * Navigate to previous testimonial
-   * Handles circular navigation (going to the last item when at the first)
-   */
   const handlePrev = () => {
     setActiveIndex((prevIndex) => (prevIndex === 0 ? testimonials.length - 1 : prevIndex - 1));
   };
 
-  /**
-   * Navigate to next testimonial
-   * Handles circular navigation (going to the first item when at the last)
-   */
   const handleNext = () => {
     setActiveIndex((prevIndex) => (prevIndex === testimonials.length - 1 ? 0 : prevIndex + 1));
   };
 
   return (
-    <section className="py-20 bg-[#16161A]" id="testimonials" ref={ref}>
-      <Container>
-        {/* Section heading with fade-in and slide-up animation */}
+    <section className="py-24 md:py-32 lg:py-40 bg-[#111114] relative" id="testimonials" ref={ref}>
+      <div className="absolute inset-0 bg-dots opacity-20 pointer-events-none"></div>
+
+      <Container className="relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
-          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-[#FF2247]">
-            Success Stories
+          <span className="label-uppercase mb-4 block">Testimonials</span>
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight text-white mb-4">
+            Success <span className="heading-gradient">Stories</span>
           </h2>
-          <div className="text-xl text-gray-700 max-w-3xl mx-auto">
+          <p className="text-lg text-gray-500 max-w-3xl mx-auto">
             Hear from students and educators who have experienced the
             impact of our hackathons firsthand.
-          </div>
+          </p>
         </motion.div>
 
-        {/* Testimonial card with scale-up animation on scroll */}
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={isInView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.95 }}
           transition={{ duration: 0.5, delay: 0.3 }}
-          className="relative mx-auto"
+          className="relative mx-auto max-w-4xl"
         >
-          <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
-            <div className="flex flex-col md:flex-row">
-              {/* Left side - Testimonial quote content with animated transitions */}
-              <div className="p-8 md:p-12 md:w-3/5 bg-[#131435]">
-                <svg className="text-[#FF2247] w-12 h-12 mb-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M4.583 17.321C3.553 16.227 3 15 3 13.011c0-3.5 2.457-6.637 6.03-8.188l.893 1.378c-3.335 1.804-3.987 4.145-4.247 5.621.537-.278 1.24-.375 1.929-.311 1.804.167 3.226 1.648 3.226 3.489a3.5 3.5 0 01-3.5 3.5c-1.073 0-2.099-.49-2.748-1.179zm10 0C13.553 16.227 13 15 13 13.011c0-3.5 2.457-6.637 6.03-8.188l.893 1.378c-3.335 1.804-3.987 4.145-4.247 5.621.537-.278 1.24-.375 1.929-.311 1.804.167 3.226 1.648 3.226 3.489a3.5 3.5 0 01-3.5 3.5c-1.073 0-2.099-.49-2.748-1.179z"></path>
-                </svg>
-                
-                {/* Animated testimonial content that changes when activeIndex changes */}
+          <div className="card-glass-strong rounded-2xl overflow-hidden">
+            <div className="p-8 md:p-12">
+              {/* Large quote icon */}
+              <svg className="text-[#F93236]/30 w-16 h-16 mb-8" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M4.583 17.321C3.553 16.227 3 15 3 13.011c0-3.5 2.457-6.637 6.03-8.188l.893 1.378c-3.335 1.804-3.987 4.145-4.247 5.621.537-.278 1.24-.375 1.929-.311 1.804.167 3.226 1.648 3.226 3.489a3.5 3.5 0 01-3.5 3.5c-1.073 0-2.099-.49-2.748-1.179zm10 0C13.553 16.227 13 15 13 13.011c0-3.5 2.457-6.637 6.03-8.188l.893 1.378c-3.335 1.804-3.987 4.145-4.247 5.621.537-.278 1.24-.375 1.929-.311 1.804.167 3.226 1.648 3.226 3.489a3.5 3.5 0 01-3.5 3.5c-1.073 0-2.099-.49-2.748-1.179z"></path>
+              </svg>
+
+              {/* Animated testimonial content with horizontal slide */}
+              <AnimatePresence mode="wait">
                 <motion.div
                   key={activeIndex}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
+                  initial={{ opacity: 0, x: 40 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -40 }}
                   transition={{ duration: 0.3 }}
-                  className="testimonial-content"
                 >
-                  <div className="text-xl text-white mb-6">
-                    "{testimonials[activeIndex].quote}"
-                  </div>
-                  
+                  <p className="text-xl md:text-2xl text-gray-200 mb-8 leading-relaxed font-light">
+                    &ldquo;{testimonials[activeIndex].quote}&rdquo;
+                  </p>
+
                   <div className="flex items-center">
-                    <div className="w-12 h-12 rounded-full bg-gray-200 overflow-hidden">
-                      {/* Using a div with background image instead of img tag */}
-                      <div 
+                    <div className="w-12 h-12 rounded-full bg-white/[0.05] border border-white/[0.1] overflow-hidden">
+                      <div
                         style={{
                           width: '100%',
                           height: '100%',
@@ -138,66 +110,53 @@ export default function Testimonials() {
                       />
                     </div>
                     <div className="ml-4">
-                      <h4 className="text-lg font-semibold text-white">
+                      <h4 className="text-lg font-bold tracking-tight text-white">
                         {testimonials[activeIndex].name}
                       </h4>
-                      <div className="text-sm text-gray-400">
+                      <div className="text-sm text-gray-500">
                         {testimonials[activeIndex].role}, {testimonials[activeIndex].school}
                       </div>
                     </div>
                   </div>
                 </motion.div>
-              </div>
+              </AnimatePresence>
 
-              {/* Right side - Navigation controls with decorative background */}
-              <div className="bg-gradient-to-br from-[#F93236] to-[#FF2247] md:w-2/5 relative overflow-hidden">
-                <div className="absolute inset-0 opacity-20">
-                  <svg className="w-full h-full" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                    <pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse">
-                      <path d="M 10 0 L 0 0 0 10" fill="none" stroke="white" strokeWidth="1"/>
-                    </pattern>
-                    <rect width="100%" height="100%" fill="url(#grid)" />
-                  </svg>
+              {/* Navigation */}
+              <div className="flex items-center justify-between mt-10 pt-8 border-t border-white/[0.06]">
+                {/* Vertical bar navigation dots */}
+                <div className="flex space-x-2">
+                  {testimonials.map((_, index) => (
+                    <button
+                      key={index}
+                      onClick={() => setActiveIndex(index)}
+                      className={`w-8 h-1 rounded-full transition-all duration-300 ${
+                        index === activeIndex ? 'bg-[#F93236] w-12' : 'bg-white/[0.1] hover:bg-white/[0.2]'
+                      }`}
+                      aria-label={`Go to testimonial ${index + 1}`}
+                    />
+                  ))}
                 </div>
-                
-                <div className="relative h-full flex items-center justify-center p-8">
-                  <div className="text-white text-center">
-                  {/* Dot indicators for direct navigation between testimonials */}
-                  <div className="flex space-x-1 mb-6 justify-center">
-                      {testimonials.map((_, index) => (
-                        <button
-                          key={index}
-                          onClick={() => setActiveIndex(index)}
-                          className={`w-3 h-3 rounded-full ${
-                            index === activeIndex ? 'bg-white' : 'bg-white/40'
-                          }`}
-                          aria-label={`Go to testimonial ${index + 1}`}
-                        />
-                      ))}
-                    </div>
-                    
-                    {/* Previous/Next arrow buttons for sequential navigation */}
-                    <div className="flex justify-center space-x-4">
-                      <button
-                        onClick={handlePrev}
-                        className="p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors"
-                        aria-label="Previous testimonial"
-                      >
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
-                        </svg>
-                      </button>
-                      <button
-                        onClick={handleNext}
-                        className="p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors"
-                        aria-label="Next testimonial"
-                      >
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
-                        </svg>
-                      </button>
-                    </div>
-                  </div>
+
+                {/* Arrow buttons */}
+                <div className="flex space-x-3">
+                  <button
+                    onClick={handlePrev}
+                    className="w-10 h-10 flex items-center justify-center bg-white/[0.05] border border-white/[0.08] hover:bg-white/[0.1] transition-colors"
+                    aria-label="Previous testimonial"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4 text-gray-400">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+                    </svg>
+                  </button>
+                  <button
+                    onClick={handleNext}
+                    className="w-10 h-10 flex items-center justify-center bg-white/[0.05] border border-white/[0.08] hover:bg-white/[0.1] transition-colors"
+                    aria-label="Next testimonial"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4 text-gray-400">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+                    </svg>
+                  </button>
                 </div>
               </div>
             </div>
